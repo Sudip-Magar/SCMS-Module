@@ -27,6 +27,7 @@ return new class extends Migration
             $table->id(); // permission id
             $table->string('name');
             $table->string('package_name'); 
+            $table->string('sub_package_name'); 
             $table->string('guard_name');
             $table->timestamps();
 
