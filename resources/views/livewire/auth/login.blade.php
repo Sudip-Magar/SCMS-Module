@@ -1,8 +1,8 @@
 <div class="h-screen w-full flex items-center justify-center">
     <div class="w-1/3   bg-white p-8 rounded-lg shadow">
         <div class="border-b-2 border-emerald-600 pb-3">
-            <h2 class="text-3xl font-bold text-center">Login</h2>
-            <p class="text-center mt-1">Nepalese Internation College</p>
+            <h2 class="text-xl font-bold text-center">Login</h2>
+            <p class="text-center mt-1 text-sm">Nepalese Internation College</p>
         </div>
 
         <x-form no-separator wire:submit.prevent="login" class="mt-6">
