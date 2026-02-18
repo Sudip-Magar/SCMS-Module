@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Setup;
 
+use App\Enums\StatusState;
+use App\Enums\UserTypeStatusState;
+use App\Livewire\Forms\Setup\UserForm;
 use Livewire\Component;
 use App\Models\User as UserModel;
 use Mary\Traits\Toast;
@@ -10,7 +13,22 @@ class User extends Component
 {
     use Toast;
     public bool $drawer = false;
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
+    public UserForm $userForm;
+    public $title ='Create User';
+    public array $sortBy = ['column' => 'username', 'direction' => 'asc'];
+    public $status;
+    public $user_types;
+
+    public function mount(){
+        $this->status = StatusState::cases();
+        $this->user_types = UserTypeStatusState::cases();
+        // dd($this->status);
+    }
+
+    public function saveUser(){
+        // dd($this->userForm);
+        $this->userForm->performSaveUser();
+    }
 
     public function render()
     {
@@ -23,28 +41,31 @@ class User extends Component
     public function userData()
     {
         return UserModel::query()
-            ->with('roles')
-            ->select('id', 'name', 'email', 'created_at', 'updated_at')
+            ->leftJoin('roles', 'roles.id', '=', 'users.role_id')
+            ->selectRaw("users.id as userId, users.username, users.role_id, users.user_type, users.status, roles.name as role_name")
             ->orderBy(...array_values($this->sortBy))
-            ->get()
-            ->map(fn($user) => [
-                // 'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'roles' => $user->roles->pluck('name')->join(', '),
-                'created_at' => $user->created_at,
-                'updated_at' => $user->updated_at,
-            ]);
+            ->get();
+
     }
 
     public function headers()
     {
         return [
             ['key' => 'action', 'label' => 'Action', 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'name', 'label' => 'Name', 'class' => 'w-50'],
-            ['key' => 'email', 'label' => 'Email', 'class' => 'w-50'],
-            ['key' => 'created_at', 'label' => 'Created At', 'sortable' => false],
-            ['key' => 'updated_at', 'label' => 'Updated At', 'sortable' => false],
+            ['key' => 'username', 'label' => 'Name', 'class' => 'w-50'],
+            ['key' => 'user_type', 'label' => 'User Type', 'sortable' => false],
+            ['key' => 'role_name', 'label' => 'Role', 'sortable' => false],
+            ['key' => 'status', 'label' => 'Status', 'sortable' => false],
         ];
+    }
+
+    public function resetForm()
+    {
+      $this->userForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetValidation();
     }
 }
