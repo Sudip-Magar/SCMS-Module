@@ -11,7 +11,7 @@ use Mary\Traits\Toast;
 class Login extends Component
 {
     use Toast;
-    public $email;
+    public $username;
     public $password;
     
     public function mount()
@@ -24,16 +24,16 @@ class Login extends Component
     public function login()
     {
         $this->validate([
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['username' => $this->username, 'password' => $this->password])) {
             session()->flash('success', 'Login successful');
             return redirect()->route('dashboard');
         } else {
             session()->flash('error', 'Invalid credentials');
-            $this->error('Invalid email or password', position: "toast-bottom");
+            $this->error('Invalid username or password', position: "toast-bottom");
         }
     }
 

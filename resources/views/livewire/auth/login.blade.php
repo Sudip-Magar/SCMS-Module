@@ -6,8 +6,8 @@
         </div>
 
         <x-form no-separator wire:submit.prevent="login" class="mt-6">
-            <x-input label="Email" icon="o-envelope" placeholder="The e-mail" wire:model='email' />
-            <x-password label="Password" icon="o-lock-closed" wire:model="password" right />
+            <x-input label="Username" icon="o-user" placeholder="Enter username" wire:model='username' />
+            <x-password label="Password" icon="o-lock-closed" wire:model="password" right placeholder="Enter Password"/>
 
             {{-- Notice we are using now the `actions` slot from `x-form`, not from modal --}}
             <x-slot:actions>
