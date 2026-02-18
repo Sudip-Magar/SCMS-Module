@@ -37,16 +37,16 @@
             <div class="flex items-center cursor-pointer gap-2" @click="open = !open">
                 <img class="w-8 h-8 rounded-full object-cover" src="{{ asset('storage/images/logo.png') }}"
                     alt="">
-                <button class="text-[14px] cursor-pointer">{{ __('Sudeep Magar') }}</button>
+                <button class="text-[14px] cursor-pointer">{{ __(auth()->user()->username) }}</button>
                 <i class="fa-solid fa-angle-down duration-300" :class="open ? 'rotate-180' : ''"></i>
             </div>
 
             <!-- Dropdown menu -->
             <div x-show="open" x-transition @click.outside="open = false"
-                class="absolute top-full right-0 mt-2 bg-emerald-600 text-white px-2 py-3 text-sm rounded-md shadow-md z-[1000]">
+                class="absolute top-full right-0 mt-2 bg-emerald-600 text-white px-2 py-3 text-sm rounded-md shadow-md z-1000">
                 <div class="border-b-2 pb-1 border-white">
-                    <h4 class="font-semibold text-white">Sudeep Magar</h4>
-                    <p class="text-xs">Admin</p>
+                    <h4 class="font-semibold text-white">{{ __(auth()->user()->username) }}</h4>
+                    <p class="text-xs">{{ __(auth()->user()->user_type) }}</p>
                 </div>
                 <ul class="pt-1">
                     <li class="hover:text-gray-300 flex items-center gap-2 py-1">

@@ -51,6 +51,7 @@
             document.documentElement.classList.add('dark');
         }
     });
+    
 </script>
 
 </html>

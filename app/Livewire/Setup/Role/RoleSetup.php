@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Setup\Role;
 
-use App\Livewire\Forms\RoleForm;
+
 use Livewire\Component;
 use Mary\Traits\Toast;
 use Spatie\Permission\Models\Role;
@@ -11,10 +11,6 @@ class RoleSetup extends Component
 {
     use Toast;
     public bool $drawer = false;
-
-    public RoleForm $role;
-    public string $name = '';
-    public $title = 'Create Role';
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
     public function createRole()

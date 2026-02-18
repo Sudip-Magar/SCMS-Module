@@ -10,7 +10,7 @@ return [
         'title' => 'Setup',
         'icon' => 'fa-solid fa-sliders',
         'children' => [
-            ['title' => 'Users', 'route' => 'dashboard'],
+            ['title' => 'Users', 'route' => 'setup.user'],
             ['title' => 'Permission', 'route' => 'setup.permission'],
             ['title' => 'Role', 'route' => 'setup.role'],
         ],

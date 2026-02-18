@@ -2,10 +2,8 @@
     <x-header class="" title="Role Setup">
         <x-slot:actions>
             <div x-cloak>
-                <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();
-
-" responsive icon="o-plus"
-                    class="btn-primary btn-sm" />
+                <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
+                    icon="o-plus" class="btn-primary btn-sm" />
             </div>
         </x-slot:actions>
     </x-header>
@@ -78,7 +76,7 @@
 
                 <x-slot:actions>
                     <x-button label="Cancel" @click.prevent="$wire.drawer = false, $wire.resetForm()" />
-                    <x-button label="Save" type="submit" class="btn-primary" />
+                    <x-button label="Save" spinner="savePermission" type="submit" class="btn-primary" />
                 </x-slot:actions>
 
             </x-form>
