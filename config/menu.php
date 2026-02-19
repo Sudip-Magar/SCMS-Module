@@ -20,7 +20,7 @@ return [
         'title' => 'Academic Setup',
         'icon' => 'fa-solid fa-graduation-cap',
         'children' => [
-            ['title' => 'Academic Year', 'route' => 'dashboard'],
+            ['title' => 'Academic Year', 'route' => 'academic-setup.academi-year'],
             ['title' => 'Subject', 'route' => 'dashboard'],
         ],
     ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup\Role;
+namespace App\Livewire\Scms\Setup\Role;
 
 
 use Livewire\Component;
@@ -50,7 +50,7 @@ class RoleSetup extends Component
     }
     public function render()
     {
-        return view('livewire.setup.role.role-setup', [
+        return view('livewire.scms.setup.role.role-setup', [
             'roles' => $this->RoleData(),
             'headers' => $this->headers(),
         ]);

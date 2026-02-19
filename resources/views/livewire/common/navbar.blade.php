@@ -31,7 +31,7 @@
                 <li>
                     <button
                         @click.prevent="activeMenu === '{{ $menu['title'] }}' ? activeMenu = null : activeMenu = '{{ $menu['title'] }}'"
-                        class="w-full flex items-center justify-between px-6 py-3 hover:bg-emerald-700 transition">
+                        class="w-full flex items-center justify-between px-6 py-3 hover:bg-emerald-700 transition cursor-pointer">
 
                         <div class="flex items-center gap-3">
                             <i class="{{ $menu['icon'] ?? 'fa-solid fa-circle' }}"></i>

@@ -19,3 +19,28 @@ body {
 x-cloak {
     display: none;
 }
+
+.modal-box {
+    /* width: 80% !important; */
+    max-width: 45% !important;
+}
+
+.input {
+    display: inline-flex;
+    height: 35px !important;
+    outline: none;
+    border-color: rgb(187, 187, 187);
+}
+
+.select {
+    /* display: block; */
+    height: 35px !important;
+    outline: none;
+    border-color: rgb(187, 187, 187);
+}
+
+.fieldset-legend {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0 0 3px 0;
+}
