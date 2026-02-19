@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup\Role;
+namespace App\Livewire\Scms\Setup\Role;
 
 use Livewire\Component;
 use Mary\Traits\Toast;
@@ -83,7 +83,7 @@ class CreateRole extends Component
 
     public function render()
     {
-        return view('livewire.setup.role.create-role', [
+        return view('livewire.scms.setup.role.create-role', [
             'grouped' => $this->groupedPermissions(),
         ]);
     }

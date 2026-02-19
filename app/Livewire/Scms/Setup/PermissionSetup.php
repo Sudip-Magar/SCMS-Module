@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup;
+namespace App\Livewire\Scms\Setup;
 
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -121,7 +121,7 @@ class PermissionSetup extends Component
 
     public function render()
     {
-        return view('livewire.setup.permission-setup', [
+        return view('livewire.scms.setup.permission-setup', [
             'permissions' => $this->permissionData(),
             'headers' => $this->headers(),
         ]);

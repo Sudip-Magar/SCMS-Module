@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup;
+namespace App\Livewire\Scms\Setup;
 
 use App\Enums\StatusState;
 use App\Enums\UserTypeStatusState;
@@ -32,7 +32,7 @@ class User extends Component
 
     public function render()
     {
-        return view('livewire.setup.user', [
+        return view('livewire.scms.setup.user', [
             'users' => $this->userData(),
             'headers' => $this->headers(),
         ]);

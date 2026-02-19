@@ -8,6 +8,11 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css"
+        rel="stylesheet" type="text/css" />
+    <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
+        type="text/javascript"></script>
+
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -32,8 +37,27 @@
     </div>
 
     @livewireScripts
-    <x-toast/>
+    <x-toast />
 </body>
+
+
+<script>
+    window.onload = function() {
+        var mainInput = document.getElementById("nepali-datepicker");
+        mainInput.NepaliDatePicker({
+            miniEnglishDates: true,
+            language: "english",
+            onSelect: function(date){
+                let result =NepaliFunctions.BS2AD(date);
+                console.log(result);
+            }
+        });
+       
+
+    };
+
+    
+</script>
 
 <script>
     document.addEventListener('alpine:init', () => {
@@ -51,7 +75,6 @@
             document.documentElement.classList.add('dark');
         }
     });
-    
 </script>
 
 </html>
