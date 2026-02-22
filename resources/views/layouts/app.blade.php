@@ -13,6 +13,9 @@
     <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
         type="text/javascript"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -35,29 +38,9 @@
             </div>
         </div>
     </div>
-
-    @livewireScripts
     <x-toast />
 </body>
 
-
-<script>
-    window.onload = function() {
-        var mainInput = document.getElementById("nepali-datepicker");
-        mainInput.NepaliDatePicker({
-            miniEnglishDates: true,
-            language: "english",
-            onSelect: function(date){
-                let result =NepaliFunctions.BS2AD(date);
-                console.log(result);
-            }
-        });
-       
-
-    };
-
-    
-</script>
 
 <script>
     document.addEventListener('alpine:init', () => {

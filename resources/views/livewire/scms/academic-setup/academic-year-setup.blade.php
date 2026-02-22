@@ -1,21 +1,21 @@
-<div x-data="{ drawer: @entangle('drawer') }">
-    <x-header class="" title="Role Setup">
+<div x-data="{ drawer: @entangle('drawer') }" x-init="$store.academicYearSetup.init()">
+    <x-header class="text-lg" title="Role Setup">
         <x-slot:actions>
             <div x-cloak>
                 <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
-                    icon="o-plus" class="btn-primary btn-sm" />
+                    icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5" />
             </div>
         </x-slot:actions>
     </x-header>
 
-    <x-card>
-        <x-table :headers="$headers" :rows="$years" :sort-by="$sortBy">
+    <x-card class="text-xs">
+        <x-table class="text-xs" :headers="$headers" :rows="$years" :sort-by="$sortBy">
             @scope('cell_action', $year)
-                <div class="flex text-sm">
-                    <x-button icon="o-pencil" spinner="edit({{ $year->id }})" class="btn-ghost btn-sm text-indigo-500"
-                        tooltip-bottom="Edit" x-cloak wire:click="edit({{ $year->id }})" />
+                <div class="flex text-xs">
+                    <x-button icon="o-pencil" spinner="edit({{ $year->id }})" class="btn-ghost  btn-xs text-indigo-500"
+                        tooltip-bottom="Edit" x-cloak @click.prevent="$store.academicYearSetup.edit({{ $year->id }})" />
 
-                    <x-button icon="o-trash" spinner="delete" class="btn-ghost btn-sm text-red-500" tooltip-bottom="Delete"
+                    <x-button icon="o-trash" spinner="delete" class="btn-ghost  btn-xs text-red-500" tooltip-bottom="Delete"
                         x-cloak />
 
                 </div>
@@ -23,60 +23,129 @@
         </x-table>
     </x-card>
 
-    <x-modal wire:model="drawer" title="{{ __($title) }}" class="backdrop-blur">
-        <x-card separator progress-indicator="savePermission">
-            <x-form no-separator wire:submit.prevent="savePermission">
+    <x-modal wire:model="drawer" title="{{ __($title) }}" class="backdrop-blur text-xs"
+        x-on:shown.window="$store.academicYearSetup.init()">
+        <x-card separator progress-indicator="saveAcademicYear">
+            <x-form no-separator @submit.prevent="$store.academicYearSetup.saveAcademicYear()">
 
                 <div class="grid grid-cols-2 gap-4">
 
                     <div>
-                        <p>
-                            <input type="text" id="nepali-datepicker" placeholder="Select Nepali Date" />
-                        </p>
+                        <label for="" class="fieldset-legend mb-0.5">Enter Start Year (NP):</label>
+                        <input x-model="$store.academicYearSetup.AcademicYearData.start_year_np"
+                            class="input nepali-date" data-sync="start" placeholder="Nepali Date" x-cloak>
+                        <template x-if="$store.academicYearSetup.errors?.start_year_np">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.start_year_np"></small>
+                        </template>
+                    </div>
+                    <div>
+                        <label for="" class="fieldset-legend mb-0.5">Enter Start Year (EN):</label>
+                        <input class="input english-date" data-sync="start" type="date"
+                            x-model="$store.academicYearSetup.AcademicYearData.start_year_en">
+                        <template x-if="$store.academicYearSetup.errors?.start_year_en">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.start_year_en"></small>
+                        </template>
+
                     </div>
 
-                    {{-- Start-Year --}}
                     <div>
-                        {{-- <x-datepicker label="Alt" wire:model="yearForm.start_year" icon="o-calendar"
-                            :config="$yearSelect" id="start_date" /> --}}
+                        <label for="" class="fieldset-legend mb-0.5">Enter End Year (NP):</label>
+                        <input class="input nepali-date" data-sync="end" placeholder="Nepali Date"
+                            x-model="$store.academicYearSetup.AcademicYearData.end_year_np">
+                        <template x-if="$store.academicYearSetup.errors?.end_year_np">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_np"></small>
+                        </template>
+                    </div>
+                    <div>
+                        <label for="" class="fieldset-legend mb-0.5">Enter End Year (EN):</label>
+                        <input class="input english-date" data-sync="end" type="date"
+                            x-model="$store.academicYearSetup.AcademicYearData.end_year_en">
+                        <template x-if="$store.academicYearSetup.errors?.end_year_en">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_en"></small>
+                        </template>
 
                     </div>
-
-                    <!-- End-year -->
                     <div>
-                        {{-- <x-datetime label="End Year:" placeholder="Enter End Year" wire:model="yearForm.end_year" /> --}}
-
-                        {{-- <x-input label="End Year:" wire:model="yearForm.end_year" placeholder="Enter End Year"/>
-
-                        @error('userForm.password')
-                            <small class="text-red-500 text-xs">{{ $message }}</small>
-                        @enderror --}}
-                    </div>
-
-                    <!-- Status -->
-                    <div>
-                        <x-select label="Status:" wire:model="yearForm.status" placeholder="Select Status"
+                        <x-select label="Status:" x-model="$store.academicYearSetup.AcademicYearData.status"
                             :options="$status" option-value="value" option-label="label" />
+                        <template x-if="$store.academicYearSetup.errors?.status">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.status"></small>
+                        </template>
                     </div>
-
+                    <x-slot:actions>
+                        <x-button label="Cancel"
+                            @click.prevent="$wire.drawer = false, $store.academicYearSetup.resetForm()" />
+                        <x-button label="Save" spinner="saveAcademicYear" type="submit" class="btn-primary" />
+                    </x-slot:actions>
                 </div>
-
-
-                <x-slot:actions>
-                    <x-button label="Cancel" @click.prevent="$wire.drawer = false, $wire.resetForm()" />
-                    <x-button label="Save" spinner="savePermission" type="submit" class="btn-primary" />
-                </x-slot:actions>
 
             </x-form>
 
         </x-card>
     </x-modal>
 </div>
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.store('permissionSetup', () => ({
-            permissionId: null,
+@script
+    <script>
+        Alpine.store('academicYearSetup', {
+            AcademicYearData: @json($yearForm ?? []),
+            errors: {},
 
-        }));
-    });
-</script>
+            init() {
+                this.setupDates();
+            },
+
+            setupDates() {
+                document.querySelectorAll('.nepali-date').forEach(nepali => {
+                    const key = nepali.dataset.sync;
+                    if (!key) return;
+                    const english = document.querySelector(
+                        `.english-date[data-sync="${key}"]`
+                    );
+                    DateSync.attach(nepali, english);
+                });
+            },
+
+            saveAcademicYear() {
+                $wire.saveAcademicYear(this.AcademicYearData)
+                    .then((response) => {
+                        console.log(response);
+
+                        if (response?.original?.errors) {
+                            // Set errors for Alpine
+                            for (let field in response.original.errors) {
+                                this.errors[field] = response.original.errors[field][0];
+                            }
+                            return false
+                        }
+
+                        this.resetForm();
+
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            },
+
+            edit(id) {
+                $wire.edit(id).then((response) => {
+                    console.log(response);
+                    
+                }).catch((error) => {
+                    console.log(error);
+                })
+            },
+
+            syncWithLivewire() {
+                // Update Alpine when Livewire changes yearForm
+                this.AcademicYearData = @json($yearForm ?? []);
+
+            },
+
+            resetForm() {
+                this.AcademicYearData = @json($yearForm ?? []);
+                this.errors = {};
+            }
+
+        });
+    </script>
+@endscript
