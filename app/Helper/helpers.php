@@ -62,3 +62,39 @@ if (!function_exists('auditTableEntry')) {
         return $table->create($data);    // save audit record
     }
 }
+
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
+    {
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
+
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
+    }
+}
+
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
+    {
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
+
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
+    }
+}
+
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
+    {
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
+
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
+    }
+}
