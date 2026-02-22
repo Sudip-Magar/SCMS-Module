@@ -20,8 +20,10 @@ return new class extends Migration {
         if (!Schema::hasTable($schema_name)) {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
                 $table->id();
-                $table->date('start_year');
-                $table->date('end_year');
+                $table->date('start_year_en');
+                $table->string('start_year_np');
+                $table->date('end_year_en');
+                $table->date('end_year_np');
                 $table->string('status');
                 extraField($table, $is_audit);
                 if ($is_audit) {
