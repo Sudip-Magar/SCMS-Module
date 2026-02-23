@@ -51,11 +51,11 @@ class User extends Component
     public function headers()
     {
         return [
-            ['key' => 'action', 'label' => 'Action', 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'username', 'label' => 'Name', 'class' => 'w-50'],
-            ['key' => 'user_type', 'label' => 'User Type', 'sortable' => false],
-            ['key' => 'role_name', 'label' => 'Role', 'sortable' => false],
-            ['key' => 'status', 'label' => 'Status', 'sortable' => false],
+            ['key' => 'action', 'label' => __("Action"), 'class' => 'w-16 text-center', 'sortable' => false],
+            ['key' => 'username', 'label' => __('Name'), 'class' => 'w-50'],
+            ['key' => 'user_type', 'label' => __('User Type'), 'sortable' => false],
+            ['key' => 'role_name', 'label' => __('Role'), 'sortable' => false],
+            ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
     }
 

@@ -1,7 +1,7 @@
 <aside x-data="{ activeMenu: null }"
     id="sidebar"
     :class="$store.sidebar.sidebarToggle ? 'w-0 opacity-0 pointer-events-none' : 'w-64'"
-    class="bg-blue-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 text-xs">
+    class="bg-emerald-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 text-xs">
 
     <!-- Logo -->
     <div class="py-5 text-center font-extrabold text-lg border-b border-gray-700">

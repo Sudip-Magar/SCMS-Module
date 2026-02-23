@@ -42,10 +42,10 @@ class RoleSetup extends Component
     public function headers()
     {
         return [
-            ['key' => 'action', 'label' => 'Action', 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'name', 'label' => 'Name', 'class' => 'w-50'],
-            ['key' => 'created_at', 'label' => 'Created At', 'sortable' => false],
-            ['key' => 'updated_at', 'label' => 'Updated At', 'sortable' => false],
+            ['key' => 'action', 'label' => __('Action'), 'class' => 'w-16 text-center', 'sortable' => false],
+            ['key' => 'name', 'label' => __('Name'), 'class' => 'w-50'],
+            ['key' => 'created_at', 'label' => __('Created At'), 'sortable' => false],
+            ['key' => 'updated_at', 'label' => __('Updated At'), 'sortable' => false],
         ];
     }
     public function render()

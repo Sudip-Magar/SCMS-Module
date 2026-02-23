@@ -1,8 +1,8 @@
 <div x-data="{ drawer: @entangle('drawer') }">
-    <x-header class="text-lg" title="User Setup">
+    <x-header class="text-lg" title="{{ __('User Setup') }}">
         <x-slot:actions>
             <div x-cloak>
-                <x-button label="Add" icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5"
+                <x-button label="{{ __('Add') }}" icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5"
                     @click="$wire.drawer = true" />
             </div>
         </x-slot:actions>
