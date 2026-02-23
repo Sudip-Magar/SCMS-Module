@@ -1,11 +1,11 @@
 <aside x-data="{ activeMenu: null }"
     id="sidebar"
     :class="$store.sidebar.sidebarToggle ? 'w-0 opacity-0 pointer-events-none' : 'w-64'"
-    class="bg-emerald-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 text-sm">
+    class="bg-blue-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 text-xs">
 
     <!-- Logo -->
-    <div class="py-5 text-center font-extrabold text-xl border-b border-gray-700">
-        <a href="#">Inventory</a>
+    <div class="py-5 text-center font-extrabold text-lg border-b border-gray-700">
+        <a href="#">{{ __('Nepalese College') }}</a>
     </div>
 
     <!-- Navigation -->
@@ -20,7 +20,7 @@
                         class="flex items-center gap-3 px-6 py-3 hover:bg-emerald-700 transition">
 
                         <i class="fa-solid {{ $menu['icon'] ?? 'fa-circle' }}"></i>
-                        <span>{{ $menu['title'] }}</span>
+                        <span>{{ __($menu['title']) }}</span>
                     </a>
                 </li>
             @endif
@@ -35,10 +35,10 @@
 
                         <div class="flex items-center gap-3">
                             <i class="{{ $menu['icon'] ?? 'fa-solid fa-circle' }}"></i>
-                            <span>{{ $menu['title'] }}</span>
+                            <span>{{ __($menu['title']) }}</span>
                         </div>
 
-                        <i class="fa-solid fa-chevron-down text-sm transition-transform"
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform"
                             :class="{ 'rotate-180': activeMenu === '{{ $menu['title'] }}' }"></i>
                     </button>
 
@@ -47,7 +47,7 @@
                             <li>
                                 <a href="{{ route($child['route']) }}"
                                     class="block px-12 py-2 hover:bg-emerald-700 transition">
-                                    {{ $child['title'] }}
+                                    {{ __($child['title']) }}
                                 </a>
                             </li>
                         @endforeach

@@ -1,46 +1,65 @@
-<div x-data="{ drawer: @entangle('drawer') }" x-init="$store.academicYearSetup.init()">
-    <x-header class="text-lg" title="Role Setup">
+<div x-data="{ drawer: @entangle('drawer'), deleteModal: @entangle('deleteModal') }" x-init="$store.academicYearSetup.init()">
+    <x-header class="text-lg header" title="{{ __('Role Setup') }}">
+        <x-slot:middle class="flex justify-end">
+            <x-input  class="inline-block text-black text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable />
+        </x-slot:middle>
         <x-slot:actions>
             <div x-cloak>
-                <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
-                    icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5" />
+                <x-button :label="__('Add')"
+                    @click.prevent="$wire.drawer = true, $wire.resetFormValidation(), $store.academicYearSetup.resetForm()"
+                    responsive icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5" />
             </div>
         </x-slot:actions>
     </x-header>
 
-    <x-card class="text-xs">
-        <x-table class="text-xs" :headers="$headers" :rows="$years" :sort-by="$sortBy">
+    <x-card class="text-xs" x-bind:class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'" >
+        <x-pagination-filter/>
+        <x-table x-bind:class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'"  class="text-xs" :headers="$headers" :rows="$years" :sort-by="$sortBy" with-pagination>
             @scope('cell_action', $year)
                 <div class="flex text-xs">
                     <x-button icon="o-pencil" spinner="edit({{ $year->id }})" class="btn-ghost  btn-xs text-indigo-500"
                         tooltip-bottom="Edit" x-cloak @click.prevent="$store.academicYearSetup.edit({{ $year->id }})" />
 
-                    <x-button icon="o-trash" spinner="delete" class="btn-ghost  btn-xs text-red-500" tooltip-bottom="Delete"
-                        x-cloak />
+                    <x-button icon="o-trash"
+                        @click.prevent="$store.academicYearSetup.deleteDate({{ $year->id }}); $wire.deleteModal = true"
+                        class="btn-ghost btn-xs text-red-500" tooltip-bottom="Delete" x-cloak />
 
                 </div>
             @endscope
         </x-table>
     </x-card>
 
+    <x-modal wire:model="deleteModal" title="Are You Sure" box-class="w-84">
+        <p class="text-red-500 border-b pb-2">Are you sure you want to delete this data? this action cannot be undone!
+        </p>
+        <x-slot:actions>
+            <x-button label="Close" class="btn-primary btn-xs py-3.5 px-3.5"
+                @click.prevent="$store.academicYearSetup.resetDeleteData(); $wire.deleteModal = false;" />
+
+            <x-button label="Delete" spinner="delete" class="btn-error btn-xs py-3.5 px-3.5"
+                @click.prevent="$wire.delete($store.academicYearSetup.academic_year_id)" />
+        </x-slot:actions>
+    </x-modal>
+
     <x-modal wire:model="drawer" title="{{ __($title) }}" class="backdrop-blur text-xs"
         x-on:shown.window="$store.academicYearSetup.init()">
         <x-card separator progress-indicator="saveAcademicYear">
-            <x-form no-separator @submit.prevent="$store.academicYearSetup.saveAcademicYear()">
+            <x-form no-separator @submit.prevent="$store.academicYearSetup.saveAcademicYear()"
+                class="reset-grid reset-grid-flow-row reset-auto-rows-min reset-gap-3 ">
 
                 <div class="grid grid-cols-2 gap-4">
 
                     <div>
-                        <label for="" class="fieldset-legend mb-0.5">Enter Start Year (NP):</label>
-                        <input x-model="$store.academicYearSetup.AcademicYearData.start_year_np"
+                        <label for="start_year_en" class="fieldset-legend mb-0.5">Enter Start Year (NP):</label>
+                        <input x-model="$store.academicYearSetup.AcademicYearData.start_year_np" id="start_year_en"
                             class="input nepali-date" data-sync="start" placeholder="Nepali Date" x-cloak>
                         <template x-if="$store.academicYearSetup.errors?.start_year_np">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.start_year_np"></small>
                         </template>
                     </div>
                     <div>
-                        <label for="" class="fieldset-legend mb-0.5">Enter Start Year (EN):</label>
-                        <input class="input english-date" data-sync="start" type="date"
+                        <label for="start_year_np" class="fieldset-legend mb-0.5">Enter Start Year (EN):</label>
+                        <input class="input english-date" data-sync="start" type="date" id="start_year_np"
                             x-model="$store.academicYearSetup.AcademicYearData.start_year_en">
                         <template x-if="$store.academicYearSetup.errors?.start_year_en">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.start_year_en"></small>
@@ -49,16 +68,16 @@
                     </div>
 
                     <div>
-                        <label for="" class="fieldset-legend mb-0.5">Enter End Year (NP):</label>
+                        <label for="end_year_en" class="fieldset-legend mb-0.5">Enter End Year (NP):</label>
                         <input class="input nepali-date" data-sync="end" placeholder="Nepali Date"
-                            x-model="$store.academicYearSetup.AcademicYearData.end_year_np">
+                            x-model="$store.academicYearSetup.AcademicYearData.end_year_np" id="end_year_en">
                         <template x-if="$store.academicYearSetup.errors?.end_year_np">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_np"></small>
                         </template>
                     </div>
                     <div>
-                        <label for="" class="fieldset-legend mb-0.5">Enter End Year (EN):</label>
-                        <input class="input english-date" data-sync="end" type="date"
+                        <label for="end_year_np" class="fieldset-legend mb-0.5">Enter End Year (EN):</label>
+                        <input class="input english-date" data-sync="end" type="date" id="end_year_np"
                             x-model="$store.academicYearSetup.AcademicYearData.end_year_en">
                         <template x-if="$store.academicYearSetup.errors?.end_year_en">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_en"></small>
@@ -74,8 +93,10 @@
                     </div>
                     <x-slot:actions>
                         <x-button label="Cancel"
-                            @click.prevent="$wire.drawer = false, $store.academicYearSetup.resetForm()" />
-                        <x-button label="Save" spinner="saveAcademicYear" type="submit" class="btn-primary" />
+                            @click.prevent="$wire.drawer = false, $store.academicYearSetup.resetForm()"
+                            class="btn-xs py-3.5 px-3.5" />
+                        <x-button label="Save" spinner="saveAcademicYear" type="submit"
+                            class="btn-primary btn-xs py-3.5 px-3.5" />
                     </x-slot:actions>
                 </div>
 
@@ -88,6 +109,7 @@
     <script>
         Alpine.store('academicYearSetup', {
             AcademicYearData: @json($yearForm ?? []),
+            academic_year_id: null,
             errors: {},
 
             init() {
@@ -108,7 +130,6 @@
             saveAcademicYear() {
                 $wire.saveAcademicYear(this.AcademicYearData)
                     .then((response) => {
-                        console.log(response);
 
                         if (response?.original?.errors) {
                             // Set errors for Alpine
@@ -128,8 +149,10 @@
 
             edit(id) {
                 $wire.edit(id).then((response) => {
-                    console.log(response);
-                    
+                    if (response?.original?.data) {
+                        this.AcademicYearData = response.original.data
+                    }
+
                 }).catch((error) => {
                     console.log(error);
                 })
@@ -144,8 +167,18 @@
             resetForm() {
                 this.AcademicYearData = @json($yearForm ?? []);
                 this.errors = {};
-            }
+            },
 
+            deleteDate(id) {
+                this.academic_year_id = id;
+
+            },
+
+            resetDeleteData() {
+                this.academic_year_id = null
+
+
+            },
         });
     </script>
 @endscript
