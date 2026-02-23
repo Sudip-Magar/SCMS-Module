@@ -9,12 +9,12 @@ if (!function_exists('extraField')) {
     function extraField($table, $is_audit)
     {
         $table->foreignIdFor(User::class, 'created_by')->nullable();
-        $table->foreignIdFor(User::class, 'update_by')->nullable();
+        $table->foreignIdFor(User::class, 'updated_by')->nullable();
         $table->foreignIdFor(User::class, 'deleted_by')->nullable();
 
         if (!$is_audit) {
             $table->foreign('created_by')->references('id')->on('users')->restrictOnDelete()->restrictOnUpdate();
-            $table->foreign('update_by')->references('id')->on('users')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('updated_by')->references('id')->on('users')->restrictOnDelete()->restrictOnUpdate();
             $table->foreign('deleted_by')->references('id')->on('users')->restrictOnDelete()->restrictOnUpdate();
         }
     }
@@ -37,8 +37,8 @@ if (!function_exists('auditField')) {
     }
 }
 
-if (!function_exists('validateDate')) {
-    function validateDate(array $data, array $rules)
+if (!function_exists('validateField')) {
+    function validateField(array $data, array $rules)
     {
         $validator = Validator::make($data, $rules);
 
@@ -58,6 +58,9 @@ if (!function_exists('auditTableEntry')) {
         $data['performed_by'] = Auth::id();
         $data['ip_address'] = request()->ip();
 
+        if ($action == 'delete') {
+            $data['deleted_by'] = Auth::id();
+        }
         $table = new $auditTableClass(); // instantiate audit model
         return $table->create($data);    // save audit record
     }
