@@ -35,13 +35,16 @@ x-cloak {
     height: 30px !important;
     outline: none;
     border-color: rgb(187, 187, 187);
+    font-size: 12px !important;
 }
 
 .select {
     /* display: block; */
     height: 30px !important;
+    width: clamp(3rem, 20rem, 100%);
     outline: none;
     border-color: rgb(187, 187, 187);
+    font-size: 12px !important;
 }
 
 .fieldset-legend {

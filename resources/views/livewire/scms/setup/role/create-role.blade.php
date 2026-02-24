@@ -1,13 +1,13 @@
 <div>
-    <x-header title="Add Role" separator />
+    <x-header title="{{ __('Add Role') }}" separator />
 
     <x-card>
         <x-form wire:submit.prevent="saveRole">
 
-            <x-input label="Role Name" wire:model.live="name" placeholder="Enter Role Name" icon="o-user-group" />
+            <x-input label="Role Name" wire:model.live="name" placeholder="{{ __('Enter Role Name') }}" icon="o-user-group" />
 
             <h1 class="text-sm font-semibold mt-4 mb-2">
-                Permissions
+                {{ __(key: 'Permissions') }}
             </h1>
 
             @foreach ($grouped as $package => $subs)
@@ -63,8 +63,8 @@
             @endforeach
 
             <x-slot:actions>
-                <x-button label="Cancel" link="{{ route('setup.role') }}" />
-                <x-button label="Save Role" class="btn-primary" spinner="saveRole" type="submit" />
+                <x-button label="{{ __('Cancel') }}" link="{{ route('setup.role') }}" class="btn-xs p-3.5" />
+                <x-button label="{{ __('Save') }}" class="btn-primary btn-xs p-3.5" spinner="saveRole" type="submit" />
             </x-slot:actions>
 
         </x-form>

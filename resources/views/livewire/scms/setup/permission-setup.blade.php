@@ -1,5 +1,5 @@
 <div x-data="{ drawer: @entangle('drawer') }">
-    <x-header class="" title="Role Setup">
+    <x-header class="" title="{{ __('Permission Setup') }}">
         <x-slot:actions>
             <div x-cloak>
                 <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
@@ -13,9 +13,9 @@
             @scope('cell_action', $permission)
                 <div class="flex text-sm">
                     <x-button icon="o-pencil" spinner="edit({{ $permission->id }})" class="btn-ghost btn-sm text-indigo-500"
-                        tooltip-bottom="Edit" x-cloak wire:click="edit({{ $permission->id }})" />
+                        tooltip-bottom="{{ __('Edit') }}" x-cloak wire:click="edit({{ $permission->id }})" />
 
-                    <x-button icon="o-trash" spinner="delete" class="btn-ghost btn-sm text-red-500" tooltip-bottom="Delete"
+                    <x-button icon="o-trash" spinner="delete" class="btn-ghost btn-sm text-red-500" tooltip-bottom="{{ __('Delete') }}"
                         x-cloak />
 
                 </div>
@@ -75,8 +75,8 @@
                 </div>
 
                 <x-slot:actions>
-                    <x-button label="Cancel" @click.prevent="$wire.drawer = false, $wire.resetForm()" />
-                    <x-button label="Save" spinner="savePermission" type="submit" class="btn-primary" />
+                    <x-button label="{{ __('Cancel') }}" @click.prevent="$wire.drawer = false, $wire.resetForm()" />
+                    <x-button label="{{ __('Save') }}" spinner="savePermission" type="submit" class="btn-primary" />
                 </x-slot:actions>
 
             </x-form>
