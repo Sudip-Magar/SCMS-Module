@@ -3,8 +3,8 @@
     "Role Setup": "भूमिका सेटअप",
     "Start Year (EN)": "सुरू वर्ष (अङ्ग्रेजी)",
     "Start Year (NP)": "सुरू वर्ष (नेपाली)",
-    "End Year (EN)":"अन्त्य वर्ष (अङ्ग्रेजी)",
-    "End Year (NP)":"अन्त्य वर्ष (नेपाली)",
+    "End Year (EN)": "अन्त्य वर्ष (अङ्ग्रेजी)",
+    "End Year (NP)": "अन्त्य वर्ष (नेपाली)",
     "Status": "स्थिति",
     "Action": "एक्सन",
     "Per Page": "प्रति पृष्ठ",
@@ -37,7 +37,7 @@
     "Enter Role Name": "भूमिकाको नाम प्रविष्ट गर्नुहोस्",
     "Permissions": "अनुमतिहरू",
     "Save": "बचाउनु",
-    "Permission Setup":"अनुमति सेटअप",
+    "Permission Setup": "अनुमति सेटअप",
     "Close": "बन्द गर्नुहोस्",
     "Create Academic Year": "शैक्षिक वर्ष सिर्जना गर्नुहोस्",
     "Edit Academic Year": "शैक्षिक वर्ष सम्पादन गर्नुहोस्",
@@ -50,5 +50,10 @@
     "Enter Program name": "कार्यक्रमको नाम प्रविष्ट गर्नुहोस्",
     "Enter Program Short name": "कार्यक्रमको छोटो नाम प्रविष्ट गर्नुहोस्",
     "Create Program": "कार्यक्रम सिर्जना गर्नुहोस्",
-    "Edit Program": "कार्यक्रम सम्पादन गर्नुहोस्"
+    "Edit Program": "कार्यक्रम सम्पादन गर्नुहोस्",
+    "Programs": "कार्यक्रम",
+    "Faculty": "संकाय",
+    "Academic Faculty Setup": "शैक्षिक संकाय सेटअप",
+    "Enter Faculty name": "संकाय नाम प्रविष्ट गर्नुहोस्",
+    "Enter Faculty Short name": "संकाय छोटो नाम प्रविष्ट गर्नुहोस्"
 }

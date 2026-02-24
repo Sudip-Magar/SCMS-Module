@@ -4,18 +4,18 @@ namespace App\Livewire\Scms\AcademicSetup;
 
 use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
-use App\Livewire\Forms\AcademicSetup\AcademicProgramForm;
-use App\Models\AcademicSetup\AcademicProgram;
+use App\Livewire\Forms\AcademicSetup\AcademicFacultyForm;
+use App\Models\AcademicSetup\AcademicFaculty;
 use App\Traits\WithCustomPagination;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
-class AcademicProgramSetup extends Component
+class AcademicFacultySetup extends Component
 {
     use Toast, WithCustomPagination;
     public string $search = '';
-    public AcademicProgramForm $programForm;
+    public AcademicFacultyForm $facultyForm;
     public bool $drawer = false;
     public bool $deleteModal = false;
     public $title;
@@ -32,43 +32,43 @@ class AcademicProgramSetup extends Component
             ->toArray();
     }
 
-    public function saveAcademicProgram()
+    public function saveAcademicFaculty()
     {
-        $is_saved = $this->programForm->performProgramSave();
+        $is_saved = $this->facultyForm->performFacultySave();
 
         if (!$is_saved) {
-            $this->error('Academic Program Could not be Saved', position: 'toast-bottom');
+            $this->error('Academic Faculty Could not be Saved', position: 'toast-bottom');
             return false;
         }
 
-        $this->success("Academic Program " . ($this->programForm->id ? 'Updated' : 'Saved') . " Successfully", position: 'toast-bottom');
+        $this->success("Academic Faculty " . ($this->facultyForm->id ? 'Updated' : 'Saved') . " Successfully", position: 'toast-bottom');
         $this->drawer = false;
         $this->resetForm();
         $this->resetFormValidation();
 
     }
 
-    public function edit(AcademicProgram $program)
+    public function edit(AcademicFaculty $faculty)
     {
-        $this->title = "Edit Program";
-        $this->programForm->id = $program->id;
-        $this->programForm->name = $program->name;
-        $this->programForm->short_name = $program->short_name;
-        $this->programForm->status = $program->status;
+        $this->title = "Edit Faculty";
+        $this->facultyForm->id = $faculty->id;
+        $this->facultyForm->name = $faculty->name;
+        $this->facultyForm->short_name = $faculty->short_name;
+        $this->facultyForm->status = $faculty->status;
         $this->drawer = true;
     }
 
-    public function delete(AcademicProgram $program)
+    public function delete(AcademicFaculty $faculty)
     {
         try {
-            AuditTableEntryEvent::dispatch('academic_programs', $program, 'delete');
-            $is_delete = $program->deleteOrFail();
+            AuditTableEntryEvent::dispatch('academic_faculties', $faculty, 'delete');
+            $is_delete = $faculty->deleteOrFail();
             if (!$is_delete) {
-                $this->error('Failed to delete the Academic Program', position: "toast-bottom");
+                $this->error('Failed to delete the Academic Faculty', position: "toast-bottom");
                 return false;
             }
             $this->deleteModal = false;
-            $this->error('Academic Program Delete Successfully', position: 'toast-bottom');
+            $this->error('Academic Faculty Delete Successfully', position: 'toast-bottom');
 
         } catch (\Exception $exception) {
             $this->error('Something went wrong ' . $exception->getMessage(), position: 'toast-bottom');
@@ -78,15 +78,15 @@ class AcademicProgramSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-program-setup', [
-            'program_data_list' => $this->programData(),
-            'headers' => $this->headers()
+        return view('livewire.scms.academic-setup.academic-faculty-setup',[
+            'faculty_data_list' => $this->facultyData(),
+            'headers' => $this->headers(),
         ]);
     }
 
-    public function programData(): LengthAwarePaginator
+    public function facultyData(): LengthAwarePaginator
     {
-        return AcademicProgram::query()
+        return AcademicFaculty::query()
             ->selectRaw("id, name, short_name,  CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
                             LOWER(SUBSTRING(`status`, 2))) as status")
@@ -107,8 +107,8 @@ class AcademicProgramSetup extends Component
 
     public function resetForm()
     {
-        $this->title = 'Create Program';
-        $this->programForm->reset();
+        $this->title = 'Create Faculty';
+        $this->facultyForm->reset();
     }
 
     public function resetFormValidation()

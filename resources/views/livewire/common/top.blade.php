@@ -26,13 +26,18 @@
             </a>
         </div>
 
-       <x-theme-toggle />
+        <x-theme-toggle />
 
         <!-- User Dropdown -->
         <div x-data="{ open: false }" class="relative" x-cloak>
             <div class="flex items-center cursor-pointer gap-2" @click="open = !open">
-                <img class="w-7 h-7 rounded-full object-cover" src="{{ asset('storage/images/logo.png') }}"
-                    alt="">
+                {{-- <img class="w-7 h-7 rounded-full object-cover" src="{{ asset('storage/images/logo.png') }}"
+                    alt=""> --}}
+                {{-- <x-avatar placeholder="{{ Auth()->user()->short_name }}" /> --}}
+                    <div class="p-1 rounded-full bg-emerald-600 flex items-center justify-between font-medium text-white">
+                        {{ Auth()->user()->short_name }}
+                    </div>
+
                 <button class="text-xs font-medium cursor-pointer">{{ __(auth()->user()->username) }}</button>
                 <i class="fa-solid fa-angle-down duration-300" :class="open ? 'rotate-180' : ''"></i>
             </div>
