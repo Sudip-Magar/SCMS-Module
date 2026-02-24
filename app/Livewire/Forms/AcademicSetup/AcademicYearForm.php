@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms\AcademicSetup;
 
+use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicYear;
 use App\Models\AuditModel\AuditAcademicYear;
 use Date;
@@ -41,9 +42,9 @@ class AcademicYearForm extends Form
         }
         $is_saved = AcademicYear::updateOrCreate(['id' => $this->id], $data);
 
-        auditTableEntry(AuditAcademicYear::class, $is_saved->toArray(), $this->id ? 'edit' : 'create');
+        AuditTableEntryEvent::dispatch('academic_years', $is_saved, $this->id ? 'edit' : 'create');
 
-        if($is_saved){
+        if ($is_saved) {
             return true;
         }
 

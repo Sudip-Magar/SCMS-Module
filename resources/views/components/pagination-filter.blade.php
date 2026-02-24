@@ -1,17 +1,20 @@
 @props([
     'perPages' => [
-    ['value' => '1', 'label' => '1'], 
-    ['value' => '10', 'label' => '10'],
-    ['value' => '50', 'label' => '50'],
-    ['value' => '100', 'label' => '100'],
-    ['value' => '500', 'label' => '500'],
-    ['value' => '1000', 'label' => '1000'],
+        ['key' => '1', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('1') : '1'],
+        ['key' => '10', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('10') : '10'],
+        ['key' => '50', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('50') : '50'],
+        ['key' => '100', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('100') : '100'],
+        ['key' => '500', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('500') : '500'],
+        ['key' => '1000', 'label' => session('locale') == 'np' ? EngToNpNumberConverter('1000') : '1000'],
     ],
 ])
-<div class="flex justify-end">
+
+<div {{ $attributes->class(['flex justify-end']) }} class="flex justify-end">
+    {{-- <pre>{{ print_r($perPages, true) }}</pre> --}}
     <div class="flex gap-2 items-center">
         <label>{{ __('Per Page') }}</label>
-        <x-select class="w-22!" x-bind:class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'"
-            :options="$perPages" option-value='value' option-label="label" wire:model.live.debounce='perPage' />
+        <x-select class="w-22!"
+            :options="$perPages" option-value="key" option-label="label" wire:model.live.debounce='perPage'
+            id="perPage" name="perPage" :key="session('locale')" />
     </div>
 </div>

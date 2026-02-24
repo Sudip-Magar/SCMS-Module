@@ -12,6 +12,12 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
     font-family: "Poppins", sans-serif;
     font-size: 12px !important;
@@ -21,7 +27,7 @@ x-cloak {
     display: none;
 }
 
-.text-base-content{
+.text-base-content {
     font-size: 12px !important;
 }
 
@@ -53,7 +59,7 @@ x-cloak {
     padding: 0 0 3px 0;
 }
 
-.font-extrabold{
+.font-extrabold {
     font-size: 17px;
 }
 
@@ -62,10 +68,38 @@ x-cloak {
 }
 
 /** Active button **/
-.mary-table-pagination span[aria-current="page"] > span {
+.mary-table-pagination span[aria-current="page"]>span {
     @apply bg-emerald-600 text-base-100
 }
 
-.header{
+.header {
     margin-bottom: 1px !important;
+}
+
+.breadcrumbs {
+    /* background-color: purple !important; */
+    margin: 16px 16px 0px 16px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+.breadcrumbs li {
+    padding: 2px 8px;
+    font-weight: 600;
+
+}
+
+.breadcrumbs li:not(:last-child)::after {
+    content: " > ";
+    margin: 0 6px;
+    color: #999;
+}
+
+.breadcrumbs li:last-child {
+    background-color: #D0FAE5;
+    color: #009966;
+    border-radius: 8px;
+    border: solid #00e99c 2px;
 }

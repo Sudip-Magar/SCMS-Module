@@ -1,9 +1,10 @@
 <?php
-namespace App\Models\AuditModel;
+
+namespace App\Models\AcademicSetup;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AuditAcademicYear extends Model
+class AcademicProgram extends Model
 {
     protected $guarded = ['id'];
 }

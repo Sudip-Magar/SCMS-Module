@@ -1,5 +1,4 @@
-<div x-data class="px-4 flex justify-between items-center shadow-lg z-100"
-    :class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'">
+<div x-data class="px-4 flex justify-between items-center shadow-sm z-100">
     <div class="flex gap-1 items-center">
         <button class="px-3 py-2 rounded-md cursor-pointer" @click.prevent="$store.sidebar.handelToggle()">
             <i class="fa-solid fa-bars-staggered text-sm"></i>
@@ -27,10 +26,7 @@
             </a>
         </div>
 
-        <!-- Theme toggle -->
-        <button @click.prevent="$store.darkmode.toggleTheme()" class="cursor-pointer">
-            <i class="transition-all duration-150" :class="$store.darkmode.toggle ? 'fa-regular fa-sun rotate-180' : 'fa-regular fa-moon'"></i>
-        </button>
+       <x-theme-toggle />
 
         <!-- User Dropdown -->
         <div x-data="{ open: false }" class="relative" x-cloak>

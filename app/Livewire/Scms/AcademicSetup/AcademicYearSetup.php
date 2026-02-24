@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Scms\AcademicSetup;
 
+use App\Events\AuditTableEntryEvent;
 use App\Livewire\Forms\AcademicSetup\AcademicYearForm;
 use App\Models\AcademicSetup\AcademicYear;
 use App\Models\AuditModel\AuditAcademicYear;
@@ -28,6 +29,7 @@ class AcademicYearSetup extends Component
 
     public function mount()
     {
+        // dd(session('locale'));
         $this->status = collect(StatusState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
@@ -57,8 +59,8 @@ class AcademicYearSetup extends Component
             $this->drawer = false;
             $this->resetForm();
             $this->resetFormValidation();
-        } catch(\Exception){
-            $this->error('Something went wrong', position:'toast-bottom');
+        } catch (\Exception) {
+            $this->error('Something went wrong', position: 'toast-bottom');
         }
 
     }
@@ -73,17 +75,17 @@ class AcademicYearSetup extends Component
 
     public function delete(AcademicYear $academicYear)
     {
-        try{
-            auditTableEntry(AuditAcademicYear::class,$academicYear->toArray(), 'delete');
+        try {
+            AuditTableEntryEvent::dispatch('academic_years', $academicYear, 'delete');
             $is_delete = $academicYear->deleteOrFail();
-            if(!$is_delete){
-                $this->error('Failed to delete the Academic Year', position:"toast-bottom");
+            if (!$is_delete) {
+                $this->error('Failed to delete the Academic Year', position: "toast-bottom");
                 return false;
             }
             $this->deleteModal = false;
-            $this->error('Academic Year Delete Successfully', position:'toast-bottom');
-        }catch(\Exception){
-            $this->error('Something went wrong', position:'toast-bottom');
+            $this->error('Academic Year Delete Successfully', position: 'toast-bottom');
+        } catch (\Exception $exception) {
+            $this->error('Something went wrong ' . $exception->getMessage(), position: 'toast-bottom');
         }
     }
 
@@ -101,7 +103,7 @@ class AcademicYearSetup extends Component
             ->selectRaw("id, start_year_en, start_year_np, end_year_en, end_year_np,  CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
                             LOWER(SUBSTRING(`status`, 2))) as status")
-                            ->when($this->search, fn($query)=>$query->where('start_year_en', 'like',"%$this->search%"))
+            ->when($this->search, fn($query) => $query->where('start_year_en', 'like', "%$this->search%"))
             ->orderBy(...array_values($this->sortBy))
             ->paginate($this->perPage, pageName: 'page');
     }
