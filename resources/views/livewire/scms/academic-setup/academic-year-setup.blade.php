@@ -1,7 +1,7 @@
 <div x-data="{ drawer: @entangle('drawer'), deleteModal: @entangle('deleteModal') }" x-init="$store.academicYearSetup.init()">
     <x-header class="text-lg header" title="{{ __('Academic Year Setup') }}">
         <x-slot:middle class="flex justify-end">
-            <x-input class="inline-block text-black text-xs" placeholder="{{ __('Search...') }}"
+            <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}"
                 wire:model.live.debounce="search" clearable />
         </x-slot:middle>
         <x-slot:actions>
@@ -12,10 +12,9 @@
             </div>
         </x-slot:actions>
     </x-header>
-    <x-card class="text-xs" x-bind:class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'">
+    <x-card class="text-xs">
         <x-pagination-filter />
-        <x-table x-bind:class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'"
-            class="text-xs" :headers="$headers" :rows="$years" :sort-by="$sortBy" with-pagination>
+        <x-table class="text-xs" :headers="$headers" :rows="$years" :sort-by="$sortBy" with-pagination>
             @scope('cell_action', $year)
                 <div class="flex text-xs">
                     <x-button icon="o-pencil" spinner="edit({{ $year->id }})" class="btn-ghost  btn-xs text-indigo-500"
@@ -55,8 +54,8 @@
                         <label for="start_year_en"
                             class="fieldset-legend mb-0.5">{{ __('Enter Start Year (NP)') }}:</label>
                         <input x-model="$store.academicYearSetup.AcademicYearData.start_year_np" id="start_year_en"
-                            class="input nepali-date" data-sync="start" placeholder="{{ __('Enter Start Year (NP)') }}"
-                            x-cloak>
+                            autocomplete="off" class="input nepali-date" data-sync="start"
+                            placeholder="{{ __('Enter Start Year (NP)') }}" x-cloak>
                         <template x-if="$store.academicYearSetup.errors?.start_year_np">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.start_year_np"></small>
                         </template>
@@ -75,19 +74,20 @@
                     </div>
 
                     <div>
-                        <label for="end_year_en"
+                        <label for="end_year_np"
                             class="fieldset-legend mb-0.5">{{ __('Enter End Year (NP)') }}:</label>
                         <input class="input nepali-date" data-sync="end" placeholder="{{ __('Enter End Year (NP)') }}"
-                            x-model="$store.academicYearSetup.AcademicYearData.end_year_np" id="end_year_en">
+                            autocomplete="off" x-model="$store.academicYearSetup.AcademicYearData.end_year_np"
+                            id="end_year_np">
                         <template x-if="$store.academicYearSetup.errors?.end_year_np">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_np"></small>
                         </template>
                     </div>
 
                     <div>
-                        <label for="end_year_np"
+                        <label for="end_year_en"
                             class="fieldset-legend mb-0.5">{{ __('Enter End Year (EN)') }}:</label>
-                        <input class="input english-date" data-sync="end" type="date" id="end_year_np"
+                        <input class="input english-date" data-sync="end" type="date" id="end_year_e    n"
                             placeholder="{{ __('Enter End Year (EN)') }}"
                             x-model="$store.academicYearSetup.AcademicYearData.end_year_en">
                         <template x-if="$store.academicYearSetup.errors?.end_year_en">
@@ -97,8 +97,9 @@
                     </div>
 
                     <div>
-                        <x-select label="{{ __('Status') }}:" x-model="$store.academicYearSetup.AcademicYearData.status"
-                            :options="$status" option-value="value" option-label="label" />
+                        <x-select label="{{ __('Status') }}:"
+                            x-model="$store.academicYearSetup.AcademicYearData.status" :options="$status"
+                            option-value="value" option-label="label" />
                         <template x-if="$store.academicYearSetup.errors?.status">
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.status"></small>
                         </template>
@@ -106,7 +107,8 @@
                 </div>
 
                 <x-slot:actions>
-                    <x-button label="{{ __('Cancel') }}" @click.prevent="$wire.drawer = false, $store.academicYearSetup.resetForm()"
+                    <x-button label="{{ __('Cancel') }}"
+                        @click.prevent="$wire.drawer = false, $store.academicYearSetup.resetForm()"
                         class="btn-xs py-3.5 px-3.5" />
                     <x-button label="{{ __('Save') }}" spinner="saveAcademicYear" type="submit"
                         class="btn-primary btn-xs py-3.5 px-3.5" />

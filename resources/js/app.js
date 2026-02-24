@@ -1,21 +1,5 @@
 import './bootstrap';
 
-document.addEventListener('alpine:init', () => {
-    Alpine.store('darkmode', {
-        toggle: localStorage.getItem('theme') === 'dark', // load saved theme
-        toggleTheme() {
-            this.toggle = !this.toggle;
-            document.documentElement.classList.toggle('dark', this.toggle);
-            localStorage.setItem('theme', this.toggle ? 'dark' : 'light');
-        },
-    });
-
-    // Apply theme immediately
-    if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.classList.add('dark');
-    }
-});
-
 window.DateSync = {
 
     bsToAd(bsDate) {

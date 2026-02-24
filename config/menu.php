@@ -3,16 +3,17 @@ return [
     [
         'title' => 'Dashboard',
         'icon' => 'fa-solid fa-gauge',
-        'route' => 'dashboard'
+        'route' => 'dashboard',
+        'search' => ['Dashboard'],
     ],
 
     [
         'title' => 'Setup',
         'icon' => 'fa-solid fa-sliders',
         'children' => [
-            ['title' => 'Users', 'route' => 'setup.user'],
-            ['title' => 'Permission', 'route' => 'setup.permission'],
-            ['title' => 'Role', 'route' => 'setup.role'],
+            ['title' => 'Users', 'route' => 'setup.user', 'search' => ['User Setup', 'Setup']],
+            ['title' => 'Permission', 'route' => 'setup.permission', 'search' => ['Permission Setup', 'Setup']],
+            ['title' => 'Role', 'route' => 'setup.role', 'search' => ['Role Setup', 'Setup']],
         ],
     ],
 
@@ -20,17 +21,8 @@ return [
         'title' => 'Academic Setup',
         'icon' => 'fa-solid fa-graduation-cap',
         'children' => [
-            ['title' => 'Academic Year', 'route' => 'academic-setup.academi-year'],
-            ['title' => 'Subject', 'route' => 'dashboard'],
-        ],
-    ],
-
-    [
-        'title' => 'Products',
-        'icon' => 'o-home',
-        'children' => [
-            ['title' => 'All Products', 'route' => 'dashboard'],
-            ['title' => 'Add Product', 'route' => 'dashboard'],
+            ['title' => 'Academic Year', 'route' => 'academic-setup.academic-year', 'search' => ['Academic year Setup', 'Academic Setup']],
+            ['title' => 'Programs', 'route' => 'academic-setup.academic-program', 'search' => ['Academic Programs Setup', 'Academic Setup']],
         ],
     ],
 
@@ -38,6 +30,7 @@ return [
         'title' => 'Settings',
         'icon' => 'o-home',
         'route' => 'dashboard',
+        'search' => ['Setting']
     ],
 
 ];

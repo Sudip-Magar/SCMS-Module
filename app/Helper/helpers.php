@@ -47,21 +47,20 @@ if (!function_exists('validateField')) {
         }
 
         return true;
-        dd($validator);
     }
 }
 
-if (!function_exists('auditTableEntry')) {
-    function auditTableEntry(string $auditTableClass, array $data, string $action)
-    {
-        $data['action'] = $action;
-        $data['performed_by'] = Auth::id();
-        $data['ip_address'] = request()->ip();
 
-        if ($action == 'delete') {
-            $data['deleted_by'] = Auth::id();
+if (!function_exists('EngToNpNumberConverter')) {
+    function EngToNpNumberConverter($number)
+    {
+        $enNumber = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $npNumber = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        if (session('locale') == 'np') {
+            // dd(session('locale'));
+            // dd(str_replace($enNumber, $npNumber, $number));
+            return str_replace($enNumber, $npNumber, $number);
         }
-        $table = new $auditTableClass(); // instantiate audit model
-        return $table->create($data);    // save audit record
+        // return str_replace($enNumber, $enNumber, $number);
     }
 }

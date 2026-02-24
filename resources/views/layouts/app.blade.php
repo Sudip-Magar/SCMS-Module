@@ -23,21 +23,22 @@
     @livewireStyles
 </head>
 
-<body x-data class="transition-colors duration-300"
-    :class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'">
+<body x-data class="transition-colors duration-300">
     {{-- @include('livewire.common.navbar') --}}
     <div class="flex">
         @livewire('common.navbar')
 
         <div class="w-full relative">
-            <div class="sticky top-0 z-1000">
+            <div class="sticky top-0 z-100">
                 <x-common.top />
             </div>
+            <x-tabuna-breadcrumbs />
             <div class="p-4 z-0">
                 {{ $slot }}
             </div>
         </div>
     </div>
+    {{-- <x-spotlight shortcut=""/> --}}
     <x-toast />
 </body>
 
