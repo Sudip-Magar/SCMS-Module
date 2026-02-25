@@ -23,7 +23,10 @@ return [
         'children' => [
             ['title' => 'Academic Year', 'route' => 'academic-setup.academic-year', 'search' => ['Academic year Setup', 'Academic Setup']],
             ['title' => 'Programs', 'route' => 'academic-setup.academic-program', 'search' => ['Academic Programs Setup', 'Academic Setup']],
-            ['title' => 'Faculty', 'route' => 'academic-setup.academic-faculty', 'search' => ['Academic Programs Setup', 'Academic Setup']],
+            ['title' => 'Faculty', 'route' => 'academic-setup.academic-faculty', 'search' => ['Academic Faculty Setup', 'Academic Setup']],
+            ['title' => 'Level', 'route' => 'academic-setup.academic-level', 'search' => ['Academic Level Setup', 'Academic Setup']],
+            ['title' => 'Section', 'route' => 'academic-setup.academic-section', 'search' => ['Academic section Setup', 'Academic Setup']],
+            ['title' => 'Subject', 'route' => 'academic-setup.academic-subject', 'search' => ['Academic subject Setup', 'Academic Setup']],
         ],
     ],
 

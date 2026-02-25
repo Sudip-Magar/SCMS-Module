@@ -2,7 +2,10 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Scms\AcademicSetup\AcademicFacultySetup;
+use App\Livewire\Scms\AcademicSetup\AcademicLevelSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicProgramSetup;
+use App\Livewire\Scms\AcademicSetup\AcademicSectionSetup;
+use App\Livewire\Scms\AcademicSetup\AcademicSubjectSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicYearSetup;
 use App\Livewire\Scms\Dashboard;
 use App\Livewire\Scms\Setup\PermissionSetup;
@@ -36,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/academic-year', AcademicYearSetup::class)->name('academic-setup.academic-year');
         Route::get('/academic-program', AcademicProgramSetup::class)->name('academic-setup.academic-program');
         Route::get('/academic-faculty', AcademicFacultySetup::class)->name('academic-setup.academic-faculty');
+        Route::get('/academic-level', AcademicLevelSetup::class)->name('academic-setup.academic-level');
+        Route::get('/academic-section', AcademicSectionSetup::class)->name('academic-setup.academic-section');
+        Route::get('/academic-subject', AcademicSubjectSetup::class)->name('academic-setup.academic-subject');
     });
 });
 
