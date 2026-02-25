@@ -11,7 +11,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Form;
 use App\Enums\StatusState;
 
-class AcademicYearForm extends Form
+class   AcademicYearForm extends Form
 {
     public $id;
     public $start_year_en;

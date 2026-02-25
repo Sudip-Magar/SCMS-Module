@@ -30,7 +30,7 @@ class AcademicLevelForm extends Form
 
             'short_name' => [
                 'required',
-                'max:5',
+                'max:10',
                 Rule::unique('academic_levels', 'short_name')->ignore($this->id)
             ],
 
