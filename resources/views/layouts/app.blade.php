@@ -20,7 +20,8 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @livewireStyles
+    {{-- @livewireStyles --}}
+    @stack('styles')
 </head>
 
 <body x-data class="transition-colors duration-300">
