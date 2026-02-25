@@ -23,6 +23,7 @@ return [
         'children' => [
             ['title' => 'Academic Year', 'route' => 'academic-setup.academic-year', 'search' => ['Academic year Setup', 'Academic Setup']],
             ['title' => 'Programs', 'route' => 'academic-setup.academic-program', 'search' => ['Academic Programs Setup', 'Academic Setup']],
+            ['title' => 'Faculty', 'route' => 'academic-setup.academic-faculty', 'search' => ['Academic Programs Setup', 'Academic Setup']],
         ],
     ],
 

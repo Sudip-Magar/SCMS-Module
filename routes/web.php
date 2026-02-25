@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Auth\Login;
+use App\Livewire\Scms\AcademicSetup\AcademicFacultySetup;
 use App\Livewire\Scms\AcademicSetup\AcademicProgramSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicYearSetup;
 use App\Livewire\Scms\Dashboard;
@@ -34,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('academic-setup')->group(function () {
         Route::get('/academic-year', AcademicYearSetup::class)->name('academic-setup.academic-year');
         Route::get('/academic-program', AcademicProgramSetup::class)->name('academic-setup.academic-program');
+        Route::get('/academic-faculty', AcademicFacultySetup::class)->name('academic-setup.academic-faculty');
     });
 });
 

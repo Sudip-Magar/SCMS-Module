@@ -4,13 +4,13 @@ namespace App\Livewire\Forms\AcademicSetup;
 
 use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
-use App\Models\AcademicSetup\AcademicProgram;
+use App\Models\AcademicSetup\AcademicFaculty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class AcademicProgramForm extends Form
+class AcademicFacultyForm extends Form
 {
     public $id;
     public $name;
@@ -23,26 +23,26 @@ class AcademicProgramForm extends Form
             'name' => [
                 'required',
                 'max:70',
-                Rule::unique('academic_programs', 'name')->ignore($this->id)
+                Rule::unique('academic_faculties', 'name')->ignore($this->id)
             ],
 
             'short_name' => [
                 'required',
                 'max:5',
-                Rule::unique('academic_programs', 'short_name')->ignore($this->id)
+                Rule::unique('academic_faculties', 'short_name')->ignore($this->id)
             ],
 
             'status' => 'required'
         ];
     }
 
-    public function performProgramSave()
+    public function performFacultySave()
     {
         $this->validate();
 
         $data = [
             'name' => $this->name,
-            'short_name' => strtoupper($this->short_name),
+            'short_name' => $this->short_name,
             'status' => $this->status
         ];
 
@@ -52,9 +52,9 @@ class AcademicProgramForm extends Form
             $data['created_by'] = Auth::user()->id;
         }
 
-        $is_saved = AcademicProgram::updateOrCreate(['id' => $this->id], $data);
+        $is_saved = AcademicFaculty::updateOrCreate(['id' => $this->id], $data);
 
-        AuditTableEntryEvent::dispatch('academic_programs', $is_saved, $this->id ? 'edit' : 'create');
+        AuditTableEntryEvent::dispatch('academic_faculties', $is_saved, $this->id ? 'edit' : 'create');
 
         if ($is_saved) {
             return true;
