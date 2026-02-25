@@ -55,5 +55,26 @@
     "Faculty": "संकाय",
     "Academic Faculty Setup": "शैक्षिक संकाय सेटअप",
     "Enter Faculty name": "संकाय नाम प्रविष्ट गर्नुहोस्",
-    "Enter Faculty Short name": "संकाय छोटो नाम प्रविष्ट गर्नुहोस्"
+    "Enter Faculty Short name": "संकाय छोटो नाम प्रविष्ट गर्नुहोस्",
+    "Create Faculty": "संकाय सिर्जना गर्नुहोस्",
+    "Edit Faculty": "संकाय सम्पादन गर्नुहोस्",
+    "Academic Type": "शैक्षिक प्रकार",
+    "Create Level": "स्तर सिर्जना गर्नुहोस्",
+    "Edit Level": "स्तर सम्पादन गर्नुहोस्",
+    "Academic Level Setup": "शैक्षिक स्तर सेटअप",
+    "Enter Level name": "स्तरको नाम प्रविष्ट गर्नुहोस्",
+    "Enter Level Short name": "स्तरको छोटो नाम प्रविष्ट गर्नुहोस्",
+    "Enter Academic Type": "शैक्षिक प्रकार प्रविष्ट गर्नुहोस्",
+    "Academic Section Setup": "शैक्षिक खण्ड सेटअप",
+    "Enter Section name": "खण्डको नाम प्रविष्ट गर्नुहोस्",
+    "Enter Section Short name": "खण्डको छोटो नाम प्रविष्ट गर्नुहोस्",
+    "Create Section": "खण्ड सिर्जना गर्नुहोस्",
+    "Edit Section": "खण्ड सम्पादन गर्नुहोस्",
+    "Level": "स्तर",
+    "Section": "खण्ड",
+    "Academic Subject Setup": "शैक्षिक विषय सेटअप",
+    "Enter Subject name": "विषयको नाम प्रविष्ट गर्नुहोस्",
+    "Enter Subject Short name": "विषय छोटो नाम प्रविष्ट गर्नुहोस्",
+    "Enter Subject Code": "विषय कोड प्रविष्ट गर्नुहोस्"
+
 }

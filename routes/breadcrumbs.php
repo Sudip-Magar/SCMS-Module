@@ -42,3 +42,18 @@ Breadcrumbs::for('academic-setup.academic-faculty', function (Trail $trail) {
     $trail->parent('Academic-setup');
     $trail->push(__('Academic Faculty Setup'));
 });
+
+Breadcrumbs::for('academic-setup.academic-level', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Academic Level Setup'));
+});
+
+Breadcrumbs::for('academic-setup.academic-section', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Academic Section Setup'));
+});
+
+Breadcrumbs::for('academic-setup.academic-subject', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Academic Subject Setup'));
+});

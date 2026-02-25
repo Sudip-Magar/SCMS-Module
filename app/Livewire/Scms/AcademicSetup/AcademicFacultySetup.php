@@ -90,7 +90,7 @@ class AcademicFacultySetup extends Component
             ->selectRaw("id, name, short_name,  CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
                             LOWER(SUBSTRING(`status`, 2))) as status")
-            ->when($this->search, fn($query) => $query->where('start_year_en', 'like', "%$this->search%"))
+            ->when($this->search, fn($query) => $query->where('name', 'like', "%$this->search%"))
             ->orderBy(...array_values($this->sortBy))
             ->paginate($this->perPage, pageName: 'page');
     }
