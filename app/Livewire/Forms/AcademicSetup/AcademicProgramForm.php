@@ -28,7 +28,7 @@ class AcademicProgramForm extends Form
 
             'short_name' => [
                 'required',
-                'max:5',
+                'max:10',
                 Rule::unique('academic_programs', 'short_name')->ignore($this->id)
             ],
 

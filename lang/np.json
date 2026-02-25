@@ -75,6 +75,16 @@
     "Academic Subject Setup": "शैक्षिक विषय सेटअप",
     "Enter Subject name": "विषयको नाम प्रविष्ट गर्नुहोस्",
     "Enter Subject Short name": "विषय छोटो नाम प्रविष्ट गर्नुहोस्",
-    "Enter Subject Code": "विषय कोड प्रविष्ट गर्नुहोस्"
+    "Enter Subject Code": "विषय कोड प्रविष्ट गर्नुहोस्",
+    "Room": "कोठा",
+    "Room Setup": "कोठा सेटअप",
+    "Floor No.": "तल्ला नं.",
+    "Block No.": "ब्लक नं.",
+    "Create Room": "कोठा सिर्जना गर्नुहोस्",
+    "Edit Room": "कोठा सम्पादन गर्नुहोस्",
+    "Enter Room name": "कोठाको नाम प्रविष्टि गर्नुहोस्",
+    "Enter Room Short name": "कोठाको छोटो नाम प्रविष्ट गर्नुहोस्",
+    "Enter Floor Number": "तल्ला नम्बर प्रविष्ट गर्नुहोस्",
+    "Enter Block Number": "ब्लक नम्बर प्रविष्ट गर्नुहोस्"
 
 }

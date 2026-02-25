@@ -57,3 +57,13 @@ Breadcrumbs::for('academic-setup.academic-subject', function (Trail $trail) {
     $trail->parent('Academic-setup');
     $trail->push(__('Academic Subject Setup'));
 });
+
+Breadcrumbs::for('academic-setup.academic-room', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Room Setup'));
+});
+
+Breadcrumbs::for('academic-setup.academic-schedule', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Schedule Setup'));
+});

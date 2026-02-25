@@ -29,9 +29,9 @@ class AcademicSubjectForm extends Form
                 'max:70',
                 Rule::unique('academic_subjects', 'name')->ignore($this->id)
             ],
-            'short_name' => 'nullable|max:5',
+            'short_name' => 'nullable|max:10',
             'status' => 'required',
-            'code' => 'required|max:5',
+            'code' => 'required|max:10',
             'type' => 'required'
         ];
     }

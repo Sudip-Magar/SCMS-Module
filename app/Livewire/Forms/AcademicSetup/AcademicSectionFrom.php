@@ -30,7 +30,7 @@ class AcademicSectionFrom extends Form
 
             'short_name' => [
                 'required',
-                'max:5',
+                'max:10',
                 Rule::unique('academic_sections', 'short_name')->ignore($this->id)
             ],
 
