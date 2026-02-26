@@ -1,8 +1,8 @@
 <div x-data="{ drawer: @entangle('drawer'), deleteModal: @entangle('deleteModal') }" x-init="$store.academicYearSetup.init()">
     <x-header class="text-lg header" title="{{ __('Academic Year Setup') }}">
         <x-slot:middle class="flex justify-end">
-            <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}"
-                wire:model.live.debounce="search" clearable />
+            <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search"
+                clearable />
         </x-slot:middle>
         <x-slot:actions>
             <div x-cloak>
@@ -94,6 +94,15 @@
                             <small class="text-red-500" x-text="$store.academicYearSetup.errors.end_year_en"></small>
                         </template>
 
+                    </div>
+
+                    <div>
+                        <x-select label="{{ __('Academic Level') }}:"
+                            x-model="$store.academicYearSetup.AcademicYearData.academic_level" :options="$academic_level"
+                            option-value="value" option-label="label" />
+                        <template x-if="$store.academicYearSetup.errors?.academic_level">
+                            <small class="text-red-500" x-text="$store.academicYearSetup.errors.academic_level"></small>
+                        </template>
                     </div>
 
                     <div>

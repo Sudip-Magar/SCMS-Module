@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\searchSelect2Controller;
 use App\Livewire\Auth\Login;
 use App\Livewire\Scms\AcademicSetup\AcademicDailyScheduleSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicFacultySetup;
@@ -7,6 +8,7 @@ use App\Livewire\Scms\AcademicSetup\AcademicLevelSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicProgramSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicRoomSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicSectionSetup;
+use App\Livewire\Scms\AcademicSetup\AcademicStructureSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicSubjectSetup;
 use App\Livewire\Scms\AcademicSetup\AcademicYearSetup;
 use App\Livewire\Scms\Dashboard;
@@ -28,6 +30,7 @@ Route::get('/lang/{loacle}', function ($locale) {
 })->name('lang.switch');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/searchSelect2', searchSelect2Controller::class)->name('searchSelect2');
     Route::get('/', Dashboard::class)->name('dashboard');
 
     Route::prefix('setup')->group(function () {
@@ -46,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/academic-subject', AcademicSubjectSetup::class)->name('academic-setup.academic-subject');
         Route::get('/academic-room', AcademicRoomSetup::class)->name('academic-setup.academic-room');
         Route::get('/academic-schedule', AcademicDailyScheduleSetup::class)->name('academic-setup.academic-schedule');
+        Route::get('/academic-structure', AcademicStructureSetup::class)->name('academic-setup.academic-structure');
     });
 });
 
