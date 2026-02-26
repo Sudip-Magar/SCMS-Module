@@ -48,7 +48,7 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <x-select label="{{ __('Status') }}:" wire:model='scheduleForm.academic_level'
+                        <x-select label="{{ __('Academic Level') }}:" wire:model='scheduleForm.academic_level'
                             :options="$academic_level" option-value="value" option-label="label" />
                     </div>
 

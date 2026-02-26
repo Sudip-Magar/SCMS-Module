@@ -21,7 +21,7 @@ class AcademicDailyScheduleSetup extends Component
     public bool $drawer = false;
     public bool $deleteModal = false;
     public $title;
-    public array $sortBy = ['column' => 'academic_level', 'direction' => 'asc'];
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
     public $academic_level;
     public $shift;
@@ -106,12 +106,12 @@ class AcademicDailyScheduleSetup extends Component
     public function scheduleData(): LengthAwarePaginator
     {
         return AcademicDailySchedule::query()
-            ->selectRaw("id, day, total_period, shift, CONCAT(
+            ->selectRaw("id, name, day, total_period, shift, CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
                             LOWER(SUBSTRING(`status`, 2))) as status, CONCAT(
                             UCASE(SUBSTRING(`academic_level`, 1, 1)),
                             LOWER(SUBSTRING(`academic_level`, 2))) as academic_level")
-            ->when($this->search, fn($query) => $query->where('academic_level', 'like', "%$this->search%"))
+            ->when($this->search, fn($query) => $query->where('name', 'like', "%$this->search%"))
             ->orderBy(...array_values($this->sortBy))
             ->paginate($this->perPage, pageName: 'page');
     }
@@ -120,7 +120,8 @@ class AcademicDailyScheduleSetup extends Component
     {
         return [
             ['key' => 'action', 'label' => __('Action'), 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'academic_level', 'label' => __('Academic Level'), 'class' => 'w-100',],
+            ['key' => 'name', 'label' => __('Name'), 'class' => 'w-100',],
+            ['key' => 'academic_level', 'label' => __('Academic Level'),],
             ['key' => 'day', 'label' => __('Day'), 'sortable' => false],
             ['key' => 'total_period', 'label' => __('Total Period'), 'sortable' => false],
             ['key' => 'shift', 'label' => __('Shift'), 'sortable' => false],
