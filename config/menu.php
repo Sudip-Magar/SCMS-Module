@@ -28,7 +28,7 @@ return [
             ['title' => 'Section', 'route' => 'academic-setup.academic-section', 'search' => ['Academic section Setup', 'Academic Setup']],
             ['title' => 'Subject', 'route' => 'academic-setup.academic-subject', 'search' => ['Academic subject Setup', 'Academic Setup']],
             ['title' => 'Room', 'route' => 'academic-setup.academic-room', 'search' => ['Academic room Setup', 'Academic Setup']],
-            ['title' => 'Academic Schedule', 'route' => 'academic-setup.academic-schedule', 'search' => ['Academic schedule Setup', 'Academic Setup']],
+            ['title' => 'Daily Schedule', 'route' => 'academic-setup.academic-schedule', 'search' => ['Academic schedule Setup', 'Academic Setup']],
         ],
     ],
 

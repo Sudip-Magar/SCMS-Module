@@ -85,6 +85,17 @@
     "Enter Room name": "कोठाको नाम प्रविष्टि गर्नुहोस्",
     "Enter Room Short name": "कोठाको छोटो नाम प्रविष्ट गर्नुहोस्",
     "Enter Floor Number": "तल्ला नम्बर प्रविष्ट गर्नुहोस्",
-    "Enter Block Number": "ब्लक नम्बर प्रविष्ट गर्नुहोस्"
+    "Enter Block Number": "ब्लक नम्बर प्रविष्ट गर्नुहोस्",
+    "Daily Schedule": "दैनिक तालिका",
+    "Schedule Setup": "तालिका सेटअप",
+    "Academic Level": "शैक्षिक स्तर",
+    "Day": "बार",
+    "Total Period": "कुल अवधि",
+    "Shift": "सिफ्ट",
+    "Enter day": "बार प्रविष्ट गर्नुहोस्",
+    "Enter total Period":"कुल अवधि प्रविष्ट गर्नु,होस्",
+    "Enter Shift": "सिफ्ट प्रविष्ट गर्नुहोस्",
+    "Create Daily Schedule":"दैनिक तालिका बनाउनुहोस्",
+    "Edit Daily Schedule":"दैनिक तालिका सम्पादन गर्नुहोस्"
 
 }
