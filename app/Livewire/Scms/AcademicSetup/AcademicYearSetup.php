@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Scms\AcademicSetup;
 
+use App\Enums\AcademicLevelState;
 use App\Events\AuditTableEntryEvent;
 use App\Livewire\Forms\AcademicSetup\AcademicYearForm;
 use App\Models\AcademicSetup\AcademicYear;
@@ -23,9 +24,9 @@ class AcademicYearSetup extends Component
     public bool $drawer = false;
     public bool $deleteModal = false;
     public $title;
-    public array $sortBy = ['column' => 'start_year_en', 'direction' => 'asc'];
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
-    public $yearSelect;
+    public $academic_level;
 
     public function mount()
     {
@@ -36,9 +37,13 @@ class AcademicYearSetup extends Component
                 'label' => $item->value
             ])
             ->toArray();
+        $this->academic_level = collect(AcademicLevelState::cases())
+            ->map(fn($item) => [
+                'value' => $item->name,
+                'label' => $item->value
+            ])
+            ->toArray();
 
-        // $this->yearSelect = ['altFormat' => 'd/m/Y'];
-        // dd($this->status);
     }
 
     public function saveAcademicYear($data)
@@ -100,10 +105,13 @@ class AcademicYearSetup extends Component
     public function yearData(): LengthAwarePaginator
     {
         return AcademicYear::query()
-            ->selectRaw("id, start_year_en, start_year_np, end_year_en, end_year_np,  CONCAT(
+            ->selectRaw("id, name, start_year_en, start_year_np, end_year_en, end_year_np,  CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
-                            LOWER(SUBSTRING(`status`, 2))) as status")
-            ->when($this->search, fn($query) => $query->where('start_year_en', 'like', "%$this->search%"))
+                            LOWER(SUBSTRING(`status`, 2))) as status,
+                            CONCAT(
+                            UCASE(SUBSTRING(`academic_level`, 1, 1)),
+                            LOWER(SUBSTRING(`academic_level`, 2))) as academic_level")
+            ->when($this->search, fn($query) => $query->where('name', 'like', "%$this->search%"))
             ->orderBy(...array_values($this->sortBy))
             ->paginate($this->perPage, pageName: 'page');
     }
@@ -112,7 +120,9 @@ class AcademicYearSetup extends Component
     {
         return [
             ['key' => 'action', 'label' => __('Action'), 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'start_year_en', 'label' => __('Start Year (EN)'), 'class' => 'w-50',],
+            ['key' => 'name', 'label' => __('Name'), 'class' => 'w-50',],
+            ['key' => 'academic_level', 'label' => __('Academic_level'),'sortable' => false],
+            ['key' => 'start_year_en', 'label' => __('Start Year (EN)'),'sortable' => false],
             ['key' => 'start_year_np', 'label' => __('Start Year (NP)'), 'sortable' => false],
             ['key' => 'end_year_en', 'label' => __('End Year (EN)'), 'sortable' => false],
             ['key' => 'end_year_np', 'label' => __('End Year (NP)'), 'sortable' => false],

@@ -19,6 +19,7 @@ return new class extends Migration {
         if (!Schema::hasTable($schema_name)) {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
                 $table->id();
+                $table->string('name');
                 $table->string('academic_level');
                 $table->string(column: 'day');
                 $table->integer('total_period');

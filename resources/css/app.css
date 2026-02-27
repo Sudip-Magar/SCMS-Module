@@ -103,3 +103,31 @@ x-cloak {
     border-radius: 8px;
     border: solid #00e99c 2px;
 }
+
+/* DARK MODE - Select2 */
+.dark .select2-container--default .select2-selection--single {
+    background-color: #1D232A;
+    /* gray-800 */
+    border-color: rgb(181, 181, 181);
+    /* gray-600 */
+    color: white;
+}
+
+.dark .select2-container--default .select2-selection__rendered {
+    color: white;
+}
+
+.dark .select2-container--default .select2-dropdown {
+    background-color: #1D232A;
+    color: white;
+}
+
+.dark .select2-container--default .select2-results__option {
+    background-color: #1D232A;
+    color: white;
+}
+
+.dark .select2-container--default .select2-results__option--highlighted {
+    background-color: #374151;
+    /* gray-700 */
+}

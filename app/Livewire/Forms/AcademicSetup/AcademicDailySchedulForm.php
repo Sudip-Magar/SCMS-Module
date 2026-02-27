@@ -15,6 +15,7 @@ use Livewire\Form;
 class AcademicDailySchedulForm extends Form
 {
     public $id;
+    public $name;
     public $academic_level = AcademicLevelState::SCHOOL->name;
     public $day;
     public $total_period;
@@ -51,6 +52,8 @@ class AcademicDailySchedulForm extends Form
             'status' => $this->status,
         ];
 
+        $data['name'] = $this->generateScheduleName($data);
+
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
         } else {
@@ -66,5 +69,15 @@ class AcademicDailySchedulForm extends Form
         }
 
         return true;
+    }
+
+    public function generateScheduleName($data){
+        $academic_level = ucfirst(strtolower($data['academic_level']));
+        $day = ucfirst(strtolower($data['day']));
+        $shift = ucfirst(strtolower($data['shift']));
+        $total_period = $data['total_period'];
+
+        $result = "{$academic_level}-{$day}-{$shift}({$total_period} Period)";
+        return $result;
     }
 }
