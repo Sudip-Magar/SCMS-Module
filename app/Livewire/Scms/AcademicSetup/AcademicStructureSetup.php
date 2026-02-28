@@ -6,6 +6,7 @@ namespace App\Livewire\Scms\AcademicSetup;
 use App\Enums\AcademicLevelState;
 use App\Enums\AcademicSystemState;
 use App\Enums\StatusState;
+use App\Events\AuditTableEntryEvent;
 use App\Http\Controllers\searchSelect2Controller;
 use App\Livewire\Forms\AcademicSetup\AcademicStructureForm;
 use App\Models\AcademicSetup\AcademicStructure;
@@ -61,9 +62,9 @@ class AcademicStructureSetup extends Component
     public function saveAcademicStructure($data)
     {
         try {
-            // if (($has_errors = validateField($data, $this->structureForm->getRules()))) {
-            //     return $has_errors;
-            // }
+            if (($has_errors = validateField($data, $this->structureForm->getRules()))) {
+                return $has_errors;
+            }
             $is_saved = $this->structureForm->performAcademicStructure($data);
 
             if (!$is_saved) {
@@ -71,12 +72,12 @@ class AcademicStructureSetup extends Component
                 return false;
             }
 
-            $this->success('Academic Structure ' . ($this->structureForm->id ? 'Updated' : 'Saved') . ' Successgfully', position: 'toast-bottom');
+            $this->success('Academic Structure ' . ($this->structureForm->id ? 'Updated' : 'Saved') . ' Successfully', position: 'toast-bottom');
             $this->drawer = false;
             return true;
 
         } catch (\Exception $exception) {
-            $this->error('Something went wrong', position: 'toast-bottom');
+            $this->error('Something went wrong' . $exception->getMessage(), position: 'toast-bottom');
         }
     }
 
@@ -97,10 +98,36 @@ class AcademicStructureSetup extends Component
         $selectSearch = app(searchSelect2Controller::class);
 
         $this->drawer = true;
+        $this->academicYears = $selectSearch->getAcademicYear(request());
         $this->academicPrograms = $selectSearch->getAcademicProgram(request());
-        $this->js('$store.academicStructureSetup.academicPrograms = '. json_encode($this->academicPrograms).'');
-        $this->js('$store.academicStructureSetup.init('. $structure . ')');
-        // return response()->json(['data' => $structure->toArray()]);
+        $this->academicFaculty = $selectSearch->getAcademicFaculty(request());
+        $this->academicLevel = $selectSearch->getAcademicLevel(request());
+        $this->academicRooms = $selectSearch->getAcademicRoom(request());
+        $this->academicSections = $selectSearch->getAcademicSection(request());
+        $this->js('$store.academicStructureSetup.academicYears = ' . json_encode($this->academicYears));
+        $this->js('$store.academicStructureSetup.academicPrograms = ' . json_encode($this->academicPrograms));
+        $this->js('$store.academicStructureSetup.academicFaculty = ' . json_encode($this->academicFaculty));
+        $this->js('$store.academicStructureSetup.academicLevel = ' . json_encode($this->academicLevel));
+        $this->js('$store.academicStructureSetup.academicRooms = ' . json_encode($this->academicRooms));
+        $this->js('$store.academicStructureSetup.academicSections = ' . json_encode($this->academicSections));
+        $this->js('$store.academicStructureSetup.init(' . $structure . ')');
+    }
+
+    public function delete(AcademicStructure $structure)
+    {
+        try {
+            AuditTableEntryEvent::dispatch('academic_structures', $structure, 'delete');
+            $is_deleted = $structure->deleteOrFail();
+            if (!$is_deleted) {
+                $this->error('Failed to delete the Academic Structure', position: "toast-bottom");
+                return false;
+            }
+
+            $this->deleteModal = false;
+            $this->error('Academic Structure Delete Successfully', position: 'toast-bottom');
+        } catch (\Exception $exception) {
+            $this->error('Something went wrong ' . $exception->getMessage(), position: 'toast-bottom');
+        }
     }
 
     public function render()

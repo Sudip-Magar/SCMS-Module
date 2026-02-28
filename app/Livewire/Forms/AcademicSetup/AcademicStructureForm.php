@@ -45,12 +45,13 @@ class AcademicStructureForm extends Form
 
     public function performAcademicStructure($data)
     {
+
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
-            } else {
-                $data['created_by'] = Auth::user()->id;
-                }
-                $is_saved = AcademicStructure::updateOrCreate(['id' => $this->id], $data);
+        } else {
+            $data['created_by'] = Auth::user()->id;
+        }
+        $is_saved = AcademicStructure::updateOrCreate(['id' => $this->id], $data);
 
         AuditTableEntryEvent::dispatch('academic_structures', $is_saved, $this->id ? 'edit' : 'create');
         if ($is_saved) {
