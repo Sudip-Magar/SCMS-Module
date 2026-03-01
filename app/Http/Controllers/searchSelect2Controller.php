@@ -7,6 +7,7 @@ use App\Models\AcademicSetup\AcademicLevel;
 use App\Models\AcademicSetup\AcademicProgram;
 use App\Models\AcademicSetup\AcademicRoom;
 use App\Models\AcademicSetup\AcademicSection;
+use App\Models\AcademicSetup\AcademicStructure;
 use App\Models\AcademicSetup\AcademicYear;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,8 @@ class searchSelect2Controller extends Controller
             'get_academic_faculty' => 'getAcademicFaculty',
             'get_academic_level' => 'getAcademicLevel',
             'get_academic_room' => 'getAcademicRoom',
-            'get_academic_section' => 'getAcademicSection'
+            'get_academic_section' => 'getAcademicSection',
+            'get_academic_structure' => 'getAcademicStructure',
         };
     }
 
@@ -83,6 +85,16 @@ class searchSelect2Controller extends Controller
     public function getAcademicSection(Request $request)
     {
         return AcademicSection::query()
+            ->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('term', '') . '%');
+            })
+            ->active()
+            ->get(['id', 'name as text']);
+    }
+
+    public function getAcademicStructure(Request $request)
+    {
+        return AcademicStructure::query()
             ->where(function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })

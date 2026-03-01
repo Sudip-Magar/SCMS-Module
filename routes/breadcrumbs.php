@@ -68,7 +68,17 @@ Breadcrumbs::for('academic-setup.academic-schedule', function (Trail $trail) {
     $trail->push(__('Schedule Setup'));
 });
 
-Breadcrumbs::for('academic-setup.academic-strucutre', function (Trail $trail) {
+Breadcrumbs::for('academic-setup.academic-structure', function (Trail $trail) {
     $trail->parent('Academic-setup');
     $trail->push(__('Structure Setup'));
+});
+
+Breadcrumbs::for('academic-setup.academic-timetable', function (Trail $trail) {
+    $trail->parent('Academic-setup');
+    $trail->push(__('Timetable Setup'));
+});
+
+Breadcrumbs::for('academic-setup.academic-timetable.add', function (Trail $trail) {
+    $trail->parent('academic-setup.academic-timetable');
+    $trail->push(__('Timetable Setup Add'));
 });

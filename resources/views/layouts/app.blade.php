@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    {{-- <x-spotlight shortcut=""/> --}}
+{{--     <x-spotlight shortcut=""/>--}}
     <x-toast />
 </body>
 
