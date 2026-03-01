@@ -17,6 +17,8 @@ use App\Livewire\Scms\Setup\Role\CreateRole;
 use App\Livewire\Scms\Setup\Role\RoleSetup;
 use App\Livewire\Scms\Setup\User;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableSetup;
+use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableAdd;
 use Tabuna\Breadcrumbs\Trail;
 
 Route::get('/login', Login::class)->name('login');
@@ -50,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/academic-room', AcademicRoomSetup::class)->name('academic-setup.academic-room');
         Route::get('/academic-schedule', AcademicDailyScheduleSetup::class)->name('academic-setup.academic-schedule');
         Route::get('/academic-structure', AcademicStructureSetup::class)->name('academic-setup.academic-structure');
+        Route::get('/academic-timetable', AcademicTimetableSetup::class)->name('academic-setup.academic-timetable');
+        Route::get('/academic-timetable/add/{id?}', AcademicTimetableAdd::class)->name('academic-setup.academic-timetable.add');
     });
 });
 
