@@ -46,7 +46,7 @@ if (!function_exists('validateField')) {
             return response()->json(['errors' => $validator->errors()->toArray()]);
         }
 
-        return true;
+        return [];
     }
 }
 

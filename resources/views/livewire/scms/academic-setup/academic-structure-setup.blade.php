@@ -77,7 +77,7 @@
                                     x-for="listItem in $store.academicStructureSetup.academicYears.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicYears?.year_id || null">
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.year_id || null">
                                     </option>
                                 </template>
                             </select>
@@ -92,13 +92,13 @@
                             <select class="academic-program-select"
                                 @change.prevent="$store.academicStructureSetup.updateSelectedData('program_id',$event.target.value)"
                                 x-bind:id="'program_id'" x-bind:data-row-index="'program_id'"
-                                x-model="$store.academicStructureSetup.structureData.program_id">
+                                 x-model="$store.academicStructureSetup.structureData.program_id">
                                 <option value="">{{ 'Add Program' }}</option>
                                 <template
                                     x-for="listItem in $store.academicStructureSetup.academicPrograms.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicPrograms?.program_id ||
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.program_id ||
                                             null">
                                     </option>
                                 </template>
@@ -121,7 +121,7 @@
                                     x-for="listItem in $store.academicStructureSetup.academicFaculty.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicPrograms?.faculty_id ||
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.faculty_id ||
                                             null">
                                     </option>
                                 </template>
@@ -145,7 +145,7 @@
                                     x-for="listItem in $store.academicStructureSetup.academicLevel.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicPrograms?.level_id ||
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.level_id ||
                                             null">
                                     </option>
                                 </template>
@@ -168,7 +168,7 @@
                                     x-for="listItem in $store.academicStructureSetup.academicRooms.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicPrograms?.room_id ||
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.room_id ||
                                             null">
                                     </option>
                                 </template>
@@ -191,7 +191,7 @@
                                     x-for="listItem in $store.academicStructureSetup.academicSections.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">
                                     <option :value="listItem.id" x-text="listItem.text"
-                                        :selected="listItem.id === $store.academicStructureSetup?.academicPrograms?.section_id ||
+                                        :selected="listItem.id === $store.academicStructureSetup?.structureData?.section_id ||
                                             null">
                                     </option>
                                 </template>
@@ -257,9 +257,8 @@
 
             init(structureData) {
                 this.initializeSelect2();
-                console.log(this.academicPrograms);
-                
-                if(structureData) {
+
+                if (structureData) {
                     this.structureData = structureData;
                 }
             },
@@ -280,7 +279,7 @@
                             return false
                         }
                         // success
-                        $store.academicStructureSetup.resetForm();
+                        // $store.academicStructureSetup.resetForm();
                     })
                     .catch(error => {
                         console.error(error);
@@ -377,12 +376,29 @@
 
                 // Set initial value
                 if (this.structureData[config.key]) {
-                    const option = new Option(
-                        this.structureData[config.key],
-                        this.structureData[config.key],
-                        true, true
-                    );
-                    element.append(option).trigger('change');
+                    let listMap = {
+                        year_id: this.academicYears,
+                        program_id: this.academicPrograms,
+                        faculty_id: this.academicFaculty,
+                        level_id: this.academicLevel,
+                        room_id: this.academicRooms,
+                        section_id: this.academicSections
+                    };
+
+                    let list = listMap[config.key] || [];
+
+                    let selectedItem = list.find(item => item.id == this.structureData[config.key]);
+
+
+                    if (selectedItem) {
+                        const option = new Option(
+                            selectedItem.text, // ✅ show text
+                            selectedItem.id, // ✅ value
+                            true, true
+                        );
+
+                        element.append(option).trigger('change');
+                    }
                 }
             },
 
