@@ -63,22 +63,28 @@ Breadcrumbs::for('academic-setup.academic-room', function (Trail $trail) {
     $trail->push(__('Room Setup'));
 });
 
-Breadcrumbs::for('academic-setup.academic-schedule', function (Trail $trail) {
-    $trail->parent('Academic-setup');
-    $trail->push(__('Schedule Setup'));
-});
-
 Breadcrumbs::for('academic-setup.academic-structure', function (Trail $trail) {
     $trail->parent('Academic-setup');
     $trail->push(__('Structure Setup'));
 });
 
-Breadcrumbs::for('academic-setup.academic-timetable', function (Trail $trail) {
-    $trail->parent('Academic-setup');
+//timetable setup breadcrumbs
+Breadcrumbs::for('timetable-setup', function (Trail $trail) {
     $trail->push(__('Timetable Setup'));
 });
 
-Breadcrumbs::for('academic-setup.academic-timetable.add', function (Trail $trail) {
-    $trail->parent('academic-setup.academic-timetable');
-    $trail->push(__('Timetable Setup Add'));
+Breadcrumbs::for('timetable-setup.daily-schedule', function (Trail $trail) {
+    $trail->parent('timetable-setup');
+    $trail->push(__('Daily Schedule'));
+});
+
+
+Breadcrumbs::for('timetable-setup.timetable-setup', function (Trail $trail) {
+    $trail->parent('timetable-setup');
+    $trail->push(__('Timetable'));
+});
+
+Breadcrumbs::for('timetable-setup.timetable-setup.add', function (Trail $trail) {
+    $trail->parent('timetable-setup.timetable-setup');
+    $trail->push(__('Timetable Add'));
 });

@@ -28,18 +28,28 @@ return [
             ['title' => 'Section', 'route' => 'academic-setup.academic-section', 'search' => ['Academic section Setup', 'Academic Setup']],
             ['title' => 'Subject', 'route' => 'academic-setup.academic-subject', 'search' => ['Academic subject Setup', 'Academic Setup']],
             ['title' => 'Room', 'route' => 'academic-setup.academic-room', 'search' => ['Academic room Setup', 'Academic Setup']],
-            ['title' => 'Academic Schedule', 'route' => 'academic-setup.academic-schedule', 'search' => ['Academic schedule Setup', 'Academic Setup']],
             ['title' => 'Academic Structure', 'route' => 'academic-setup.academic-structure', 'search' => ['Academic Structure Setup', 'Academic Setup']],
-            ['title' => 'Academic Timetable', 'route' => 'academic-setup.academic-timetable', 'search' => ['Academic Timetable Setup', 'Academic Setup']],
 
         ],
     ],
 
     [
-        'title' => 'Settings',
-        'icon' => 'o-home',
-        'route' => 'dashboard',
-        'search' => ['Setting']
+        'title' => 'Timetable Setup',
+        'icon' => 'fas fa-calendar-days',
+        'children' => [
+            ['title' => 'Daily Schedule', 'route' => 'timetable-setup.daily-schedule', 'search' => ['Academic schedule Setup', 'Academic Setup']],
+            ['title' => 'Timetable', 'route' => 'timetable-setup.timetable-setup', 'search' => ['Academic Timetable Setup', 'Academic Setup']],
+
+        ],
+    ],
+
+    [
+        'title' => 'Student',
+        'icon' => 'fa-solid fa-user-graduate',
+        'children' => [
+            ['title' => 'Users', 'route' => 'setup.user', 'search' => ['User Setup', 'Setup']],
+            ['title' => 'Permission', 'route' => 'setup.permission', 'search' => ['Permission Setup', 'Setup']],
+        ],
     ],
 
 ];
