@@ -19,6 +19,8 @@ use App\Livewire\Scms\Setup\User;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableSetup;
 use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableAdd;
+use  App\Livewire\Scms\StudentSetup\Student\StudentList;
+use  App\Livewire\Scms\StudentSetup\Student\StudentAdd;
 use Tabuna\Breadcrumbs\Trail;
 
 Route::get('/login', Login::class)->name('login');
@@ -53,10 +55,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/academic-structure', AcademicStructureSetup::class)->name('academic-setup.academic-structure');
     });
 
-     Route::prefix('timetable-setup')->group(function () {
+    Route::prefix('timetable-setup')->group(function () {
         Route::get('/daily-schedule', AcademicDailyScheduleSetup::class)->name('timetable-setup.daily-schedule');
         Route::get('/timetable-setup', AcademicTimetableSetup::class)->name('timetable-setup.timetable-setup');
         Route::get('/timetable-setup/add/{id?}', AcademicTimetableAdd::class)->name('timetable-setup.timetable-setup.add');
+    });
+
+    Route::prefix('student-setup')->group(function () {
+        Route::get('/student-list', StudentList::class)->name('student-setup.student-list');
+        Route::get('/student-list/add/{id?}', StudentAdd::class)->name('student-setup.student-add');
     });
 });
 

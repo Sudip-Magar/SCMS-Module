@@ -44,11 +44,10 @@ return [
     ],
 
     [
-        'title' => 'Student',
+        'title' => 'Student Setup',
         'icon' => 'fa-solid fa-user-graduate',
         'children' => [
-            ['title' => 'Users', 'route' => 'setup.user', 'search' => ['User Setup', 'Setup']],
-            ['title' => 'Permission', 'route' => 'setup.permission', 'search' => ['Permission Setup', 'Setup']],
+            ['title' => 'Student', 'route' => 'student-setup.student-list', 'search' => ['Student Setup', 'Student']],
         ],
     ],
 
