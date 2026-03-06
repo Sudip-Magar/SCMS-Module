@@ -6,7 +6,7 @@
         </x-slot:middle>
         <x-slot:actions>
             <div x-cloak>
-                <x-button :label="__('Add')" link="{{route('academic-setup.academic-timetable.add')}}" responsive
+                <x-button :label="__('Add')" link="{{route('timetable-setup.timetable-setup.add')}}" responsive
                     icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5" />
             </div>
         </x-slot:actions>

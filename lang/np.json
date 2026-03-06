@@ -93,9 +93,11 @@
     "Total Period": "कुल अवधि",
     "Shift": "सिफ्ट",
     "Enter day": "बार प्रविष्ट गर्नुहोस्",
-    "Enter total Period":"कुल अवधि प्रविष्ट गर्नु,होस्",
+    "Enter total Period": "कुल अवधि प्रविष्ट गर्नु,होस्",
     "Enter Shift": "सिफ्ट प्रविष्ट गर्नुहोस्",
-    "Create Daily Schedule":"दैनिक तालिका बनाउनुहोस्",
-    "Edit Daily Schedule":"दैनिक तालिका सम्पादन गर्नुहोस्"
-
+    "Create Daily Schedule": "दैनिक तालिका बनाउनुहोस्",
+    "Edit Daily Schedule": "दैनिक तालिका सम्पादन गर्नुहोस्",
+    "Timetable Setup": "समयतालिका सेटअप",
+    "Timetable": "समयतालिका",
+    "Timetable Add": "समयतालिका थप्नुहोस्"
 }

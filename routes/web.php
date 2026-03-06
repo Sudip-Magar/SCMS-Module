@@ -50,10 +50,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/academic-section', AcademicSectionSetup::class)->name('academic-setup.academic-section');
         Route::get('/academic-subject', AcademicSubjectSetup::class)->name('academic-setup.academic-subject');
         Route::get('/academic-room', AcademicRoomSetup::class)->name('academic-setup.academic-room');
-        Route::get('/academic-schedule', AcademicDailyScheduleSetup::class)->name('academic-setup.academic-schedule');
         Route::get('/academic-structure', AcademicStructureSetup::class)->name('academic-setup.academic-structure');
-        Route::get('/academic-timetable', AcademicTimetableSetup::class)->name('academic-setup.academic-timetable');
-        Route::get('/academic-timetable/add/{id?}', AcademicTimetableAdd::class)->name('academic-setup.academic-timetable.add');
+    });
+
+     Route::prefix('timetable-setup')->group(function () {
+        Route::get('/daily-schedule', AcademicDailyScheduleSetup::class)->name('timetable-setup.daily-schedule');
+        Route::get('/timetable-setup', AcademicTimetableSetup::class)->name('timetable-setup.timetable-setup');
+        Route::get('/timetable-setup/add/{id?}', AcademicTimetableAdd::class)->name('timetable-setup.timetable-setup.add');
     });
 });
 

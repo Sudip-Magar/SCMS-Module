@@ -18,7 +18,7 @@ return new class extends Migration {
                 $table->id();
                 $table->string('username')->unique();
                 $table->string('user_type')->nullable();
-                $table->string('short_name');
+                $table->string('short_name')->nullable();
                 $table->unsignedBigInteger('user_id')->nullable();
                 $table->unsignedBigInteger('role_id')->nullable();
                 $table->string('password');
