@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Numbering\AdmissionNumbering;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -62,5 +63,35 @@ if (!function_exists('EngToNpNumberConverter')) {
             return str_replace($enNumber, $npNumber, $number);
         }
         // return str_replace($enNumber, $enNumber, $number);
+    }
+}
+
+if (!function_exists('getAdmissionNumbering')) {
+    function getAdmissionNumbering()
+    {
+        $admissionNumbering = AdmissionNumbering::query()
+            ->active()
+            ->get()
+            ->map(function ($row) {
+
+                $prefix = $row->prefix ?? '';
+                $suffix = $row->suffix ?? '';
+
+                // determine number
+                $number = $row->current > $row->start ? $row->current : $row->start;
+
+                // pad number
+                $body = str_pad($number, $row->body_length, '0', STR_PAD_LEFT);
+
+                // generate label
+                $label = $prefix . $body . $suffix;
+
+                return [
+                    'value' => $row->id,
+                    'label' => $label,
+                ];
+            });
+
+        return $admissionNumbering;
     }
 }

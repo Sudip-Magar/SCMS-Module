@@ -19,6 +19,7 @@ use App\Livewire\Scms\Setup\User;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableSetup;
 use App\Livewire\Scms\AcademicSetup\Timetable\AcademicTimetableAdd;
+use App\Livewire\Scms\Numbering\AcademicNumbering;
 use  App\Livewire\Scms\StudentSetup\Student\StudentList;
 use  App\Livewire\Scms\StudentSetup\Student\StudentAdd;
 use Tabuna\Breadcrumbs\Trail;
@@ -64,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('student-setup')->group(function () {
         Route::get('/student-list', StudentList::class)->name('student-setup.student-list');
         Route::get('/student-list/add/{id?}', StudentAdd::class)->name('student-setup.student-add');
+        Route::get('/admission-numbering', AcademicNumbering::class)->name('student-setup.admission-numbering');
     });
 });
 

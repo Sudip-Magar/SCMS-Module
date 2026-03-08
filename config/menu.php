@@ -48,6 +48,7 @@ return [
         'icon' => 'fa-solid fa-user-graduate',
         'children' => [
             ['title' => 'Student', 'route' => 'student-setup.student-list', 'search' => ['Student Setup', 'Student']],
+            ['title' => 'Admission Numbering', 'route' => 'student-setup.admission-numbering', 'search' => ['Student Setup', 'Student']],
         ],
     ],
 
