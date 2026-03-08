@@ -199,8 +199,6 @@
 
             resetDeleteData() {
                 this.academic_year_id = null
-
-
             },
         });
     </script>

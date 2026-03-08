@@ -9,6 +9,8 @@ use App\Models\AcademicSetup\AcademicRoom;
 use App\Models\AcademicSetup\AcademicSection;
 use App\Models\AcademicSetup\AcademicStructure;
 use App\Models\AcademicSetup\AcademicYear;
+use App\Models\Address\District;
+use App\Models\Address\Province;
 use Illuminate\Http\Request;
 
 class searchSelect2Controller extends Controller
@@ -29,6 +31,8 @@ class searchSelect2Controller extends Controller
             'get_academic_room' => 'getAcademicRoom',
             'get_academic_section' => 'getAcademicSection',
             'get_academic_structure' => 'getAcademicStructure',
+            'get_province' => 'getProvince',
+            'get_district' => 'getDistrict',
         };
     }
 
@@ -39,6 +43,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -49,6 +54,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -59,6 +65,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -69,6 +76,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -79,6 +87,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -89,6 +98,7 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
 
@@ -99,6 +109,29 @@ class searchSelect2Controller extends Controller
                 $query->where('name', 'like', '%' . $request->input('term', '') . '%');
             })
             ->active()
+            ->limit(10)
             ->get(['id', 'name as text']);
     }
+    public function getProvince(Request $request)
+    {
+        return Province::query()
+            ->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('term', '') . '%');
+            })
+            ->limit(10)
+            ->get(['id', 'name as text']);
+    }
+
+    public function getDistrict(Request $request)
+{
+    return District::query()
+        ->when($request->filled('selected_id'), function ($query) use ($request) {
+            $query->where('province_id', $request->input('selected_id'));
+        })
+        ->when($request->filled('term'), function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->input('term') . '%');
+        })
+        ->limit(10)
+        ->get(['id', 'name as text']);
+}
 }

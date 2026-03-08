@@ -29,4 +29,5 @@ class StudentForm extends Form
     public $admission_date_en;
     public $admission_date_np;
     public $status = StatusState::ACTIVE->name;
+
 }
