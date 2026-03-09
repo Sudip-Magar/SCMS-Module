@@ -67,30 +67,39 @@ if (!function_exists('EngToNpNumberConverter')) {
 }
 
 if (!function_exists('getAdmissionNumbering')) {
-    function getAdmissionNumbering()
+    function getAdmissionNumbering($id = null)
     {
-        $admissionNumbering = AdmissionNumbering::query()
-            ->active()
-            ->get()
-            ->map(function ($row) {
+        // Query either all or specific
+        $query = AdmissionNumbering::query()->active();
 
+        if ($id) {
+            $query->where('id', $id);
+        }
+
+        $admissionNumbering = $query->get()
+            ->map(function ($row) {
                 $prefix = $row->prefix ?? '';
                 $suffix = $row->suffix ?? '';
 
-                // determine number
-                $number = $row->current > $row->start ? $row->current : $row->start;
+                // determine number index
+                $numberIndex = $row->current > $row->start ? $row->current : $row->start;
 
-                // pad number
-                $body = str_pad($number, $row->body_length, '0', STR_PAD_LEFT);
+                // pad number for admission_no
+                $body = str_pad($numberIndex, $row->body_length, '0', STR_PAD_LEFT);
 
-                // generate label
-                $label = $prefix . $body . $suffix;
+                $admissionNo = $prefix . $body . $suffix;
 
                 return [
-                    'value' => $row->id,
-                    'label' => $label,
+                    'admission_no' => $admissionNo,               // full admission number
+                    'admission_numbering_index' => $numberIndex, // numeric index
+                    'admission_numbering_id' => $row->id,                   // for select options
                 ];
             });
+
+        // if ID given, return single object
+        if ($id) {
+            return $admissionNumbering->first();
+        }
 
         return $admissionNumbering;
     }

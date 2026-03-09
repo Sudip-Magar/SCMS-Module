@@ -49,7 +49,7 @@ class AcademicYearSetup extends Component
     public function saveAcademicYear($data)
     {
         try {
-            if (($has_errors = validateField($data, $this->yearForm->getRules())) !== true) {
+            if (($has_errors = validateField($data, $this->yearForm->getRules()))) {
                 return $has_errors;
             }
 

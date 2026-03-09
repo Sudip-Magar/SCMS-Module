@@ -20,6 +20,8 @@ return new class extends Migration {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
                 $table->id();
                 $table->string('admission_no');
+                $table->string('admission_numbering_index');
+                $table->unsignedBigInteger('admission_numbering_id');
                 $table->string('first_name');
                 $table->string('middle_name')->nullable();
                 $table->string('last_name');
@@ -44,6 +46,7 @@ return new class extends Migration {
                 if (!$is_audit) {
                     $table->foreign('province_id')->references('id')->on('provinces')->restrictOnDelete()->cascadeOnUpdate();
                     $table->foreign('district_id')->references('id')->on('districts')->restrictOnDelete()->cascadeOnUpdate();
+                    $table->foreign('admission_numbering_id')->references('id')->on('admission_numberings')->restrictOnDelete()->cascadeOnUpdate();
                 }
 
                 $table->timestamps();

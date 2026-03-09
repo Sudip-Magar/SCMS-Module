@@ -18,15 +18,15 @@ return new class extends Migration {
     {
         if (!Schema::hasTable($schema_name)) {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
-                $table->id();
-                $table->string('academic_level');
-                $table->string('prefix');
-                $table->string('suffix');
-                $table->integer('start');
-                $table->integer('current');
-                $table->integer('body_length');
-                $table->integer('total_length');
-                $table->string('status');
+                    $table->id();
+                    $table->string('academic_level');
+                    $table->string('prefix');
+                    $table->string('suffix');
+                    $table->integer('start');
+                    $table->integer('current');
+                    $table->integer('body_length');
+                    $table->integer('total_length');
+                    $table->string('status');
                 extraField($table, $is_audit);
                 if ($is_audit) {
                     auditField($table);
