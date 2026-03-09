@@ -1,5 +1,5 @@
 <div x-data
-     class="px-3 py-2 flex justify-between items-center  border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
+     class="px-3 py-2 flex justify-between items-center bg-white dark:bg-[#1D232A] border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
 
     <!-- Left Section - Logo & Toggle -->
     <div class="flex gap-3 items-center">

@@ -21,9 +21,9 @@ return new class extends Migration {
                 $table->id();
                 $table->unsignedBigInteger('student_id');
                 $table->unsignedBigInteger('academic_structure_id')->nullable();
-                $table->integer('roll_no');
-                $table->string('symbol_no');
-                $table->string('registration_no');
+                $table->integer('roll_no')->nullable();
+                $table->string('symbol_no')->nullable();
+                $table->string('registration_no')->nullable;
                 extraField($table, $is_audit);
                 if ($is_audit) {
                     auditField($table);
