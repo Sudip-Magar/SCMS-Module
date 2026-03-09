@@ -4,6 +4,7 @@ namespace App\Livewire\Scms\StudentSetup\Student;
 
 use App\Enums\GenderState;
 use App\Enums\StatusState;
+use App\Enums\StudentDocumentTypeState;
 use App\Enums\StudentGuardainRelationState;
 use App\Enums\StudentGuardianOccupationState;
 use App\Livewire\Forms\Student\StudentForm;
@@ -19,11 +20,12 @@ class StudentAdd extends Component
     public $title;
     public StudentForm $studentForm;
     public StudentStructureForm $structureForm;
-    public $selectedTab = "guardian-tab";
+    public $selectedTab = "document-tab";
     public $status;
     public $gender;
     public $relations;
     public $occupations;
+    public $documentTypes;
 
     public $provinces;
     public $districts;
@@ -46,6 +48,13 @@ class StudentAdd extends Component
             ->toArray();
 
         $this->occupations = collect(StudentGuardianOccupationState::cases())
+            ->map(fn($item) => [
+                'value' => $item->name,
+                'label' => $item->value
+            ])
+            ->toArray();
+
+          $this->documentTypes = collect(StudentDocumentTypeState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
                 'label' => $item->value

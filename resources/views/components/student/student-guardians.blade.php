@@ -19,30 +19,30 @@
             </thead>
              <tbody class="bg-white">
             <template x-for="(guardian, index) in {{ $alpine_store }}.guardianForm" :key="index">
-                <tr>
-                    <td class="px-4 py-2 border-2 border-gray-400" x-text="index + 1"></td>
+                <tr x-show="guardian">
+                    <td class="px-4 py-2 border-2 border-gray-400 w-15" x-text="index + 1"></td>
 
-                    <td class="px-4 py-2 border-2 border-gray-400">
+                    <td class="px-4 py-2 border-2 border-gray-400 w-1/5">
                         <x-input placeholder="{{ __('Enter Guardian Name') }}"
-                            x-model='{{ $alpine_store }}.guardianForm[index].name' />
+                            x-model='guardian.name' />
                     </td>
 
-                    <td class="px-4 py-2 border-2 border-gray-400">
-                        <x-select x-model="{{ $alpine_store }}.guardianForm[index].relation" :options="$relations"
+                    <td class="px-4 py-2 border-2 border-gray-400 w-1/5">
+                        <x-select x-model="guardian.relation" :options="$relations"
                             option-value="value" option-label="label" />
                     </td>
 
-                    <td class="px-4 py-2 border-2 border-gray-400">
+                    <td class="px-4 py-2 border-2 border-gray-400 w-1/5">
                         <x-input type="number" placeholder="{{ __('Enter Guardian Number') }}"
-                            x-model='{{ $alpine_store }}.guardianForm[index].phone' />
+                            x-model='guardian.phone' />
                     </td>
 
-                    <td class="px-4 py-2 border-2 border-gray-400">
-                        <x-select x-model="{{ $alpine_store }}.guardianForm[index].occupation" :options="$occupations"
+                    <td class="px-4 py-2 border-2 border-gray-400 w-1/5">
+                        <x-select x-model="guardian.occupation" :options="$occupations"
                             option-value="value" option-label="label" />
                     </td>
 
-                    <td class="px-4 py-2 border-2 border-gray-400 w-30">
+                    <td class="px-4 py-2 border-2 border-gray-400 ">
                         <x-button icon="o-plus" @click.prevent="{{ $alpine_store }}.addRow()"
                             class="btn-xs btn-success text-white" />
                         <template x-if="index > 0">
