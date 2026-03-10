@@ -30,4 +30,23 @@ class StudentForm extends Form
     public $admission_date_np;
     public $status = StatusState::ACTIVE->name;
 
+    public function rules(){
+        return [
+            'admission_no' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'gender' => 'required',
+            'date_of_birth_en' => 'required',
+            'date_of_birth_np' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'province_id' => 'required',
+            'district_id' => 'required',
+            'city' => 'required',
+            'ward_no' => 'required',
+            'admission_date_en' => 'required',
+            'admission_date_np' => 'required',
+        ];
+    }
+
 }

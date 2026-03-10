@@ -11,21 +11,23 @@ use App\Livewire\Forms\Student\StudentForm;
 use App\Livewire\Forms\Student\StudentStructureForm;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Mary\Traits\Toast;
 
 class StudentAdd extends Component
 {
-    use WithFileUploads;
-    public $admissionNumberingModal = false;
+    use WithFileUploads, Toast;
+    public $admissionNumberingModal = true;
     public $id;
     public $title;
     public StudentForm $studentForm;
     public StudentStructureForm $structureForm;
-    public $selectedTab = "document-tab";
+    public $selectedTab = "guardian-tab";
     public $status;
     public $gender;
     public $relations;
     public $occupations;
     public $documentTypes;
+    public $documents = [];
 
     public $provinces;
     public $districts;
@@ -54,7 +56,7 @@ class StudentAdd extends Component
             ])
             ->toArray();
 
-          $this->documentTypes = collect(StudentDocumentTypeState::cases())
+        $this->documentTypes = collect(StudentDocumentTypeState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
                 'label' => $item->value
@@ -70,6 +72,30 @@ class StudentAdd extends Component
         if (!$this->id) {
             $this->documentNumberings = getAdmissionNumbering();
         }
+    }
+
+    public function saveStudent($data)
+    {
+        try {
+            if($has_errors = validateField($data['studentData'], $this->studentForm->getRules())){
+                return $has_errors;
+            }
+            dd($data['studentData']);
+
+        } catch (\Exception $exception) {
+            $this->error('Something went wrong', position: 'toast-bottom');
+        }
+
+    }
+
+    public function removeDocument($index)
+    {
+        if (isset($this->documents[$index])) {
+            unset($this->documents[$index]);
+        }
+
+        // reindex array so Livewire stays consistent
+        $this->documents = array_values($this->documents);
     }
 
     public function updateNumbering($id)
