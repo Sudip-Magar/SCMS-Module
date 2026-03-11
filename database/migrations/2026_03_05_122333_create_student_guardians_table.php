@@ -23,7 +23,7 @@ return new class extends Migration {
                 $table->string('name');
                 $table->string('relation');
                 $table->bigInteger('phone');
-                $table->bigInteger('occupation');
+                $table->string('occupation');
                 extraField($table, $is_audit);
                 if ($is_audit) {
                     auditField($table);

@@ -1,8 +1,9 @@
-<div>
+<div x-data="{documentForm: @entangle('documentForm').live} " x-init="$store.studentSetup.documentForm = documentForm">
     <x-header class="text-lg header" title="{{ __($title) }}"/>
 
-    <x-modal wire:model="admissionNumberingModal" class="backdrop-blur text-xs" box-class="w-100">
-        <x-select label="{{ __('Admission Numbering') }}" :options="$documentNumberings" option-label="admission_no"
+    <x-modal wire:model="admissionNumberingModal" class="backdrop-blur text-xs" box-class="w-100" persistent>
+        <x-select class="w-full!" label="{{ __('Admission Numbering') }}" :options="$documentNumberings"
+                  option-label="admission_no"
                   option-value="admission_numbering_id" x-model="$store.studentSetup.selectedNumbering"
                   @change="$store.studentSetup.updateNumbering($event.target.value)"/>
         <x-slot:actions>
@@ -91,7 +92,10 @@
                     <div>
                         <x-input label="{{ __('First Name') }}" placeholder="{{ __('First Name') }}"
                                  x-model="$store.studentSetup.studentData.first_name"/>
-                        <span class="text-red-500 text-xs" x-text="$store.studentSetup.errors.first_name || ''"></span>
+                        <template x-if="$store.studentSetup.errors['first_name']">
+                            <span class="text-red-500 text-xs"
+                                  x-text="$store.studentSetup.errors['first_name']"></span>
+                        </template>
                     </div>
 
                     <div>
@@ -244,7 +248,8 @@
                 </x-tab>
 
                 <x-tab name="document-tab" label="{{ __('Education Document') }}">
-                    <x-student.student-documents alpine_store="$store.studentSetup" :document_types="$documentTypes"/>
+                    <x-student.student-documents alpine_store="$store.studentSetup" :document_types="$documentTypes"
+                                                 :document_form="$documentForm"/>
                 </x-tab>
             </x-tabs>
             {{-- end guardians and documents detail tabs --}}
@@ -272,12 +277,6 @@
             occupation: @json(\App\Enums\StudentGuardianOccupationState::TEACHER->name),
         }],
 
-        documentForm: [{
-            student_id: '',
-            document_type: @json(\App\Enums\StudentDocumentTypeState::SEE_CERTIFICATE->name),
-            file_path: '',
-        }],
-
         errors: {},
         provinces: @json($provinces ?? []),
         academicStructures: @json($academicStructures ?? []),
@@ -285,6 +284,7 @@
         documentNumberings: @json($documentNumberings ?? []),
         districts: @json($districts ?? []),
         selectedNumbering: null,
+        documentForm: [],
 
         init() {
             Alpine.nextTick(() => {
@@ -303,35 +303,25 @@
         },
 
         saveStudent() {
-            console.log($store.studentSetup.guardianForm);
-            console.log($store.studentSetup.documentForm)
+            const data = {
+                studentData: $store.studentSetup.studentData ?? [],
+                structureForm: $store.studentSetup.structureForm ?? [],
+                guardianForm: $store.studentSetup.guardianForm ?? [],
+            };
 
-        },
-        addRow() {
-            this.guardianForm.push({
-                student_id: '',
-                name: '',
-                relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
-                phone: '',
-                occupation: @json(\App\Enums\StudentGuardianOccupationState::TEACHER->name)
+            $wire.saveStudent(data).then((response) => {
+                this.errors = {};
+                console.log(response);
+                if (response?.original?.errors) {
+                    for (let field in response.original.errors) {
+                        $store.studentSetup.errors[field] = response.original.errors[field][0];
+                    }
+                    return;
+                }
+            }).then((error) => {
+                console.log(error);
+
             })
-        },
-
-        addDocumentRow() {
-            this.documentForm.push({
-                student_id: '',
-                document_type: @json(\App\Enums\StudentDocumentTypeState::SEE_CERTIFICATE->name),
-                file_path: '',
-            })
-        },
-
-        removeRow(index) {
-            this.guardianForm.splice(index, 1)
-        },
-
-        removeDocumentRow(index) {
-            console.log(index)
-            this.documentForm.splice(index, 1)
         },
 
         setupDates() {
@@ -425,6 +415,7 @@
 
         updateNumbering(id) {
             this.selectedNumbering = id;
+            console.log(this.selectedNumbering)
 
             $wire.updateNumbering(id)
                 .then((response) => {
@@ -438,6 +429,75 @@
                     console.log(error);
                 });
         },
+
+        // Guardian field logic
+        addRow() {
+            this.guardianForm.push({
+                student_id: '',
+                name: '',
+                relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
+                phone: '',
+                occupation: @json(\App\Enums\StudentGuardianOccupationState::TEACHER->name)
+            })
+        },
+
+        removeRow(index) {
+            this.guardianForm.splice(index, 1)
+        },
+        //    End Guardian field logic
+
+        // document field logic
+        addDocumentRow() {
+            $wire.documentForm.push({
+                student_id: '',
+                document_type: @json(\App\Enums\StudentDocumentTypeState::SEE_CERTIFICATE->name),
+                file_path: null,
+                preview: null,
+                old_file: null,
+
+            })
+        },
+
+        removeDocumentRow(index) {
+            $wire.documentForm.splice(index, 1)
+        },
+
+        uploadDocument(event, index) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Show preview locally
+            $wire.documentForm[index].preview = URL.createObjectURL(file);
+
+            // Upload to Livewire
+            $wire.upload(
+                `documentForm.${index}.file_path`, // <-- nested key Livewire understands
+                file,
+                (uploadedFileName) => {
+                    // Livewire automatically updates file_path internally
+                    // you usually don't need to manually assign
+                },
+                () => {
+                }, // progress callback
+                (error) => {
+                    console.log(error);
+                }
+            );
+        },
+
+        removeDocumentFile(index) {
+
+            // clear values
+            $wire.set('documentForm.' + index + '.file_path', null)
+            $wire.set('documentForm.' + index + '.preview', null)
+
+            // remove temporary upload
+            $wire.removeUpload('documentForm.' + index + '.file_path')
+        },
+        // End document field logic
+
     });
+
+
 </script>
 @endscript

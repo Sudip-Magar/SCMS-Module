@@ -4,7 +4,7 @@ namespace App\Models\Student;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudentAcademicStrucuture extends Model
+class StudentAcademicStructure extends Model
 {
     protected  $guarded = ['id'];
 }
