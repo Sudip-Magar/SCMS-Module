@@ -3,7 +3,6 @@
 namespace App\Livewire\Scms\StudentSetup\Student;
 
 use App\Enums\GenderState;
-use App\Enums\StatusState;
 use App\Enums\StudentDocumentTypeState;
 use App\Enums\StudentGuardainRelationState;
 use App\Enums\StudentGuardianOccupationState;
@@ -16,6 +15,7 @@ use Mary\Traits\Toast;
 class StudentAdd extends Component
 {
     use WithFileUploads, Toast;
+
     public $admissionNumberingModal = true;
     public $id;
     public $title;
@@ -27,12 +27,14 @@ class StudentAdd extends Component
     public $relations;
     public $occupations;
     public $documentTypes;
-    public $documents = [];
 
     public $provinces;
     public $districts;
     public $academicStructures;
     public $documentNumberings;
+
+    public $documentForm;
+
     public function mount()
     {
         $this->gender = collect(GenderState::cases())
@@ -63,6 +65,16 @@ class StudentAdd extends Component
             ])
             ->toArray();
 
+        $this->documentForm = [
+            [
+                'student_id' => '',
+                'document_type' => StudentDocumentTypeState::BACHELOR_CERTIFICATE->name,
+                'preview' => null,
+                'file_path' => null,
+                'old_file' => null,
+            ]
+        ];
+
         if ($this->id) {
             $this->title = "Edit Student ";
         } else {
@@ -77,25 +89,46 @@ class StudentAdd extends Component
     public function saveStudent($data)
     {
         try {
-            if($has_errors = validateField($data['studentData'], $this->studentForm->getRules())){
-                return $has_errors;
+            $errors = [];
+            if ($studentErrors = validateField($data['studentData'], $this->studentForm->getRules())) {
+                $errors = array_merge(
+                    $errors,
+                    $studentErrors->getData(true)['errors']
+                );
             }
-            dd($data['studentData']);
+
+            if ($structureErrors = validateField($data['structureForm'], $this->structureForm->getRules())) {
+                $errors = array_merge(
+                    $errors,
+                    $structureErrors->getData(true)['errors']
+                );
+            }
+
+            if (!empty($errors)) {
+                return response()->json([
+                    'errors' => $errors
+                ]);
+            }
+            $is_saved = $this->studentForm->performStudentSave($data, $this->documentForm);
+
+            if (!$is_saved) {
+                $this->error("Failed to save student", position: 'toast-bottom');
+            }
+
+            $this->success(
+                title: 'Student ' . ($this->studentForm->id ? 'Updated' : 'Saved') . ' Successfully',
+                description: null,
+                position: 'toast-bottom',
+                icon: 'o-check-circle',       // Optional (any icon)
+                css: 'alert-success',                  // Optional (daisyUI classes)
+                timeout: 3000,
+                redirectTo: route('student-setup.student-list')
+            );
 
         } catch (\Exception $exception) {
             $this->error('Something went wrong', position: 'toast-bottom');
         }
 
-    }
-
-    public function removeDocument($index)
-    {
-        if (isset($this->documents[$index])) {
-            unset($this->documents[$index]);
-        }
-
-        // reindex array so Livewire stays consistent
-        $this->documents = array_values($this->documents);
     }
 
     public function updateNumbering($id)
