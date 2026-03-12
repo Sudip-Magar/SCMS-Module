@@ -1,5 +1,9 @@
 <div x-data="{ drawer: @entangle('drawer') }">
-    <x-header class="" title="{{ __('Permission Setup') }}">
+    <x-header class="text-lg header" title="{{ __('Permission Setup') }}">
+         <x-slot:middle class="flex justify-end">
+            <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search"
+                clearable />
+        </x-slot:middle>
         <x-slot:actions>
             <div x-cloak>
                 <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
@@ -9,7 +13,8 @@
     </x-header>
 
     <x-card>
-        <x-table :headers="$headers" :rows="$permissions" :sort-by="$sortBy">
+        <x-pagination-filter />
+        <x-table class="text-xs" :headers="$headers" :rows="$permissions" :sort-by="$sortBy" with-pagination>
             @scope('cell_action', $permission)
                 <div class="flex text-sm">
                     <x-button icon="o-pencil" spinner="edit({{ $permission->id }})" class="btn-ghost btn-sm text-indigo-500"
