@@ -21,7 +21,7 @@ return new class extends Migration {
                 $table->id();
                 $table->unsignedBigInteger('student_id');
                 $table->string('document_type');
-                $table->string('file_path');
+                $table->string('file_path')->nullable();
                 extraField($table, $is_audit);
                 if ($is_audit) {
                     auditField($table);

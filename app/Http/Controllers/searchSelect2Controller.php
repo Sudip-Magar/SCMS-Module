@@ -131,7 +131,7 @@ class searchSelect2Controller extends Controller
         ->when($request->filled('term'), function ($query) use ($request) {
             $query->where('name', 'like', '%' . $request->input('term') . '%');
         })
-        ->limit(10)
+//        ->limit(10)
         ->get(['id', 'name as text']);
 }
 }

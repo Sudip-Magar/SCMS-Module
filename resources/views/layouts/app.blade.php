@@ -5,17 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+          integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <link href="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/css/nepali.datepicker.v5.0.6.min.css"
-        rel="stylesheet" type="text/css" />
+          rel="stylesheet" type="text/css"/>
     <script src="https://nepalidatepicker.sajanmaharjan.com.np/v5/nepali.datepicker/js/nepali.datepicker.v5.0.6.min.js"
-        type="text/javascript"></script>
+            type="text/javascript"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -29,23 +29,23 @@
     @stack('styles')
 </head>
 
-<body x-data class="transition-colors duration-300">
-    {{-- @include('livewire.common.navbar') --}}
-    <div class="flex">
-        @livewire('common.navbar')
+<body x-data class="transition-colors duration-300 w-full overflow-x-hidden">
+{{-- @include('livewire.common.navbar') --}}
+<div class="flex">
+    @livewire('common.navbar')
 
-        <div class="w-full relative">
-            <div class="sticky top-0 z-100">
-                <x-common.top />
-            </div>
-            <x-tabuna-breadcrumbs />
-            <div class="p-4 z-0">
-                {{ $slot }}
-            </div>
+    <div class="flex-1 min-w-0 relative">
+        <div class="sticky top-0 z-100">
+            <x-common.top/>
+        </div>
+        <x-tabuna-breadcrumbs/>
+        <div class="p-4 z-0">
+            {{ $slot }}
         </div>
     </div>
+</div>
 {{--     <x-spotlight shortcut=""/>--}}
-    <x-toast />
+<x-toast/>
 </body>
 
 </html>

@@ -69,7 +69,7 @@
                         x-model="$store.numberingSetup.numberingForm.current" />
                     <x-input type="number" label="{{ __('Body Length') }}" placeholder="{{ __('Body Length') }}"
                         x-model="$store.numberingSetup.numberingForm.body_length" />
-                    <x-input type="number" label="Total Length" x-bind:value="$store.numberingSetup.total_length"
+                    <x-input type="number" label="{{__('Total Length')}}" x-bind:value="$store.numberingSetup.total_length"
                         readonly />
 
                     <x-select label="{{ __('Status') }}:" x-model="$store.numberingSetup.numberingForm.status"

@@ -95,12 +95,12 @@ Breadcrumbs::for('student-setup', function (Trail $trail) {
 
 Breadcrumbs::for('student-setup.student-list', function (Trail $trail) {
     $trail->parent('student-setup');
-    $trail->push('Student List' ,route('student-setup.student-list'));
+    $trail->push(__('Student List') ,route('student-setup.student-list'));
 });
 
 Breadcrumbs::for('student-setup.student-add', function (Trail $trail) {
     $trail->parent('student-setup.student-list');
-    $trail->push('Student Add', route('student-setup.student-add'));
+    $trail->push(__('Student Add'), route('student-setup.student-add'));
 });
 
 

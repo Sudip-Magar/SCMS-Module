@@ -10,14 +10,14 @@
             <thead class="bg-emerald-600 text-white rounded-md">
                 <tr>
                     <th class="px-4 py-2 border-2 border-gray-400 text-left">S.No</th>
-                    <th class="px-4 py-2 border-2 border-gray-400 text-left">Name</th>
-                    <th class="px-4 py-2 border-2 border-gray-400 text-left">Relation</th>
-                    <th class="px-4 py-2 border-2 border-gray-400 text-left">Phone</th>
-                    <th class="px-4 py-2 border-2 border-gray-400 text-left">Occupation</th>
-                    <th class="px-4 py-2 border-2 border-gray-400 text-left">Action</th>
+                    <th class="px-4 py-2 border-2 border-gray-400 text-left">{{__('Name')}}</th>
+                    <th class="px-4 py-2 border-2 border-gray-400 text-left">{{__('Relation')}}</th>
+                    <th class="px-4 py-2 border-2 border-gray-400 text-left">{{__('Phone')}}</th>
+                    <th class="px-4 py-2 border-2 border-gray-400 text-left">{{__('Occupation')}}</th>
+                    <th class="px-4 py-2 border-2 border-gray-400 text-left">{{__('Action')}}</th>
                 </tr>
             </thead>
-             <tbody class="bg-white">
+             <tbody class="bg-white dark:bg-[#1D232A]">
             <template x-for="(guardian, index) in {{ $alpine_store }}.guardianForm" :key="index">
                 <tr x-show="guardian">
                     <td class="px-4 py-2 border-2 border-gray-400 w-15" x-text="index + 1"></td>

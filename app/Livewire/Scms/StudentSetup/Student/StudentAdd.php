@@ -6,6 +6,7 @@ use App\Enums\GenderState;
 use App\Enums\StudentDocumentTypeState;
 use App\Enums\StudentGuardainRelationState;
 use App\Enums\StudentGuardianOccupationState;
+use App\Http\Controllers\searchSelect2Controller;
 use App\Livewire\Forms\Student\StudentForm;
 use App\Livewire\Forms\Student\StudentStructureForm;
 use Livewire\Component;
@@ -35,7 +36,39 @@ class StudentAdd extends Component
 
     public $documentForm;
 
+    public $guardiansData;
+
     public function mount()
+    {
+        $this->getStates();
+
+        if ($this->id) {
+            $searchSelect = app(searchSelect2Controller::class);
+            $this->title = "Edit Student";
+            $this->getStudentData();
+            $this->academicStructures = $searchSelect->getAcademicStructure(request());
+            $this->provinces = $searchSelect->getProvince(request());
+            $this->districts = $searchSelect->getDistrict(request());
+//            dd($this->provinces);
+        } else {
+            $this->title = 'Create Student';
+            $this->documentForm = [
+                [
+                    'student_id' => '',
+                    'document_type' => StudentDocumentTypeState::BACHELOR_CERTIFICATE->name,
+                    'preview' => null,
+                    'file_path' => null,
+                    'old_file' => null,
+                ]
+            ];
+        }
+
+        if (!$this->id) {
+            $this->documentNumberings = getAdmissionNumbering();
+        }
+    }
+
+    public function getStates()
     {
         $this->gender = collect(GenderState::cases())
             ->map(fn($item) => [
@@ -64,25 +97,30 @@ class StudentAdd extends Component
                 'label' => $item->value
             ])
             ->toArray();
+    }
 
-        $this->documentForm = [
-            [
-                'student_id' => '',
-                'document_type' => StudentDocumentTypeState::BACHELOR_CERTIFICATE->name,
+    public function getStudentData()
+    {
+        $this->studentForm->id = $this->id;
+        $data = $this->studentForm->fetchData($this->id);
+        $this->structureForm->id = $data['structureForm']->id;
+        $this->structureForm->student_id = $data['structureForm']->student_id;
+        $this->structureForm->registration_no = $data['structureForm']->registration_no;
+        $this->structureForm->academic_structure_id = $data['structureForm']->academic_structure_id;
+        $this->structureForm->symbol_no = $data['structureForm']->symbol_no;
+        $this->structureForm->roll_no = $data['structureForm']->roll_no;
+        $this->guardiansData = $data['studentGuardian'];
+//        dd($data['studentDocuments']);
+
+        foreach ($data['studentDocuments'] as $key => $value) {
+            $this->documentForm[] = [
+                'id' => $value['id'],
+                'student_id' => $this->id,
+                'document_type' => $value['document_type'],
                 'preview' => null,
                 'file_path' => null,
-                'old_file' => null,
-            ]
-        ];
-
-        if ($this->id) {
-            $this->title = "Edit Student ";
-        } else {
-            $this->title = 'Create Student';
-        }
-
-        if (!$this->id) {
-            $this->documentNumberings = getAdmissionNumbering();
+                'old_file' => $value['file_path'] ? asset('storage/'.$value['file_path']) : null,
+            ];
         }
     }
 
