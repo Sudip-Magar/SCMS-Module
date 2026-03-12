@@ -1,16 +1,18 @@
 <div x-data="{documentForm: @entangle('documentForm').live} " x-init="$store.studentSetup.documentForm = documentForm">
     <x-header class="text-lg header" title="{{ __($title) }}"/>
 
-    <x-modal wire:model="admissionNumberingModal" class="backdrop-blur text-xs" box-class="w-100" persistent>
-        <x-select class="w-full!" label="{{ __('Admission Numbering') }}" :options="$documentNumberings"
-                  option-label="admission_no"
-                  option-value="admission_numbering_id" x-model="$store.studentSetup.selectedNumbering"
-                  @change="$store.studentSetup.updateNumbering($event.target.value)"/>
-        <x-slot:actions>
-            <x-button label="{{ __('Ok') }}" class="btn-primary btn-xs py-3.5 px-3.5"
-                      @click.prevent="$wire.admissionNumberingModal = false"/>
-        </x-slot:actions>
-    </x-modal>
+    @if(!$id)
+        <x-modal wire:model="admissionNumberingModal" class="backdrop-blur text-xs" box-class="w-100" persistent>
+            <x-select class="w-full!" label="{{ __('Admission Numbering') }}" :options="$documentNumberings"
+                      option-label="admission_no"
+                      option-value="admission_numbering_id" x-model="$store.studentSetup.selectedNumbering"
+                      @change="$store.studentSetup.updateNumbering($event.target.value)"/>
+            <x-slot:actions>
+                <x-button label="{{ __('Ok') }}" class="btn-primary btn-xs py-3.5 px-3.5"
+                          @click.prevent="$wire.admissionNumberingModal = false"/>
+            </x-slot:actions>
+        </x-modal>
+    @endif
 
     <x-card separator progress-indicator="saveStudent">
         <x-form no-separator @submit.prevent="$store.studentSetup.saveStudent"
@@ -114,12 +116,6 @@
                               :options="$gender" option-value="value" option-label="label"/>
 
                     <div>
-                        <x-input label="{{ __('Last Name') }}" placeholder="{{ __('Last Name') }}"
-                                 x-model="$store.studentSetup.studentData.last_name"/>
-                        <span class="text-red-500 text-xs" x-text="$store.studentSetup.errors.last_name || ''"></span>
-                    </div>
-
-                    <div>
                         <label for="date_of_birth_np"
                                class="fieldset-legend mb-0.5">{{ __('Date of Birth (NP)') }}:</label>
                         <input x-model="$store.studentSetup.studentData.date_of_birth_np" id="date_of_birth_np"
@@ -156,7 +152,7 @@
                         class="w-25 h-25 bg-gray-100 dark:bg-gray-800 mx-auto mb-2 flex items-center justify-center rounded-lg overflow-hidden">
                         @if ($studentForm->photo)
                             <img class="w-full h-full object-cover" src="{{ $studentForm->photo->temporaryUrl() }}"
-                                 alt="No Photo">
+                                 alt="{{__('No Photo')}}">
                         @elseif($studentForm->old_photo)
                             <img class="w-full h-full object-cover"
                                  src="{{ asset('/storage/' . $studentForm->old_photo) }}"
@@ -240,7 +236,7 @@
             {{-- End Address --}}
 
             {{-- guardians and documents detail tabs --}}
-            <h2 class="text-sm font-semibold border-b pb-1 my-2">{{ __('Guardian and Docuemnt Information') }}</h2>
+            <h2 class="text-sm font-semibold border-b pb-1 my-2">{{ __('Guardian and Education Document Information') }}</h2>
             <x-tabs wire:model="selectedTab" active-class="bg-emerald-100 py-1 text-emerald-800 rounded-md">
                 <x-tab name="guardian-tab" label="{{ __('Guardian Detail') }}">
                     <x-student.student-guardians alpine_store="$store.studentSetup" :relations="$relations"
@@ -269,13 +265,7 @@
     Alpine.store('studentSetup', {
         studentData: @json($studentForm ?? []),
         structureForm: @json($structureForm ?? []),
-        guardianForm: [{
-            student_id: '',
-            name: '',
-            relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
-            phone: '',
-            occupation: @json(\App\Enums\StudentGuardianOccupationState::TEACHER->name),
-        }],
+        guardianForm: [],
 
         errors: {},
         provinces: @json($provinces ?? []),
@@ -286,11 +276,37 @@
         selectedNumbering: null,
         documentForm: [],
 
+        loadStudentData() {
+            if (this.studentData.id) {
+                guardianData = @json($guardiansData ?? []);
+                for (let guardian of guardianData) {
+                    this.guardianForm.push({
+                        id: guardian.id,
+                        student_id: this.studentData.id,
+                        name: guardian.name,
+                        relation: guardian.relation,
+                        phone: guardian.phone,
+                        occupation: guardian.occupation,
+                    })
+                }
+            } else {
+                this.guardianForm = [{
+                    student_id: '',
+                    name: '',
+                    relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
+                    phone: '',
+                    occupation: @json(\App\Enums\StudentGuardianOccupationState::TEACHER->name),
+                }];
+            }
+        },
+
         init() {
             Alpine.nextTick(() => {
                 this.setupDates();
                 this.initializeSelect2();
             });
+
+            this.loadStudentData();
 
             if (!this.studentData.admission_numbering_id && this.documentNumberings.length) {
                 const first = this.documentNumberings[0];
@@ -311,7 +327,6 @@
 
             $wire.saveStudent(data).then((response) => {
                 this.errors = {};
-                console.log(response);
                 if (response?.original?.errors) {
                     for (let field in response.original.errors) {
                         $store.studentSetup.errors[field] = response.original.errors[field][0];
@@ -401,12 +416,11 @@
         },
 
         updateSelectedData(key, value) {
-            if (key == 'academic_structure_id') {
+            if (key === 'academic_structure_id') {
                 this.structureForm[key] = value ? value : null;
             } else {
                 this.studentData[key] = value ? value : null;
             }
-            console.log(this.structureForm);
 
             if (value) {
                 this.errors[key] = '';
@@ -415,11 +429,9 @@
 
         updateNumbering(id) {
             this.selectedNumbering = id;
-            console.log(this.selectedNumbering)
 
             $wire.updateNumbering(id)
                 .then((response) => {
-                    console.log(response);
                     this.studentData.admission_no = response.admission_no;
                     this.studentData.admission_numbering_index = response.admission_numbering_index;
                     this.studentData.admission_numbering_id = response.admission_numbering_id;
@@ -486,8 +498,8 @@
         },
 
         removeDocumentFile(index) {
-
             // clear values
+            $wire.set('documentForm.' + index + '.old_file', null)
             $wire.set('documentForm.' + index + '.file_path', null)
             $wire.set('documentForm.' + index + '.preview', null)
 

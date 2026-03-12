@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Scms\Setup;
 
+use App\Traits\WithCustomPagination;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Mary\Traits\Toast;
 use Spatie\Permission\Models\Permission;
 
 class PermissionSetup extends Component
 {
-    use Toast;
+    use Toast, WithCustomPagination;
+
     public bool $drawer = false;
 
     public $id;
@@ -27,6 +28,7 @@ class PermissionSetup extends Component
     public array $subPackages = [];
     public $title = 'Create Permission';
     public array $sortBy = ['column' => 'package_name', 'direction' => 'asc'];
+    public $search = '';
 
     public function mount()
     {
@@ -119,6 +121,15 @@ class PermissionSetup extends Component
         }
     }
 
+    public function resetForm()
+    {
+        $this->reset([
+            'package_name',
+            'sub_package_name',
+            'id',
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.scms.setup.permission-setup', [
@@ -131,9 +142,26 @@ class PermissionSetup extends Component
     {
         return Permission::query()
             ->selectRaw('id, name, package_name, sub_package_name, created_at, updated_at')
+            ->when($this->search, function ($q) {
+                $q->where('sub_package_name', 'like', "%$this->search%")
+                    ->orWhere('package_name', 'like', "%$this->search%");
+            })
             ->orderBy(...array_values($this->sortBy))
-            ->get();
+            ->paginate($this->perPage, pageName: 'page');
     }
+
+    public function headers()
+    {
+        return [
+            ['key' => 'action', 'label' => 'Action', 'class' => 'w-16 text-center', 'sortable' => false],
+            ['key' => 'package_name', 'label' => 'Package name', 'class' => 'w-50'],
+            ['key' => 'sub_package_name', 'label' => 'Sub package name', 'sortable' => false],
+            ['key' => 'name', 'label' => 'Acceess', 'sortable' => false],
+            // ['key' => 'created_at', 'label' => 'Created At', 'sortable' => false],
+            // ['key' => 'updated_at', 'label' => 'Updated At', 'sortable' => false],
+        ];
+    }
+
     public function edit(Permission $permission)
     {
         $this->resetFormValidation();
@@ -150,27 +178,6 @@ class PermissionSetup extends Component
 
         $this->drawer = true;
         $this->title = 'Edit Permission';
-    }
-
-    public function headers()
-    {
-        return [
-            ['key' => 'action', 'label' => 'Action', 'class' => 'w-16 text-center', 'sortable' => false],
-            ['key' => 'package_name', 'label' => 'Package name', 'class' => 'w-50'],
-            ['key' => 'sub_package_name', 'label' => 'Sub package name', 'sortable' => false],
-            ['key' => 'name', 'label' => 'Acceess', 'sortable' => false],
-            // ['key' => 'created_at', 'label' => 'Created At', 'sortable' => false],
-            // ['key' => 'updated_at', 'label' => 'Updated At', 'sortable' => false],
-        ];
-    }
-
-    public function resetForm()
-    {
-        $this->reset([
-            'package_name',
-            'sub_package_name',
-            'id',
-        ]);
     }
 
     public function resetFormValidation()

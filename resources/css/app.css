@@ -1,5 +1,6 @@
 @import url('../css/poppins.css');
 @import 'tailwindcss';
+
 @plugin "daisyui";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -9,7 +10,7 @@
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 @plugin "daisyui" {
@@ -68,7 +69,7 @@ x-cloak {
 }
 
 /** Active button **/
-.mary-table-pagination span[aria-current="page"]>span {
+.mary-table-pagination span[aria-current="page"] > span {
     @apply bg-emerald-600 text-base-100
 }
 
@@ -130,4 +131,48 @@ x-cloak {
 .dark .select2-container--default .select2-results__option--highlighted {
     background-color: #374151;
     /* gray-700 */
+}
+
+@layer utilities {
+    /* Light mode scrollbar */
+    .scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 4px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        background: #f3f4f6; /* very light gray */
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        background: #009866; /* your emerald color */
+        border-radius: 9999px; /* fully rounded */
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #007a57; /* slightly darker on hover */
+    }
+
+    /* Firefox */
+    .scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #009866 #f3f4f6; /* thumb track */
+    }
+
+    /* Dark mode scrollbar */
+    .dark .scrollbar::-webkit-scrollbar-track {
+        background: #1f2937; /* dark gray track */
+    }
+
+    .dark .scrollbar::-webkit-scrollbar-thumb {
+        background: #00b38c; /* lighter green for dark mode */
+    }
+
+    .dark .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #009866; /* hover in dark mode */
+    }
+
+    .dark .scrollbar {
+        scrollbar-color: #00b38c #1f2937; /* thumb track */
+    }
 }
