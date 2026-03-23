@@ -54,6 +54,7 @@ class StudentAdd extends Component
             $this->title = 'Create Student';
             $this->documentForm = [
                 [
+                    'id' => null,
                     'student_id' => '',
                     'document_type' => StudentDocumentTypeState::BACHELOR_CERTIFICATE->name,
                     'preview' => null,

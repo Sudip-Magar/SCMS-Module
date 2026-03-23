@@ -3,16 +3,20 @@
 namespace App\Livewire\Forms\Setup;
 
 use App\Enums\StatusState;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
+use App\Enums\UserTypeStatusState;
+use App\Events\AuditTableEntryEvent;
+use App\Models\Student\Student;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Form;
 
 class UserForm extends Form
 {
     public $id;
     public $username = '';
-    public $user_type = '';
-    public $user_id = '';
+    public $profile_type = UserTypeStatusState::TEACHER->name;
+    public $profile_id = '';
     public $role_id = '';
     public $password = '';
     public $status = StatusState::ACTIVE->name;
@@ -26,17 +30,51 @@ class UserForm extends Form
                 'max:255',
                 'unique:users,username,' . $this->id
             ],
-            'user_type' => ['required', 'string', 'max:255'],
-            'user_id' => ['nullable', 'integer'],
+            'profile_type' => ['required', 'string', 'max:255'],
+            'profile_id' => ['nullable', 'integer','unique:users,profile_id,' . $this->id],
             'role_id' => ['required', 'integer'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8,'.$this->id],
             'status' => ['required'], // add this
         ];
     }
 
-    public function performSaveUser()
+    public function performSaveUser($data)
     {
-        // dd($this->username);
-        $this->validate();
+//        dd($data);
+        $firstLetter = '';
+        $lastLetter = '';
+        $roleId = $data['role_id'];
+        unset($data['role_id']);
+
+        if ($this->id) {
+            $data['updated_by'] = Auth::user()->id;
+        } else {
+            $data['created_by'] = Auth::user()->id;
+        }
+
+        if ($data['profile_type'] == UserTypeStatusState::STUDENT->name) {
+            $student = Student::find($data['profile_id']);
+            $firstLetter = strtoupper(substr($student->first_name, 0, 1));
+            $lastLetter = strtoupper(substr($student->last_name, 0, 1));
+            $data['username'] = $data['username']. '@milton.com';
+            $data['short_name'] = $firstLetter . $lastLetter;
+            $data['profile_type'] = Student::class;
+        }
+
+        if ($data['password']) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
+        $is_saved = User::updateOrCreate(['id' => $this->id], $data);
+        AuditTableEntryEvent::dispatch('users', $is_saved, $this->id ? 'edit' : 'create');
+
+        if ($is_saved) {
+            $is_saved->syncRoles($roleId);
+            return true;
+        }
+
+        return false;
+
+
     }
 }

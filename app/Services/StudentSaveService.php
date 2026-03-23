@@ -32,6 +32,7 @@ class StudentSaveService
         $structureForm = $data['structureForm'];
         $guardianForm = $data['guardianForm'];
 
+
         if ($studentId) {
             $studentData['updated_by'] = Auth::user()->id;
             $structureForm['updated_by'] = Auth::user()->id;
@@ -44,6 +45,7 @@ class StudentSaveService
             $studentData['admission_numbering_index'] = $studentNumbering['admission_numbering_index'];
             $studentData['admission_numbering_id'] = $studentNumbering['admission_numbering_id'];
         }
+
         if ($photo) {
             $studentData['photo'] = $photo->store('students', 'public');
         } else {
@@ -59,12 +61,14 @@ class StudentSaveService
             self::updateCurrentStudentNumbering($studentData['admission_numbering_id']);
         }
 
+
         if ($is_saved) {
             self::saveStructure($structureForm, $studentId, $is_saved->id);
             self::saveGuardian($guardianForm, $studentId, $is_saved->id);
             self::saveDocument($documents, $studentId, $is_saved->id);
             return true;
         }
+
         return false;
     }
 
@@ -85,8 +89,9 @@ class StudentSaveService
 
     public static function saveStructure($data, $studentId, $save_id)
     {
+
         $data['student_id'] = $save_id;
-        $is_saved = StudentAcademicStructure::updateOrCreate(['id' => $data['id']], $data);
+        $is_saved = StudentAcademicStructure::updateOrCreate(['id' => $data['id'] ?? null], $data);
         AuditTableEntryEvent::dispatch('student_academic_structures', $is_saved, $data['id'] ? 'edit' : 'create');
 
         if ($is_saved) {
@@ -98,6 +103,7 @@ class StudentSaveService
 
     public static function saveGuardian($data, $studentId, $saved_id)
     {
+
         foreach ($data as $guardian) {
             $guardian['student_id'] = $saved_id;
 
@@ -107,8 +113,9 @@ class StudentSaveService
                 $guardian['created_by'] = Auth::user()->id;
             }
 
-            $is_saved = StudentGuardian::updateOrCreate(['id' => $guardian['id']], $guardian);
+            $is_saved = StudentGuardian::updateOrCreate(['id' => $guardian['id'] ?? null], $guardian);
             AuditTableEntryEvent::dispatch('student_guardians', $is_saved, $guardian['id'] ? 'edit' : 'create');
+
         }
 
         return true;
