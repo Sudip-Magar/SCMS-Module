@@ -46,6 +46,8 @@ window.DateSync = {
                     clearInterval(interval);
                 }
             }, 20);
+
+
         });
 
         nepali.dataset.synced = true;
