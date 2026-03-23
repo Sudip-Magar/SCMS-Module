@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         $this->createMigrationTable('users');
-        $this->createMigrationTable('audit_user', true);
+        $this->createMigrationTable('audit_users', true);
     }
 
     public function createMigrationTable($schema_name, $is_audit = false)
@@ -16,20 +16,17 @@ return new class extends Migration {
         if (!Schema::hasTable($schema_name)) {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
                 $table->id();
-                $table->string('username')->unique();
-                $table->string('user_type')->nullable();
+                $table->string('username');
+                $table->nullableMorphs('profile');
                 $table->string('short_name')->nullable();
-                $table->unsignedBigInteger('user_id')->nullable();
-                $table->unsignedBigInteger('role_id')->nullable();
-                $table->string('password');
+                $table->string('password')->nullable();
                 $table->string('status');
                 extraField($table, $is_audit);
                 $table->timestamp('email_verified_at')->nullable();
                 $table->rememberToken();
-                if(!$is_audit) {
-                    $table->foreign('role_id')->references('id')->on('roles')->restrictOnDelete()->restrictOnUpdate();
+                if(!$is_audit){
+                    $table->unique('username');
                 }
-
                 if($is_audit) {
                     auditField($table);
                 }
@@ -57,6 +54,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('audit_users');
         Schema::dropIfExists('audit_users');
         Schema::dropIfExists('sessions');
     }

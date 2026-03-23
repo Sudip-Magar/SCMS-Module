@@ -18,9 +18,14 @@ Breadcrumbs::for('setup.role.create', function (Trail $trail) {
     $trail->push(__('Add Role'));
 });
 
+Breadcrumbs::for('setup.user', function (Trail $trail) {
+    $trail->parent('setup');
+    $trail->push(__('User Setup'));
+});
+
 Breadcrumbs::for('setup.permission', function (Trail $trail) {
     $trail->parent('setup');
-    $trail->push(__('Permisison Setup'), route('setup.permission'));
+    $trail->push(__('Permission Setup'), route('setup.permission'));
 });
 
 // Academic Setup

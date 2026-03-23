@@ -20,7 +20,7 @@ return new class extends Migration {
             Schema::create($schema_name, function (Blueprint $table) use ($is_audit) {
                 $table->id();
                 $table->string('admission_no');
-                $table->string('admission_numbering_index');
+                    $table->string('admission_numbering_index');
                 $table->unsignedBigInteger('admission_numbering_id');
                 $table->string('first_name');
                 $table->string('middle_name')->nullable();

@@ -2,10 +2,12 @@
 
 namespace App\Models\Student;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+
     protected $guarded = ['id'];
 
     public function scopeActive($query)
@@ -28,5 +30,9 @@ class Student extends Model
 
     public function studentGurdians(){
         return $this->hasMany(StudentGuardian::class,'student_id');
+    }
+
+    public function user() {
+        return $this->morphOne(User::class, 'profile');
     }
 }
