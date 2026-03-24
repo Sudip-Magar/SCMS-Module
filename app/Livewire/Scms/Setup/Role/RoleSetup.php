@@ -18,9 +18,15 @@ class RoleSetup extends Component
 
     public function delete(Role $role)
     {
-        $is_deleted = $role->delete();
-        if(!$is_deleted){
-            $this->error('Could not delete role.', position:'toast-bottom');
+        try {
+            $is_deleted = $role->delete();
+            if (!$is_deleted) {
+                $this->error('Could not delete role.', position: 'toast-bottom');
+            }
+            $this->drawer = false;
+            $this->error('Role Delete Successfully.', position: 'toast-bottom');
+        } catch (\Exception $exception) {
+            $this->error('Something Went Wrong', position: 'toast-bottom');
         }
     }
 

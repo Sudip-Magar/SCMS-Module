@@ -116,6 +116,8 @@ class StudentSaveService
 
     public static function saveDocument($documents, $studentId, $saved_id)
     {
+//        dd($documents);
+
         foreach ($documents as $document) {
 
             $file = $document['file_path'] ?? null;

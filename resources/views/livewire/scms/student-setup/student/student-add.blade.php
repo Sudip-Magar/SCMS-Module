@@ -291,6 +291,7 @@
                 }
             } else {
                 this.guardianForm = [{
+                    id: null,
                     student_id: '',
                     name: '',
                     relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
@@ -445,6 +446,7 @@
         // Guardian field logic
         addRow() {
             this.guardianForm.push({
+                id: null,
                 student_id: '',
                 name: '',
                 relation: @json(\App\Enums\StudentGuardainRelationState::MOTHER->name),
@@ -461,6 +463,7 @@
         // document field logic
         addDocumentRow() {
             $wire.documentForm.push({
+                id: null,
                 student_id: '',
                 document_type: @json(\App\Enums\StudentDocumentTypeState::SEE_CERTIFICATE->name),
                 file_path: null,
