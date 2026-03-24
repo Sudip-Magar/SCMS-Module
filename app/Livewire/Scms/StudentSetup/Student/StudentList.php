@@ -19,6 +19,21 @@ class StudentList extends Component
     public bool $deleteModal = false;
     public array $sortBy = ['column' => 'admission_no', 'direction' => 'asc'];
     public string $search = '';
+    public $allowedPermission = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+    public function mount(){
+        $this->allowedPermission =[
+            'list' => authorizeUserCheck('student_setup-student-list'),
+            'create' =>authorizeUserCheck('student_setup-student-create'),
+            'edit' =>authorizeUserCheck('student_setup-student-edit'),
+            'delete' =>authorizeUserCheck('student_setup-student-delete'),
+        ];
+//        dd($this->allo/wedPermission);
+    }
 
     public function delete(Student $student)
     {

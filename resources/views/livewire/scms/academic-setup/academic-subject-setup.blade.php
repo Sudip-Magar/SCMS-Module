@@ -57,7 +57,7 @@
                         placeholder="{{ __('Enter Subject Code') }}" wire:model='subjectForm.code' />
 
                     <div>
-                        <x-select label="{{ __('Enter Academic Type') }}:" wire:model='subjectForm.type'
+                        <x-select class="w-full" label="{{ __('Enter Academic Type') }}:" wire:model='subjectForm.type'
                             :options="$type" option-value="value" option-label="label" />
                     </div>
 

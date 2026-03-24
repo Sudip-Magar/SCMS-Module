@@ -18,7 +18,7 @@ class PermissionSetup extends Component
     public string $package_name = '';
     public string $sub_package_name = '';
     public array $actions = [
-        'read' => true,
+        'list' => true,
         'create' => true,
         'edit' => true,
         'delete' => true,

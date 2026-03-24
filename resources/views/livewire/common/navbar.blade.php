@@ -1,6 +1,6 @@
 <aside x-data="{ activeMenu: null }" id="sidebar"
-    :class="$store.sidebar.sidebarToggle ? 'w-0 opacity-0 pointer-events-none' : 'w-72'"
-    class="bg-emerald-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 shadow-2xl text-sm">
+       :class="$store.sidebar.sidebarToggle ? 'w-0 opacity-0 pointer-events-none' : 'w-72'"
+       class="bg-emerald-600 text-white flex flex-col h-screen sticky top-0 transition-all duration-300 shadow-2xl text-sm">
 
     <!-- Logo with modern design -->
     <div class="relative py-6 text-center overflow-hidden">
@@ -129,21 +129,32 @@
     <div class="relative mt-auto border-t border-emerald-500/30">
         <!-- Decorative gradient -->
         <div class="absolute inset-0 bg-gradient-to-t from-emerald-700/50 to-transparent pointer-events-none"></div>
+        @php
+            $user = Auth::user();
+        @endphp
 
         <div class="relative p-4">
-            <div class="flex items-center gap-3 rounded-xl bg-emerald-700/50 p-3 backdrop-blur-sm border border-emerald-500/30">
+            <div
+                class="flex items-center gap-3 rounded-xl bg-emerald-700/50 p-3 backdrop-blur-sm border border-emerald-500/30">
                 <!-- Avatar with status -->
                 <div class="relative">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg">
-                        <i class="fa-regular fa-user text-white text-lg"></i>
-                    </div>
-                    <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-emerald-700"></div>
+                    @if($user->profile && $user->profile->photo)
+                        <img class="w-10 h-10 rounded-xl" src="{{ asset('storage/'.$user->profile->photo) }}"
+                             alt="Profile">
+                    @else
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg">
+                            <i class="fa-regular fa-user text-white text-lg"></i>
+                        </div>
+                    @endif
+                    <div
+                        class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-emerald-700"></div>
                 </div>
 
                 <!-- User info -->
                 <div class="flex-1 min-w-0">
-                    <p class="font-medium text-white truncate">Admin User</p>
-                    <p class="text-xs text-emerald-200 truncate">administrator@college.edu</p>
+                    <p class="font-medium text-white truncate">{{ $user->profile ? $user->profile->first_name .' ' . $user->profile->last_name : "Admin" }}</p>
+                    <p class="text-xs text-emerald-200 truncate">{{ $user->username }}</p>
                 </div>
 
                 <!-- Settings icon -->
@@ -172,13 +183,13 @@
 </aside>
 
 <script>
-document.addEventListener('alpine:init', () => {
-    Alpine.store('sidebar', {
-        sidebarToggle: false,
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('sidebar', {
+            sidebarToggle: false,
 
-        handelToggle() {
-            this.sidebarToggle = !this.sidebarToggle;
-        },
+            handelToggle() {
+                this.sidebarToggle = !this.sidebarToggle;
+            },
+        });
     });
-});
 </script>

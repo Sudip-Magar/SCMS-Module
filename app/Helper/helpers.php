@@ -104,3 +104,27 @@ if (!function_exists('getAdmissionNumbering')) {
         return $admissionNumbering;
     }
 }
+
+if(!function_exists('authorizeUserCheck')){
+    function authorizeUserCheck($permission){
+        $user = Auth::user();
+
+        if($user->username == 'admin@gmail.com'){
+            return true;
+        }
+
+        if(is_string($permission)){
+            return  $user->can($permission);
+        }
+
+        if(is_array($permission)){
+            foreach ($permission as $per){
+                if($user->can($per)){
+                    return  true;
+                }
+            }
+        }
+
+        return false;
+    }
+}

@@ -57,11 +57,19 @@
                 class="flex items-center gap-3 cursor-pointer bg-gray-100 dark:bg-gray-800 hover:bg-emerald-600 rounded-xl pl-3 pr-2 py-1.5 transition-all duration-200 group"
                 @click="open = !open">
 
-                <!-- User Avatar -->
-                <div
-                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
-                    {{ Auth()->user()->short_name }}
-                </div>
+                @php
+                    $user = Auth::user();
+                @endphp
+                    <!-- User Avatar -->
+                @if($user->profile && $user->profile->photo)
+                    <img class="w-8 h-8 rounded-lg" src="{{ asset('storage/'.$user->profile->photo) }}"
+                         alt="Profile">
+                @else
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
+                        {{ Auth()->user()->short_name }}
+                    </div>
+                @endif
 
                 <!-- User Info -->
                 <div class="hidden md:block text-left">
@@ -88,14 +96,25 @@
                 <!-- User Header -->
                 <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 p-4">
                     <div class="flex items-center gap-3">
-                        <div
-                            class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-lg">
-                            {{ Auth()->user()->short_name }}
-                        </div>
-                        <div class="text-white">
-                            <h4 class="font-semibold text-sm">{{ __(auth()->user()->username) }}</h4>
-                            <p class="text-xs text-emerald-100">{{ __(auth()->user()->user_type) }}</p>
-                        </div>
+
+                        @if($user->profile && $user->profile->photo)
+                            <img class="w-8 h-8 rounded-lg" src="{{ asset('storage/'.$user->profile->photo) }}"
+                                 alt="Profile">
+                        @else
+                            <div
+                                class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-lg">
+                                {{ Auth()->user()->short_name }}
+                            </div>
+                        @endif
+                            <div class="text-white">
+                                <h4 class="font-semibold text-sm">{{ __(auth()->user()->username) }}</h4>
+                                @if($user->profile_type == 'App\Models\Student\Student')
+                                    <p class="text-xs text-emerald-100">{{ __('Student') }} </p>
+                                @else
+                                    <p class="text-xs text-emerald-100">{{ __('Admin') }} </p>
+
+                                @endif
+                            </div>
                     </div>
                 </div>
 
