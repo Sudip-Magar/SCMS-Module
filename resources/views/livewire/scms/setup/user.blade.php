@@ -1,11 +1,12 @@
-<div x-data="{ drawer: @entangle('drawer'), deleteModal: @entangle('deleteModal') }">
+<div
+    x-data="{ drawer: @entangle('drawer'), deleteModal: @entangle('deleteModal'), allowedPermissions: @js($allowedPermissions) }">
     <x-header class="text-lg header" title="{{ __('User Setup') }}">
         <x-slot:middle class="flex justify-end">
             <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search"
                      clearable/>
         </x-slot:middle>
         <x-slot:actions>
-            <div x-cloak>
+            <div x-show="allowedPermissions.create" x-cloak>
                 <x-button label="{{ __('Add') }}" icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5"
                           @click="$wire.drawer = true; $store.userSetup.resetForm()"/>
             </div>
@@ -17,13 +18,18 @@
         <x-table class="text-xs" :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination>
             @scope('cell_action', $user)
             <div class="flex text-xs">
-                <x-button icon="o-pencil" spinner="edit({{$user['userId']}})" class="btn-ghost btn-xs text-indigo-500"
-                          tooltip-bottom="Edit"
-                          @click.prevent="$wire.edit({{ $user['userId'] }})" x-cloak/>
+                <div x-cloak x-show="allowedPermissions.edit">
+                    <x-button icon="o-pencil" spinner="edit({{$user['userId']}})"
+                              class="btn-ghost btn-xs text-indigo-500"
+                              tooltip-bottom="Edit"
+                              @click.prevent="$wire.edit({{ $user['userId'] }})"/>
+                </div>
 
-                <x-button icon="o-trash" class="btn-ghost btn-xs text-red-500" tooltip-bottom="Delete"
-                          @click.prevent="$store.userSetup.deleteData({{ $user['userId'] }}); $wire.deleteModal = true"
-                          x-cloak/>
+                <div x-cloak x-show="allowedPermissions.delete">
+                    <x-button icon="o-trash" class="btn-ghost btn-xs text-red-500" tooltip-bottom="Delete"
+                              @click.prevent="$store.userSetup.deleteData({{ $user['userId'] }}); $wire.deleteModal = true"
+                              />
+                </div>
 
             </div>
             @endscope
@@ -152,7 +158,7 @@
         roles: @json($roles ?? []),
 
         init(userData, role_id) {
-                this.initializeSelect2();
+            this.initializeSelect2();
 
             if (userData) {
                 this.userForm = userData;

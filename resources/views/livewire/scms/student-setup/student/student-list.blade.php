@@ -1,4 +1,4 @@
-<div x-data="{allowedPermission: @js($allowedPermission)}" x-init="console.log(allowedPermission)">
+<div x-data="{allowedPermissions: @js($allowedPermissions)}">
     <x-header class="text-lg header" title="{{ __('Student Setup') }}">
         <x-slot:middle class="flex justify-end">
             <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search"
@@ -6,7 +6,7 @@
         </x-slot:middle>
         <x-slot:actions>
             <div x-cloak>
-                <x-button x-show="allowedPermission.create" :label="__('Add')"
+                <x-button x-show="allowedPermissions.create" :label="__('Add')"
                           link="{{route('student-setup.student-add')}}" responsive
                           icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5"/>
             </div>
@@ -20,12 +20,12 @@
                      :headers="$headers" :rows="$student_data_list" :sort-by="$sortBy" with-pagination>
                 @scope('cell_action', $student_data)
                 <div class="flex text-xs">
-                    <div x-show="allowedPermission.edit" x-cloak>
+                    <div x-show="allowedPermissions.edit" x-cloak>
                         <x-button icon="o-pencil"
                                   class="btn-ghost btn-xs text-indigo-500" tooltip-bottom="{{ __('Edit') }}"
                                   link="{{route('student-setup.student-add',['id' => $student_data['id'] ])}}"/>
                     </div>
-                    <div x-cloak x-show="allowedPermission.delete">
+                    <div x-cloak x-show="allowedPermissions.delete">
                         <x-button icon="o-trash" class="btn-ghost btn-xs text-red-500"
                                   tooltip-bottom="{{ __('Delete') }}"
                                   @click.prevent="$store.studentSetup.deleteData({{$student_data['id']}}); $wire.deleteModal = true"/>
