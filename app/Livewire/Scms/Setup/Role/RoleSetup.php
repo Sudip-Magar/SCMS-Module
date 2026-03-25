@@ -16,9 +16,29 @@ class RoleSetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $search = '';
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
+    public function mount()
+    {
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('setup-role-list'),
+            'create' => authorizeUserCheck('setup-role-create'),
+            'edit' => authorizeUserCheck('setup-role-edit'),
+            'delete' => authorizeUserCheck('setup-role-delete'),
+        ];
+
+        authorizeUserModal('setup-role-list');
+    }
+
     public function delete(Role $role)
     {
         try {
+            authorizeUserCheck('setup-role-delete');
             $is_deleted = $role->delete();
             if (!$is_deleted) {
                 $this->error('Could not delete role.', position: 'toast-bottom');

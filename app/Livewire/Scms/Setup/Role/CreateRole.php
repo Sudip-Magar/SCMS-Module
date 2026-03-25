@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 class CreateRole extends Component
 {
     use Toast;
+
     public $id;
     public string $name = '';
     public array $selectedPermissions = [];
@@ -17,6 +18,11 @@ class CreateRole extends Component
     public function mount($id = null)
     {
         $this->id = $id;
+        if ($this->id) {
+            authorizeUserModal('setup-role-edit');
+        } else {
+            authorizeUserModal('setup-role-create');
+        }
 
         if ($id) {
             $role = Role::findOrFail($id);
@@ -24,31 +30,9 @@ class CreateRole extends Component
             $this->name = $role->name;
             $this->selectedPermissions = $role->permissions
                 ->pluck('id')
-                ->map(fn($id) => (int) $id)
+                ->map(fn($id) => (int)$id)
                 ->toArray();
         }
-        // dd($this->selectedPermissions);
-    }
-
-
-    public function groupedPermissions()
-    {
-        $permissions = Permission::all();
-
-        $data = [];
-
-        foreach ($permissions as $perm) {
-
-            $package = $perm->package_name;
-            $sub = $perm->sub_package_name;
-
-            $parts = explode('-', $perm->name);
-            $action = end($parts);
-
-            $data[$package][$sub][$action] = $perm->id;
-        }
-
-        return $data;
     }
 
     public function saveRole()
@@ -68,7 +52,7 @@ class CreateRole extends Component
         // Sync permissions correctly
         $role->syncPermissions($permissions);
 
-        $this->success(  
+        $this->success(
             title: 'Role Saved Successfully',
             description: null,                  // optional (text)
             position: 'toast-bottom',    // optional (daisyUI classes)
@@ -79,12 +63,30 @@ class CreateRole extends Component
         );
     }
 
-
-
     public function render()
     {
         return view('livewire.scms.setup.role.create-role', [
             'grouped' => $this->groupedPermissions(),
         ]);
+    }
+
+    public function groupedPermissions()
+    {
+        $permissions = Permission::all();
+
+        $data = [];
+
+        foreach ($permissions as $perm) {
+
+            $package = $perm->package_name;
+            $sub = $perm->sub_package_name;
+
+            $parts = explode('-', $perm->name);
+            $action = end($parts);
+
+            $data[$package][$sub][$action] = $perm->id;
+        }
+
+        return $data;
     }
 }

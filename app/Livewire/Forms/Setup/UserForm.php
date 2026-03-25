@@ -48,8 +48,10 @@ class UserForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserCheck('setup-user-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserCheck('setup-user-create');
         }
 
         if ($data['profile_type'] == UserTypeStatusState::STUDENT->name) {

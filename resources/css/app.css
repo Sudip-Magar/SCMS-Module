@@ -176,3 +176,13 @@ x-cloak {
         scrollbar-color: #00b38c #1f2937; /* thumb track */
     }
 }
+
+.errors-403{
+    width: 30%;
+    text-align: center;
+    padding: 10px 6px;
+}
+
+.errors-403 h2{
+    font-size: 20px;
+}

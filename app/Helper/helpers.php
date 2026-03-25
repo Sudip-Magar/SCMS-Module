@@ -2,8 +2,8 @@
 
 use App\Models\Numbering\AdmissionNumbering;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 if (!function_exists('extraField')) {
@@ -105,26 +105,56 @@ if (!function_exists('getAdmissionNumbering')) {
     }
 }
 
-if(!function_exists('authorizeUserCheck')){
-    function authorizeUserCheck($permission){
+if (!function_exists('authorizeUserCheck')) {
+    function authorizeUserCheck($permission)
+    {
         $user = Auth::user();
 
-        if($user->username == 'admin@gmail.com'){
+        if ($user->username == 'admin@gmail.com') {
             return true;
         }
 
-        if(is_string($permission)){
-            return  $user->can($permission);
+        if (is_string($permission)) {
+            return $user->can($permission);
         }
 
-        if(is_array($permission)){
-            foreach ($permission as $per){
-                if($user->can($per)){
-                    return  true;
+        if (is_array($permission)) {
+            foreach ($permission as $per) {
+                if ($user->can($per)) {
+                    return true;
                 }
             }
         }
 
         return false;
+    }
+}
+
+if (!function_exists('authorizeUserModal')) {
+    function authorizeUserModal($permission)
+    {
+        $response = Gate::allowIf(function ($user) use ($permission) {
+//            dd($user);
+            if ($user->username == 'admin@gmail.com') {
+                return true;
+            }
+            // Single permission
+            if (is_string($permission)) {
+                return $user->can($permission);
+            }
+
+            // Multiple permissions
+            if (is_array($permission)) {
+                foreach ($permission as $per) {
+                    if ($user->can($per)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false; // fallback
+        });
+
+        return $response->allowed();
     }
 }

@@ -62,7 +62,7 @@
                 @endphp
                     <!-- User Avatar -->
                 @if($user->profile && $user->profile->photo)
-                    <img class="w-8 h-8 rounded-lg" src="{{ asset('storage/'.$user->profile->photo) }}"
+                    <img class="w-8 h-8 rounded-lg object-cover" src="{{ asset('storage/'.$user->profile->photo) }}"
                          alt="Profile">
                 @else
                     <div
@@ -98,7 +98,7 @@
                     <div class="flex items-center gap-3">
 
                         @if($user->profile && $user->profile->photo)
-                            <img class="w-8 h-8 rounded-lg" src="{{ asset('storage/'.$user->profile->photo) }}"
+                            <img class="w-8 h-8 rounded-lg object-cover" src="{{ asset('storage/'.$user->profile->photo) }}"
                                  alt="Profile">
                         @else
                             <div
