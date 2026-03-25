@@ -50,8 +50,11 @@ class AcademicYearForm extends Form
         $data['name'] = $this->generateAcademicYearName($data);
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-year-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-year-create');
+
         }
         $is_saved = AcademicYear::updateOrCreate(['id' => $this->id], $data);
 

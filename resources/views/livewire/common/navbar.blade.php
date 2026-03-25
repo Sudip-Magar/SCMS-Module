@@ -21,104 +21,129 @@
     <!-- Navigation -->
     <ul class="flex-1 overflow-y-auto py-4 space-y-1 px-3">
 
+        @php
+            $user = Auth::user();
+            $isAdmin = $user->username == 'admin@gmail.com';
+        @endphp
+
         @foreach ($menus as $menu)
 
             {{-- ================= SINGLE MENU ================= --}}
             @if (!isset($menu['children']))
-                <li>
-                    <a href="{{ route($menu['route']) }}"
-                       class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 group
-                       {{ request()->routeIs($menu['route'])
-                            ? 'bg-white text-emerald-800 shadow-lg shadow-emerald-800/30 font-medium'
-                            : 'text-emerald-50 hover:bg-emerald-700 hover:shadow-md hover:shadow-emerald-800/30 hover:translate-x-1' }}">
+                @php
+                    $hasPermission = true;
+                    if (!$isAdmin && isset($menu['ability']) && $menu['ability']) {
+                        $hasPermission = auth()->user()->can($menu['ability']);
+                    }
+                @endphp
 
-                        <i class="fa-solid {{ $menu['icon'] ?? 'fa-circle' }} w-5 text-center transition-transform group-hover:scale-110
-                            {{ request()->routeIs($menu['route']) ? 'text-emerald-600' : 'text-emerald-300' }}"></i>
-                        <span>{{ __($menu['title']) }}</span>
+                @if($hasPermission)
+                    <li>
+                        <a href="{{ route($menu['route']) }}"
+                           class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 group
+                           {{ request()->routeIs($menu['route'])
+                                ? 'bg-white text-emerald-800 shadow-lg shadow-emerald-800/30 font-medium'
+                                : 'text-emerald-50 hover:bg-emerald-700 hover:shadow-md hover:shadow-emerald-800/30 hover:translate-x-1' }}">
 
-                        @if(request()->routeIs($menu['route']))
-                            <span class="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                        @endif
-                    </a>
-                </li>
+                            <i class="fa-solid {{ $menu['icon'] ?? 'fa-circle' }} w-5 text-center transition-transform group-hover:scale-110
+                                {{ request()->routeIs($menu['route']) ? 'text-emerald-600' : 'text-emerald-300' }}"></i>
+                            <span>{{ __($menu['title']) }}</span>
+
+                            @if(request()->routeIs($menu['route']))
+                                <span class="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                            @endif
+                        </a>
+                    </li>
+                @endif
             @endif
 
             {{-- ================= DROPDOWN MENU ================= --}}
             @if (isset($menu['children']))
-
                 @php
-                    $isChildActive = collect($menu['children'])->contains(fn($child) =>
+                    // Filter children based on permissions (skip for admin)
+                    $filteredChildren = collect($menu['children'])->filter(function($child) use ($isAdmin) {
+                        if (!$isAdmin && isset($child['ability']) && $child['ability']) {
+                            return auth()->user()->can($child['ability']);
+                        }
+                        return true;
+                    })->values()->toArray();
+
+                    $hasAnyChildPermission = count($filteredChildren) > 0;
+
+                    $isChildActive = collect($filteredChildren)->contains(fn($child) =>
                         request()->routeIs($child['route'])
                     );
                 @endphp
 
-                <li>
+                @if($hasAnyChildPermission)
+                    <li>
 
-                    <!-- Parent Button -->
-                    <button
-                        x-init="if({{ $isChildActive ? 'true' : 'false' }}) activeMenu='{{ $menu['title'] }}'"
-                        @click="activeMenu === '{{ $menu['title'] }}'
-                                ? activeMenu = null
-                                : activeMenu = '{{ $menu['title'] }}'"
+                        <!-- Parent Button -->
+                        <button
+                            x-init="if({{ $isChildActive ? 'true' : 'false' }}) activeMenu='{{ $menu['title'] }}'"
+                            @click="activeMenu === '{{ $menu['title'] }}'
+                                    ? activeMenu = null
+                                    : activeMenu = '{{ $menu['title'] }}'"
 
-                        class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200 group cursor-pointer
-                        {{ $isChildActive
-                            ? 'bg-white text-emerald-800 shadow-lg shadow-emerald-800/30 font-medium'
-                            : 'text-emerald-50 hover:bg-emerald-700 hover:shadow-md hover:shadow-emerald-800/30 hover:translate-x-1' }}">
+                            class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl transition-all duration-200 group cursor-pointer
+                            {{ $isChildActive
+                                ? 'bg-white text-emerald-800 shadow-lg shadow-emerald-800/30 font-medium'
+                                : 'text-emerald-50 hover:bg-emerald-700 hover:shadow-md hover:shadow-emerald-800/30 hover:translate-x-1' }}">
 
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid {{ $menu['icon'] ?? 'fa-circle' }} w-5 text-center transition-transform group-hover:scale-110
-                                {{ $isChildActive ? 'text-emerald-600' : 'text-emerald-300' }}"></i>
-                            <span>{{ __($menu['title']) }}</span>
-                        </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid {{ $menu['icon'] ?? 'fa-circle' }} w-5 text-center transition-transform group-hover:scale-110
+                                    {{ $isChildActive ? 'text-emerald-600' : 'text-emerald-300' }}"></i>
+                                <span>{{ __($menu['title']) }}</span>
+                            </div>
 
-                        <div class="flex items-center">
-                            @if($isChildActive)
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse mr-2"></span>
-                            @endif
-                            <i class="fa-solid fa-chevron-down text-xs transition-all duration-300
-                                {{ $isChildActive ? 'text-emerald-600' : 'text-emerald-300' }}"
-                               :class="{ 'rotate-180': activeMenu === '{{ $menu['title'] }}' }"></i>
-                        </div>
-                    </button>
+                            <div class="flex items-center">
+                                @if($isChildActive)
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse mr-2"></span>
+                                @endif
+                                <i class="fa-solid fa-chevron-down text-xs transition-all duration-300
+                                    {{ $isChildActive ? 'text-emerald-600' : 'text-emerald-300' }}"
+                                   :class="{ 'rotate-180': activeMenu === '{{ $menu['title'] }}' }"></i>
+                            </div>
+                        </button>
 
-                    <!-- Children with glass morphism effect -->
-                    <ul x-show="activeMenu === '{{ $menu['title'] }}'"
-                        x-collapse.duration.200ms
-                        class="mt-1 ml-4 space-y-0.5 relative">
+                        <!-- Children with glass morphism effect -->
+                        <ul x-show="activeMenu === '{{ $menu['title'] }}'"
+                            x-collapse.duration.200ms
+                            class="mt-1 ml-4 space-y-0.5 relative">
 
-                        <!-- Decorative line -->
-                        <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-emerald-500/30 rounded-full"></div>
+                            <!-- Decorative line -->
+                            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-emerald-500/30 rounded-full"></div>
 
-                        @foreach ($menu['children'] as $index => $child)
-                            <li class="relative">
-                                <a href="{{ route($child['route']) }}"
-                                   class="block px-4 py-2 ml-6 text-sm rounded-lg transition-all duration-200
-                                   {{ request()->routeIs($child['route'])
-                                        ? 'bg-emerald-700 text-white shadow-md font-medium'
-                                        : 'text-emerald-100 hover:bg-emerald-700/70 hover:text-white hover:translate-x-1' }}">
+                            @foreach ($filteredChildren as $index => $child)
+                                <li class="relative">
+                                    <a href="{{ route($child['route']) }}"
+                                       class="block px-4 py-2 ml-6 text-sm rounded-lg transition-all duration-200
+                                       {{ request()->routeIs($child['route'])
+                                            ? 'bg-emerald-700 text-white shadow-md font-medium'
+                                            : 'text-emerald-100 hover:bg-emerald-700/70 hover:text-white hover:translate-x-1' }}">
 
-                                    <div class="flex items-center gap-3">
-                                        <!-- Active/Inactive Indicator -->
-                                        <span class="text-xs w-4 text-center">
+                                        <div class="flex items-center gap-3">
+                                            <!-- Active/Inactive Indicator -->
+                                            <span class="text-xs w-4 text-center">
+                                                @if(request()->routeIs($child['route']))
+                                                    <span class="text-yellow-300">●</span>
+                                                @else
+                                                    <span class="text-emerald-400">○</span>
+                                                @endif
+                                            </span>
+                                            <span>{{ __($child['title']) }}</span>
+
                                             @if(request()->routeIs($child['route']))
-                                                <span class="text-yellow-300">●</span>
-                                            @else
-                                                <span class="text-emerald-400">○</span>
+                                                <span class="ml-auto text-yellow-300 text-xs">●</span>
                                             @endif
-                                        </span>
-                                        <span>{{ __($child['title']) }}</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
 
-                                        @if(request()->routeIs($child['route']))
-                                            <span class="ml-auto text-yellow-300 text-xs">●</span>
-                                        @endif
-                                    </div>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-
-                </li>
+                    </li>
+                @endif
             @endif
 
         @endforeach
@@ -139,7 +164,7 @@
                 <!-- Avatar with status -->
                 <div class="relative">
                     @if($user->profile && $user->profile->photo)
-                        <img class="w-10 h-10 rounded-xl" src="{{ asset('storage/'.$user->profile->photo) }}"
+                        <img class="w-10 h-10 rounded-xl object-cover" src="{{ asset('storage/'.$user->profile->photo) }}"
                              alt="Profile">
                     @else
                         <div

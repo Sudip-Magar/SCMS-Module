@@ -43,6 +43,8 @@ class User extends Component
             'delete' => authorizeUserCheck('setup-user-delete'),
         ];
 
+        authorizeUserModal('setup-user-list');
+
         $this->status = collect(StatusState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
@@ -95,12 +97,6 @@ class User extends Component
     {
         $this->title = 'Edit User';
         $this->userForm->id = $user->id;
-//        $this->userForm->username = $user->username;
-//        $this->userForm->profile_type = $user->profile_type;
-//        $this->userForm->profile_id = $user->profile_id;
-//        $this->userForm->short_name = $user->short_name;
-//        $this->userForm->status = $user->status;
-//        $this->userForm->role_id = $user->roles->pluck('id')->first();
         $this->drawer = true;
 
         $userData = [
@@ -125,6 +121,7 @@ class User extends Component
     public function delete(UserModel $user)
     {
         try {
+            authorizeUserCheck('setup-user-delete');
             AuditTableEntryEvent::dispatch('users', $user, 'delete');
             $is_delete = $user->deleteOrFail();
             if (!$is_delete) {

@@ -3,16 +3,15 @@
 namespace App\Livewire\Scms\AcademicSetup;
 
 use App\Enums\AcademicLevelState;
+use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Livewire\Forms\AcademicSetup\AcademicYearForm;
 use App\Models\AcademicSetup\AcademicYear;
 use App\Models\AuditModel\AuditAcademicYear;
 use App\Traits\WithCustomPagination;
-use Livewire\Component;
-use Livewire\WithPagination;
-use Mary\Traits\Toast;
-use App\Enums\StatusState;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\Component;
+use Mary\Traits\Toast;
 
 class AcademicYearSetup extends Component
 {
@@ -27,10 +26,25 @@ class AcademicYearSetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
     public $academic_level;
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
 
     public function mount()
     {
-        // dd(session('locale'));
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-year-list'),
+            'create' => authorizeUserCheck('academic_setup-year-create'),
+            'edit' => authorizeUserCheck('academic_setup-year-edit'),
+            'delete' => authorizeUserCheck('academic_setup-year-delete'),
+        ];
+
+        authorizeUserModal('academic_setup-year-list');
+
         $this->status = collect(StatusState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
@@ -70,6 +84,18 @@ class AcademicYearSetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Academic Year';
+        $this->yearForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicYear $academicYear)
     {
         $this->yearForm->id = $academicYear->id;
@@ -81,6 +107,7 @@ class AcademicYearSetup extends Component
     public function delete(AcademicYear $academicYear)
     {
         try {
+            authorizeUserModal('academic_setup-year-delete');
             AuditTableEntryEvent::dispatch('academic_years', $academicYear, 'delete');
             $is_delete = $academicYear->deleteOrFail();
             if (!$is_delete) {
@@ -121,24 +148,12 @@ class AcademicYearSetup extends Component
         return [
             ['key' => 'action', 'label' => __('Action'), 'class' => 'w-16 text-center', 'sortable' => false],
             ['key' => 'name', 'label' => __('Name'), 'class' => 'w-50',],
-            ['key' => 'academic_level', 'label' => __('Academic_level'),'sortable' => false],
-            ['key' => 'start_year_en', 'label' => __('Start Year (EN)'),'sortable' => false],
+            ['key' => 'academic_level', 'label' => __('Academic_level'), 'sortable' => false],
+            ['key' => 'start_year_en', 'label' => __('Start Year (EN)'), 'sortable' => false],
             ['key' => 'start_year_np', 'label' => __('Start Year (NP)'), 'sortable' => false],
             ['key' => 'end_year_en', 'label' => __('End Year (EN)'), 'sortable' => false],
             ['key' => 'end_year_np', 'label' => __('End Year (NP)'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Academic Year';
-        $this->yearForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

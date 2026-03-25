@@ -7,7 +7,6 @@ use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicProgram;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicProgramForm extends Form
@@ -48,8 +47,10 @@ class AcademicProgramForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-program-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-program-create');
         }
 
         $is_saved = AcademicProgram::updateOrCreate(['id' => $this->id], $data);

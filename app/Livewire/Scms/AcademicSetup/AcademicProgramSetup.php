@@ -14,6 +14,7 @@ use Mary\Traits\Toast;
 class AcademicProgramSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicProgramForm $programForm;
     public bool $drawer = false;
@@ -22,8 +23,24 @@ class AcademicProgramSetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-program-list'),
+            'create' => authorizeUserCheck('academic_setup-program-create'),
+            'edit' => authorizeUserCheck('academic_setup-program-edit'),
+            'delete' => authorizeUserCheck('academic_setup-program-delete'),
+        ];
+
+        authorizeUserModal('academic_setup-program-list');
+
         $this->status = collect(StatusState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
@@ -48,6 +65,18 @@ class AcademicProgramSetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Program';
+        $this->programForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicProgram $program)
     {
         $this->title = "Edit Program";
@@ -61,6 +90,7 @@ class AcademicProgramSetup extends Component
     public function delete(AcademicProgram $program)
     {
         try {
+            authorizeUserModal('academic_setup-program-delete');
             AuditTableEntryEvent::dispatch('academic_programs', $program, 'delete');
             $is_delete = $program->deleteOrFail();
             if (!$is_delete) {
@@ -103,17 +133,5 @@ class AcademicProgramSetup extends Component
             ['key' => 'short_name', 'label' => __('Short Name'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Program';
-        $this->programForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

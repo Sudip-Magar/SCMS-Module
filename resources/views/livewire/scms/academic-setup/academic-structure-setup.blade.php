@@ -186,7 +186,7 @@
                                 @change.prevent="$store.academicStructureSetup.updateSelectedData('section_id',$event.target.value)"
                                 x-bind:id="'section_id'" x-bind:data-row-index="'section_id'"
                                 x-model="$store.academicStructureSetup.structureData.section_id">
-                                <option value="">{{ 'Add Seciton' }}</option>
+                                <option value="">{{ 'Add Section' }}</option>
                                 <template
                                     x-for="listItem in $store.academicStructureSetup.academicSections.map(listItem => JSON.parse(JSON.stringify(listItem)))"
                                     :key="listItem.id">

@@ -30,8 +30,24 @@ class PermissionSetup extends Component
     public array $sortBy = ['column' => 'package_name', 'direction' => 'asc'];
     public $search = '';
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
+
     public function mount()
     {
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('setup-permission-list'),
+            'create' => authorizeUserCheck('setup-permission-create'),
+            'edit' => authorizeUserCheck('setup-permission-edit'),
+            'delete' => authorizeUserCheck('setup-permission-delete'),
+        ];
+
+        authorizeUserModal('setup-permission-list');
         $this->packages = Permission::select('package_name')
             ->distinct()
             ->pluck('package_name')

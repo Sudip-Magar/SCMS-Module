@@ -1,29 +1,36 @@
-<div x-data="{ drawer: @entangle('drawer') }">
+<div x-data="{ drawer: @entangle('drawer'), allowedPermissions: @js($allowedPermissions) }">
     <x-header class="text-lg header" title="{{ __('Permission Setup') }}">
-         <x-slot:middle class="flex justify-end">
+        <x-slot:middle class="flex justify-end">
             <x-input class="inline-block text-xs" placeholder="{{ __('Search...') }}" wire:model.live.debounce="search"
-                clearable />
+                     clearable/>
         </x-slot:middle>
         <x-slot:actions>
-            <div x-cloak>
-                <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();" responsive
-                    icon="o-plus" class="btn-primary btn-sm" />
+            <div x-show="allowedPermissions.create" x-cloak>
+                <x-button :label="__('Add')" @click.prevent="$wire.drawer = true, $wire.resetFormValidation();"
+                          responsive
+                          icon="o-plus" class="btn-primary btn-sm"/>
             </div>
         </x-slot:actions>
     </x-header>
 
     <x-card>
-        <x-pagination-filter />
+        <x-pagination-filter/>
         <x-table class="text-xs" :headers="$headers" :rows="$permissions" :sort-by="$sortBy" with-pagination>
             @scope('cell_action', $permission)
-                <div class="flex text-sm">
-                    <x-button icon="o-pencil" spinner="edit({{ $permission->id }})" class="btn-ghost btn-sm text-indigo-500"
-                        tooltip-bottom="{{ __('Edit') }}" x-cloak wire:click="edit({{ $permission->id }})" />
-
-                    <x-button icon="o-trash" spinner="delete" class="btn-ghost btn-sm text-red-500" tooltip-bottom="{{ __('Delete') }}"
-                        x-cloak />
-
+            <div class="flex text-sm">
+                <div x-cloak x-show="allowedPermissions.edit">
+                    <x-button icon="o-pencil" spinner="edit({{ $permission->id }})"
+                              class="btn-ghost btn-sm text-indigo-500"
+                              tooltip-bottom="{{ __('Edit') }}" wire:click="edit({{ $permission->id }})"/>
                 </div>
+
+                <div x-cloak x-show="allowedPermissions.delete">
+                    <x-button icon="o-trash" spinner="delete" class="btn-ghost btn-sm text-red-500"
+                              tooltip-bottom="{{ __('Delete') }}"
+                             />
+                </div>
+
+            </div>
             @endscope
         </x-table>
     </x-card>
@@ -33,7 +40,7 @@
             <x-form no-separator wire:submit.prevent="savePermission">
 
                 {{-- Package --}}
-                <x-input label="Package" list="packageList" wire:model.live="package_name" />
+                <x-input label="Package" list="packageList" wire:model.live="package_name"/>
 
                 <datalist id="packageList">
                     @foreach ($packages as $pkg)
@@ -42,7 +49,7 @@
                 </datalist>
 
                 {{-- Subpackage --}}
-                <x-input label="Sub Package" list="subPackageList" wire:model.live="sub_package_name" />
+                <x-input label="Sub Package" list="subPackageList" wire:model.live="sub_package_name"/>
 
                 <datalist id="subPackageList">
                     @foreach ($subPackages as $sub)
@@ -80,8 +87,8 @@
                 </div>
 
                 <x-slot:actions>
-                    <x-button label="{{ __('Cancel') }}" @click.prevent="$wire.drawer = false, $wire.resetForm()" />
-                    <x-button label="{{ __('Save') }}" spinner="savePermission" type="submit" class="btn-primary" />
+                    <x-button label="{{ __('Cancel') }}" @click.prevent="$wire.drawer = false, $wire.resetForm()"/>
+                    <x-button label="{{ __('Save') }}" spinner="savePermission" type="submit" class="btn-primary"/>
                 </x-slot:actions>
 
             </x-form>
