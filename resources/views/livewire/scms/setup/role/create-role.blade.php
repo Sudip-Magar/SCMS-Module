@@ -34,7 +34,7 @@
                                     <tr>
                                         <th class="text-left">Sub Package</th>
                                         <th>Create</th>
-                                        <th>Read</th>
+                                        <th>List</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -43,7 +43,7 @@
                                     @foreach ($subs as $sub => $actions)
                                         <tr>
                                             <td class="font-medium">{{ ucfirst($sub) }}</td>
-                                            @foreach (['create', 'read', 'edit', 'delete'] as $action)
+                                            @foreach (['create', 'list', 'edit', 'delete'] as $action)
                                                 <td class="text-center">
                                                     @if (isset($actions[$action]))
                                                         <x-checkbox wire:model="selectedPermissions" :value="(int) $actions[$action]"

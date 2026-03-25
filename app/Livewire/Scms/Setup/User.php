@@ -27,8 +27,22 @@ class User extends Component
     public $profiles;
     public $roles;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('setup-user-list'),
+            'create' => authorizeUserCheck('setup-user-create'),
+            'edit' => authorizeUserCheck('setup-user-edit'),
+            'delete' => authorizeUserCheck('setup-user-delete'),
+        ];
+
         $this->status = collect(StatusState::cases())
             ->map(fn($item) => [
                 'value' => $item->name,
@@ -43,6 +57,7 @@ class User extends Component
             ])
             ->toArray();
     }
+
 
     public function saveUser($data)
     {
