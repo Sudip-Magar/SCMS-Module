@@ -14,6 +14,7 @@ use Mary\Traits\Toast;
 class AcademicFacultySetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicFacultyForm $facultyForm;
     public bool $drawer = false;
@@ -22,14 +23,24 @@ class AcademicFacultySetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-faculty-list'),
+            'create' => authorizeUserCheck('academic_setup-faculty-create'),
+            'edit' => authorizeUserCheck('academic_setup-faculty-edit'),
+            'delete' => authorizeUserCheck('academic_setup-faculty-delete'),
+        ];
+
+        authorizeUserModal('academic_setup-faculty-list');
+        $this->status = backedEnumAsArray(StatusState::cases());
     }
 
     public function saveAcademicFaculty()
@@ -48,6 +59,18 @@ class AcademicFacultySetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Faculty';
+        $this->facultyForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicFaculty $faculty)
     {
         $this->title = "Edit Faculty";
@@ -61,6 +84,7 @@ class AcademicFacultySetup extends Component
     public function delete(AcademicFaculty $faculty)
     {
         try {
+            authorizeUserModal('academic_setup-faculty-delete');
             AuditTableEntryEvent::dispatch('academic_faculties', $faculty, 'delete');
             $is_delete = $faculty->deleteOrFail();
             if (!$is_delete) {
@@ -78,7 +102,7 @@ class AcademicFacultySetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-faculty-setup',[
+        return view('livewire.scms.academic-setup.academic-faculty-setup', [
             'faculty_data_list' => $this->facultyData(),
             'headers' => $this->headers(),
         ]);
@@ -103,17 +127,5 @@ class AcademicFacultySetup extends Component
             ['key' => 'short_name', 'label' => __('Short Name'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Faculty';
-        $this->facultyForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

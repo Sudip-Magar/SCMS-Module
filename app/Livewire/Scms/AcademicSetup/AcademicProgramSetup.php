@@ -41,12 +41,7 @@ class AcademicProgramSetup extends Component
 
         authorizeUserModal('academic_setup-program-list');
 
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status = backedEnumAsArray(StatusState::cases());
     }
 
     public function saveAcademicProgram()

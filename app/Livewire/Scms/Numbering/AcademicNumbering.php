@@ -15,6 +15,7 @@ use Mary\Traits\Toast;
 class AcademicNumbering extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicNumberingForm $numberingForm;
     public bool $drawer = false;
@@ -24,21 +25,25 @@ class AcademicNumbering extends Component
     public $status;
     public $academic_level;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('student_setup-admission_numbering-list'),
+            'create' => authorizeUserCheck('student_setup-admission_numbering-create'),
+            'edit' => authorizeUserCheck('student_setup-admission_numbering-edit'),
+            'delete' => authorizeUserCheck('student_setup-admission_numbering-delete'),
+        ];
+        authorizeUserModal('student_setup-admission_numbering-list');
 
-        $this->academic_level = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->academic_level = backedEnumAsArray(AcademicLevelState::cases());
     }
 
     public function saveAdmissionNumbering($data)
@@ -62,11 +67,23 @@ class AcademicNumbering extends Component
         }
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Admission Numbering';
+        $this->numberingForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AdmissionNumbering $numbering)
     {
         $this->title = 'Edit Admission Numbering';
         $this->numberingForm->id = $numbering->id;
-      
+
         $this->drawer = true;
         $this->js('$store.numberingSetup.init(' . $numbering . ')');
     }
@@ -74,6 +91,7 @@ class AcademicNumbering extends Component
     public function delete(AdmissionNumbering $numbering)
     {
         try {
+            authorizeUserModal('student_setup-admission_numbering-delete');
             AuditTableEntryEvent::dispatch('admission_numberings', $numbering, 'delete');
             $is_deleted = $numbering->deleteOrFail();
 
@@ -123,17 +141,5 @@ class AcademicNumbering extends Component
             ['key' => 'total_length', 'label' => __('Total Length'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Admission Numbering';
-        $this->numberingForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

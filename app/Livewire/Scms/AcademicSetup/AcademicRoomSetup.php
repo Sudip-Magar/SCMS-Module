@@ -14,6 +14,7 @@ use Mary\Traits\Toast;
 class AcademicRoomSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicRoomForm $roomForm;
     public bool $drawer = false;
@@ -22,14 +23,25 @@ class AcademicRoomSetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-room-list'),
+            'create' => authorizeUserCheck('academic_setup-room-create'),
+            'edit' => authorizeUserCheck('academic_setup-room-edit'),
+            'delete' => authorizeUserCheck('academic_setup-room-delete'),
+        ];
+
+        authorizeUserModal('academic_setup-room-list');
+
+        $this->status = backedEnumAsArray(StatusState::cases());
     }
 
     public function saveAcademicRoom()
@@ -48,6 +60,18 @@ class AcademicRoomSetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Room';
+        $this->roomForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicRoom $room)
     {
         $this->title = "Edit Room";
@@ -63,6 +87,7 @@ class AcademicRoomSetup extends Component
     public function delete(AcademicRoom $room)
     {
         try {
+            authorizeUserModal('academic_setup-room-delete');
             AuditTableEntryEvent::dispatch('academic_rooms', $room, 'delete');
             $is_delete = $room->deleteOrFail();
             if (!$is_delete) {
@@ -107,17 +132,5 @@ class AcademicRoomSetup extends Component
             ['key' => 'block_no', 'label' => __('Block No.'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Room';
-        $this->roomForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

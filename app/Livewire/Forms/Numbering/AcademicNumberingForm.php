@@ -7,7 +7,6 @@ use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Models\Numbering\AdmissionNumbering;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicNumberingForm extends Form
@@ -26,8 +25,10 @@ class AcademicNumberingForm extends Form
     {
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('student_setup-admission_numbering-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('student_setup-admission_numbering-create');
         }
 
         $is_saved = AdmissionNumbering::updateOrCreate(['id' => $this->id], $data);

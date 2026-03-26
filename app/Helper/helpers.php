@@ -51,6 +51,21 @@ if (!function_exists('validateField')) {
     }
 }
 
+if (!function_exists('backedEnumAsArray')) {
+    function backedEnumAsArray($enum)
+    {
+        return collect($enum)
+            ->map(function ($item) {
+                return [
+                    'value' => $item->name,
+                    'label' => $item->value,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+}
+
 
 if (!function_exists('EngToNpNumberConverter')) {
     function EngToNpNumberConverter($number)

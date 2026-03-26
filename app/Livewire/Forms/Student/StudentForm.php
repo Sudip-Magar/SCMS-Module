@@ -4,7 +4,6 @@ namespace App\Livewire\Forms\Student;
 
 use App\Enums\GenderState;
 use App\Enums\StatusState;
-use App\Livewire\Scms\StudentSetup\Student\StudentAdd;
 use App\Models\Student\Student;
 use App\Services\StudentSaveService;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -58,6 +57,11 @@ class StudentForm extends Form
 
     public function performStudentSave($data, $documents)
     {
+        if ($this->id) {
+            authorizeUserModal('student_setup-student-edit');
+        } else {
+            authorizeUserModal('student_setup-student-create');
+        }
         $result = StudentSaveService::registerStudent($data, $this->id ?? null, $documents ?? null, $this->photo ?? null);
 
         if ($result) {
@@ -66,7 +70,8 @@ class StudentForm extends Form
         return false;
     }
 
-    public function fetchData($id, ){
+    public function fetchData($id)
+    {
         $data = Student::with('studentStructure', 'studentDocuments', 'studentGurdians')->findOrFail($id);
         $this->admission_no = $data->admission_no;
         $this->admission_numbering_index = $data->admission_numbering_index;

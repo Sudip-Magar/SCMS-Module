@@ -8,7 +8,6 @@ use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicLevel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicLevelForm extends Form
@@ -52,8 +51,11 @@ class AcademicLevelForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-level-edit');
+
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-level-create');
         }
 
         $is_saved = AcademicLevel::updateOrCreate(['id' => $this->id], $data);

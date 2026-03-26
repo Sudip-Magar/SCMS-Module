@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AcademicSectionlState : string
+enum AcademicSectionState : string
 {
     case SCHOOL = 'School';
     case COLLEGE = 'College';

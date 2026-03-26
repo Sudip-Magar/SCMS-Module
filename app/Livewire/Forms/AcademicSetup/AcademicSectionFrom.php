@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Forms\AcademicSetup;
 
-use App\Enums\AcademicSectionlState;
+use App\Enums\AcademicSectionState;
 use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicSection;
@@ -17,7 +17,7 @@ class AcademicSectionFrom extends Form
     public $name;
     public $short_name;
     public $status = StatusState::ACTIVE->name;
-    public $type = AcademicSectionlState::SCHOOL->name;
+    public $type = AcademicSectionState::SCHOOL->name;
 
     public function rules()
     {
