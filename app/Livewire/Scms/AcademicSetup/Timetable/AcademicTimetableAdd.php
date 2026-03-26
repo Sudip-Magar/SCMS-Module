@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class AcademicTimetableAdd extends Component
 {
+    public $id;
     public $title = "Create Timetable";
     public bool $loading = false;
 
@@ -20,19 +21,14 @@ class AcademicTimetableAdd extends Component
 
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        if ($this->id) {
+            authorizeUserModal('timetable_setup-timetable-edit');
+        } else {
+            authorizeUserModal('timetable_setup-timetable-create');
+        }
 
-        $this->type = collect(ClassTypeState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->type = backedEnumAsArray(ClassTypeState::cases());
 
     }
 

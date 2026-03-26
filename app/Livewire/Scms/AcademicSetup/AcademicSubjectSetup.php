@@ -15,6 +15,7 @@ use Mary\Traits\Toast;
 class AcademicSubjectSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicSubjectForm $subjectForm;
     public bool $drawer = false;
@@ -24,20 +25,26 @@ class AcademicSubjectSetup extends Component
     public $status;
     public $type;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-subject-list'),
+            'create' => authorizeUserCheck('academic_setup-subject-create'),
+            'edit' => authorizeUserCheck('academic_setup-subject-edit'),
+            'delete' => authorizeUserCheck('academic_setup-subject-delete'),
+        ];
 
-        $this->type = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ]);
+        authorizeUserModal('academic_setup-subject-list');
+
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->type = backedEnumAsArray(AcademicLevelState::cases());
     }
 
     public function saveAcademicSubject()
@@ -56,6 +63,18 @@ class AcademicSubjectSetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Subject';
+        $this->subjectForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicSubject $subject)
     {
         $this->title = "Edit Subject";
@@ -71,6 +90,7 @@ class AcademicSubjectSetup extends Component
     public function delete(AcademicSubject $subject)
     {
         try {
+            authorizeUserModal('academic_setup-subject-delete');
             AuditTableEntryEvent::dispatch('academic_subjects', $subject, 'delete');
             $is_delete = $subject->deleteOrFail();
             if (!$is_delete) {
@@ -90,7 +110,7 @@ class AcademicSubjectSetup extends Component
     {
         return view('livewire.scms.academic-setup.academic-subject-setup', [
             'subject_data_list' => $this->subjectData(),
-            'headers'=> $this->headers(),
+            'headers' => $this->headers(),
         ]);
     }
 
@@ -118,17 +138,5 @@ class AcademicSubjectSetup extends Component
             ['key' => 'type', 'label' => __('Academic Type'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Subject';
-        $this->subjectForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

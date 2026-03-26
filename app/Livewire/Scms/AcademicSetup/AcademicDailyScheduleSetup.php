@@ -16,6 +16,7 @@ use Mary\Traits\Toast;
 class AcademicDailyScheduleSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicDailySchedulForm $scheduleForm;
     public bool $drawer = false;
@@ -26,28 +27,27 @@ class AcademicDailyScheduleSetup extends Component
     public $academic_level;
     public $shift;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('timetable_setup-daily_schedule-list'),
+            'create' => authorizeUserCheck('timetable_setup-daily_schedule-create'),
+            'edit' => authorizeUserCheck('timetable_setup-daily_schedule-edit'),
+            'delete' => authorizeUserCheck('timetable_setup-daily_schedule-delete'),
+        ];
 
-        $this->academic_level = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        authorizeUserModal('timetable_setup-daily_schedule-list');
 
-        $this->shift = collect(ShiftStatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->academic_level = backedEnumAsArray(AcademicLevelState::cases());
+        $this->shift = backedEnumAsArray(ShiftStatusState::cases());
     }
 
     public function saveAcademicSchedule()
@@ -65,6 +65,18 @@ class AcademicDailyScheduleSetup extends Component
         $this->resetFormValidation();
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Daily Schedule';
+        $this->scheduleForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicDailySchedule $schedule)
     {
         $this->title = "Edit Daily Schedule";
@@ -80,6 +92,7 @@ class AcademicDailyScheduleSetup extends Component
     public function delete(AcademicDailySchedule $schedule)
     {
         try {
+            authorizeUserModal('timetable_setup-daily_schedule-delete');
             AuditTableEntryEvent::dispatch('academic_daily_schedules', $schedule, 'delete');
             $is_delete = $schedule->deleteOrFail();
             if (!$is_delete) {
@@ -127,17 +140,5 @@ class AcademicDailyScheduleSetup extends Component
             ['key' => 'shift', 'label' => __('Shift'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Daily Schedule';
-        $this->scheduleForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }

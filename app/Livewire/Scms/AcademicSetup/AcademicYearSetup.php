@@ -45,19 +45,8 @@ class AcademicYearSetup extends Component
 
         authorizeUserModal('academic_setup-year-list');
 
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-        $this->academic_level = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->academic_level = backedEnumAsArray(AcademicLevelState::cases());
     }
 
     public function saveAcademicYear($data)

@@ -9,7 +9,6 @@ use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicDailySchedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicDailySchedulForm extends Form
@@ -56,8 +55,11 @@ class AcademicDailySchedulForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('timetable_setup-daily_schedule-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('timetable_setup-daily_schedule-create');
+
         }
 
         $is_saved = AcademicDailySchedule::updateOrCreate(['id' => $this->id], $data);
@@ -71,7 +73,8 @@ class AcademicDailySchedulForm extends Form
         return true;
     }
 
-    public function generateScheduleName($data){
+    public function generateScheduleName($data)
+    {
         $academic_level = ucfirst(strtolower($data['academic_level']));
         $day = ucfirst(strtolower($data['day']));
         $shift = ucfirst(strtolower($data['shift']));

@@ -9,7 +9,6 @@ use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicStructure;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicStructureForm extends Form
@@ -48,8 +47,10 @@ class AcademicStructureForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-structure-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-structure-create');
         }
         $is_saved = AcademicStructure::updateOrCreate(['id' => $this->id], $data);
 

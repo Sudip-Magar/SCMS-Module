@@ -25,19 +25,23 @@ class StudentList extends Component
         'edit' => false,
         'delete' => false,
     ];
-    public function mount(){
-        $this->allowedPermissions =[
+
+    public function mount()
+    {
+        $this->allowedPermissions = [
             'list' => authorizeUserCheck('student_setup-student-list'),
-            'create' =>authorizeUserCheck('student_setup-student-create'),
-            'edit' =>authorizeUserCheck('student_setup-student-edit'),
-            'delete' =>authorizeUserCheck('student_setup-student-delete'),
+            'create' => authorizeUserCheck('student_setup-student-create'),
+            'edit' => authorizeUserCheck('student_setup-student-edit'),
+            'delete' => authorizeUserCheck('student_setup-student-delete'),
         ];
+        authorizeUserModal('student_setup-student-list');
     }
 
     public function delete(Student $student)
     {
         DB::beginTransaction();
         try {
+            authorizeUserModal('student_setup-student-delete');
             $studentStructure = StudentAcademicStructure::where('student_id', $student->id)->first();
             $studentDocuments = StudentDocument::where('student_id', $student->id)->get();
             $studentGuardians = StudentGuardian::where('student_id', $student->id)->get();

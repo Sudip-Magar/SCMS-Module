@@ -7,7 +7,6 @@ use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicFaculty;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicFacultyForm extends Form
@@ -48,8 +47,12 @@ class AcademicFacultyForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-faculty-edit');
+
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-faculty-create');
+
         }
 
         $is_saved = AcademicFaculty::updateOrCreate(['id' => $this->id], $data);

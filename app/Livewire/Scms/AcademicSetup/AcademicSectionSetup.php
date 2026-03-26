@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Scms\AcademicSetup;
 
-use App\Enums\AcademicSectionlState;
+use App\Enums\AcademicSectionState;
 use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Livewire\Forms\AcademicSetup\AcademicSectionFrom;
@@ -26,18 +26,8 @@ class AcademicSectionSetup extends Component
 
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
-        $this->type = collect(AcademicSectionlState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ]);
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->type = backedEnumAsArray(AcademicSectionState::cases());
     }
 
     public function saveAcademicSection()

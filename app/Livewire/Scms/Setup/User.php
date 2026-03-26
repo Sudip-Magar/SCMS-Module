@@ -44,20 +44,8 @@ class User extends Component
         ];
 
         authorizeUserModal('setup-user-list');
-
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
-        $this->profile_types = collect(UserTypeStatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status =backedEnumAsArray(StatusState::cases());
+        $this->profile_types = backedEnumAsArray(UserTypeStatusState::cases());
     }
 
 

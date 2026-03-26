@@ -18,6 +18,7 @@ use Mary\Traits\Toast;
 class AcademicStructureSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicStructureForm $structureForm;
     public bool $drawer = false;
@@ -35,28 +36,27 @@ class AcademicStructureSetup extends Component
     public $academicRooms;
     public $academicSections;
 
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
+
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-structure-list'),
+            'create' => authorizeUserCheck('academic_setup-structure-create'),
+            'edit' => authorizeUserCheck('academic_setup-structure-edit'),
+            'delete' => authorizeUserCheck('academic_setup-structure-delete'),
+        ];
 
-        $this->academic_level = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        authorizeUserModal('academic_setup-structure-list');
 
-        $this->academic_system = collect(AcademicSystemState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->academic_level = backedEnumAsArray(AcademicLevelState::cases());
+        $this->academic_system = backedEnumAsArray(AcademicSystemState::cases());
     }
 
     public function saveAcademicStructure($data)
@@ -116,6 +116,7 @@ class AcademicStructureSetup extends Component
     public function delete(AcademicStructure $structure)
     {
         try {
+            authorizeUserModal('academic_setup-structure-delete');
             AuditTableEntryEvent::dispatch('academic_structures', $structure, 'delete');
             $is_deleted = $structure->deleteOrFail();
             if (!$is_deleted) {
@@ -189,15 +190,15 @@ class AcademicStructureSetup extends Component
         ];
     }
 
-    public function resetForm()
-    {
-        $this->title = 'Create Academic Structure';
-        $this->structureForm->reset();
-    }
-
     public function resetFormValidation()
     {
         $this->resetForm();
         $this->resetValidation();
+    }
+
+    public function resetForm()
+    {
+        $this->title = 'Create Academic Structure';
+        $this->structureForm->reset();
     }
 }

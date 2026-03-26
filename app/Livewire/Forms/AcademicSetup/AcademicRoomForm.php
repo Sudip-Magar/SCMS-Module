@@ -6,8 +6,6 @@ use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicRoom;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicRoomForm extends Form
@@ -44,8 +42,10 @@ class AcademicRoomForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-room-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-room-create');
         }
 
         $is_saved = AcademicRoom::updateOrCreate(['id' => $this->id], $data);

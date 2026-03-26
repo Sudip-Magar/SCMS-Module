@@ -40,17 +40,17 @@ class StudentAdd extends Component
 
     public function mount()
     {
-        $this->getStates();
 
         if ($this->id) {
+            authorizeUserModal('student_setup-student-edit');
             $searchSelect = app(searchSelect2Controller::class);
             $this->title = "Edit Student";
             $this->getStudentData();
             $this->academicStructures = $searchSelect->getAcademicStructure(request());
             $this->provinces = $searchSelect->getProvince(request());
             $this->districts = $searchSelect->getDistrict(request());
-//            dd($this->provinces);
         } else {
+            authorizeUserModal('student_setup-student-create');
             $this->title = 'Create Student';
             $this->documentForm = [
                 [
@@ -64,40 +64,14 @@ class StudentAdd extends Component
             ];
         }
 
+        $this->gender = backedEnumAsArray(GenderState::cases());
+        $this->relations = backedEnumAsArray(StudentGuardainRelationState::cases());
+        $this->occupations = backedEnumAsArray(StudentGuardianOccupationState::cases());
+        $this->documentTypes = backedEnumAsArray(StudentDocumentTypeState::cases());
+
         if (!$this->id) {
             $this->documentNumberings = getAdmissionNumbering();
         }
-    }
-
-    public function getStates()
-    {
-        $this->gender = collect(GenderState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
-        $this->relations = collect(StudentGuardainRelationState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
-        $this->occupations = collect(StudentGuardianOccupationState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
-
-        $this->documentTypes = collect(StudentDocumentTypeState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
     }
 
     public function getStudentData()
@@ -120,7 +94,7 @@ class StudentAdd extends Component
                 'document_type' => $value['document_type'],
                 'preview' => null,
                 'file_path' => null,
-                'old_file' => $value['file_path'] ? asset('storage/'.$value['file_path']) : null,
+                'old_file' => $value['file_path'] ? asset('storage/' . $value['file_path']) : null,
             ];
         }
     }

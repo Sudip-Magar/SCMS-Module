@@ -8,7 +8,6 @@ use App\Events\AuditTableEntryEvent;
 use App\Models\AcademicSetup\AcademicSubject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class AcademicSubjectForm extends Form
@@ -50,8 +49,10 @@ class AcademicSubjectForm extends Form
 
         if ($this->id) {
             $data['updated_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-subject-edit');
         } else {
             $data['created_by'] = Auth::user()->id;
+            authorizeUserModal('academic_setup-subject-create');
         }
 
         $is_saved = AcademicSubject::updateOrCreate(['id' => $this->id], $data);

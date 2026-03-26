@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
         $permissionStructure = [
             'dashboard' => ['view'],
             'setup' => ['user', 'role', 'permission'],
-            'academic_setup' => ['year', 'section', 'class', 'subject', 'faculty', 'level', 'room', 'structure', 'program'],
+            'academic_setup' => ['year', 'program', 'faculty', 'level', 'section', 'subject', 'room', 'structure'],
             'timetable_setup' => ['daily_schedule', 'timetable'],
             'student_setup' => ['student', 'admission_numbering'],
         ];

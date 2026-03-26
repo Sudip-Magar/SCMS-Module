@@ -15,6 +15,7 @@ use Mary\Traits\Toast;
 class AcademicLevelSetup extends Component
 {
     use Toast, WithCustomPagination;
+
     public string $search = '';
     public AcademicLevelForm $levelForm;
 
@@ -24,21 +25,26 @@ class AcademicLevelSetup extends Component
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public $status;
     public $type;
+    public $allowedPermissions = [
+        'list' => false,
+        'create' => false,
+        'edit' => false,
+        'delete' => false,
+    ];
 
     public function mount()
     {
-        $this->status = collect(StatusState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ])
-            ->toArray();
+        $this->allowedPermissions = [
+            'list' => authorizeUserCheck('academic_setup-level-list'),
+            'create' => authorizeUserCheck('academic_setup-level-create'),
+            'edit' => authorizeUserCheck('academic_setup-level-edit'),
+            'delete' => authorizeUserCheck('academic_setup-level-delete'),
+        ];
 
-        $this->type = collect(AcademicLevelState::cases())
-            ->map(fn($item) => [
-                'value' => $item->name,
-                'label' => $item->value
-            ]);
+        authorizeUserModal('academic_setup-level-list');
+
+        $this->status = backedEnumAsArray(StatusState::cases());
+        $this->type = backedEnumAsArray(AcademicLevelState::cases());
     }
 
     public function saveAcademicLevel()
@@ -57,6 +63,18 @@ class AcademicLevelSetup extends Component
 
     }
 
+    public function resetForm()
+    {
+        $this->title = 'Create Level';
+        $this->levelForm->reset();
+    }
+
+    public function resetFormValidation()
+    {
+        $this->resetForm();
+        $this->resetValidation();
+    }
+
     public function edit(AcademicLevel $level)
     {
         $this->title = "Edit Level";
@@ -71,6 +89,8 @@ class AcademicLevelSetup extends Component
     public function delete(AcademicLevel $level)
     {
         try {
+            authorizeUserModal('academic_setup-level-delete');
+
             AuditTableEntryEvent::dispatch('academic_levels', $level, 'delete');
             $is_delete = $level->deleteOrFail();
             if (!$is_delete) {
@@ -117,17 +137,5 @@ class AcademicLevelSetup extends Component
             ['key' => 'type', 'label' => __('Academic Type'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
-    }
-
-    public function resetForm()
-    {
-        $this->title = 'Create Level';
-        $this->levelForm->reset();
-    }
-
-    public function resetFormValidation()
-    {
-        $this->resetForm();
-        $this->resetValidation();
     }
 }
