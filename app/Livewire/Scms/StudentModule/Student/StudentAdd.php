@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\StudentSetup\Student;
+namespace App\Livewire\Scms\StudentModule\Student;
 
 use App\Enums\GenderState;
 use App\Enums\StudentDocumentTypeState;
@@ -135,7 +135,7 @@ class StudentAdd extends Component
                 icon: 'o-check-circle',       // Optional (any icon)
                 css: 'alert-success',                  // Optional (daisyUI classes)
                 timeout: 3000,
-                redirectTo: route('student-setup.student-list')
+                redirectTo: route('student-module.student-list')
             );
 
         } catch (\Exception $exception) {
@@ -152,6 +152,6 @@ class StudentAdd extends Component
 
     public function render()
     {
-        return view('livewire.scms.student-setup.student.student-add');
+        return view('livewire.scms.student-module.student.student-add');
     }
 }

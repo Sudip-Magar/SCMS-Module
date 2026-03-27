@@ -251,7 +251,7 @@
             {{-- end guardians and documents detail tabs --}}
 
             <x-slot:actions>
-                <x-button label="{{ __('Cancel') }}" link="{{ route('student-setup.student-list') }}"
+                <x-button label="{{ __('Cancel') }}" link="{{ route('student-module.student-list') }}"
                           class="btn-xs py-3.5 px-3.5"/>
                 <x-button label="{{ __('Save') }}" spinner="saveStudent" type="submit"
                           class="btn-primary btn-xs py-3.5 px-3.5"/>

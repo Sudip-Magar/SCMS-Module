@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup;
+namespace App\Livewire\Scms\AcademicModule;
 
 use App\Enums\AcademicLevelState;
 use App\Enums\ShiftStatusState;
@@ -110,7 +110,7 @@ class AcademicDailyScheduleSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-daily-schedule-setup', [
+        return view('livewire.scms.academic-module.academic-daily-schedule-setup', [
             'schedule_data_list' => $this->scheduleData(),
             'headers' => $this->headers(),
         ]);

@@ -7,7 +7,7 @@
         <x-slot:actions>
             <div x-cloak>
                 <x-button x-show="allowedPermissions.create" :label="__('Add')"
-                          link="{{route('student-setup.student-add')}}" responsive
+                          link="{{route('student-module.student-add')}}" responsive
                           icon="o-plus" class="btn-primary btn-xs py-3.5 px-3.5"/>
             </div>
         </x-slot:actions>
@@ -23,7 +23,7 @@
                     <div x-show="allowedPermissions.edit" x-cloak>
                         <x-button icon="o-pencil"
                                   class="btn-ghost btn-xs text-indigo-500" tooltip-bottom="{{ __('Edit') }}"
-                                  link="{{route('student-setup.student-add',['id' => $student_data['id'] ])}}"/>
+                                  link="{{route('student-module.student-add',['id' => $student_data['id'] ])}}"/>
                     </div>
                     <div x-cloak x-show="allowedPermissions.delete">
                         <x-button icon="o-trash" class="btn-ghost btn-xs text-red-500"

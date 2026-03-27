@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\StudentSetup\Student;
+namespace App\Livewire\Scms\StudentModule\Student;
 
 use App\Events\AuditTableEntryEvent;
 use App\Models\Student\Student;
@@ -83,7 +83,7 @@ class StudentList extends Component
 
     public function render()
     {
-        return view('livewire.scms.student-setup.student.student-list', [
+        return view('livewire.scms.student-module.student.student-list', [
             'student_data_list' => $this->studentData(),
             'headers' => $this->headers(),
         ]);
