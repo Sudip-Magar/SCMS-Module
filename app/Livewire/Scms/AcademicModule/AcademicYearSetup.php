@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup;
+namespace App\Livewire\Scms\AcademicModule;
 
 use App\Enums\AcademicLevelState;
 use App\Enums\StatusState;
@@ -112,7 +112,7 @@ class AcademicYearSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-year-setup', [
+        return view('livewire.scms.academic-module.academic-year-setup', [
             'years' => $this->yearData(),
             'headers' => $this->headers()
         ]);

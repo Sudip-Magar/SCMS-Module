@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup;
+namespace App\Livewire\Scms\AcademicModule;
 
 use App\Enums\StatusState;
 use App\Events\AuditTableEntryEvent;
-use App\Livewire\Forms\AcademicSetup\AcademicRoomForm;
-use App\Models\AcademicSetup\AcademicRoom;
+use App\Livewire\Forms\AcademicSetup\AcademicFacultyForm;
+use App\Models\AcademicSetup\AcademicFaculty;
 use App\Traits\WithCustomPagination;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Mary\Traits\Toast;
 
-class AcademicRoomSetup extends Component
+class AcademicFacultySetup extends Component
 {
     use Toast, WithCustomPagination;
 
     public string $search = '';
-    public AcademicRoomForm $roomForm;
+    public AcademicFacultyForm $facultyForm;
     public bool $drawer = false;
     public bool $deleteModal = false;
     public $title;
@@ -33,27 +33,26 @@ class AcademicRoomSetup extends Component
     public function mount()
     {
         $this->allowedPermissions = [
-            'list' => authorizeUserCheck('academic_setup-room-list'),
-            'create' => authorizeUserCheck('academic_setup-room-create'),
-            'edit' => authorizeUserCheck('academic_setup-room-edit'),
-            'delete' => authorizeUserCheck('academic_setup-room-delete'),
+            'list' => authorizeUserCheck('academic_setup-faculty-list'),
+            'create' => authorizeUserCheck('academic_setup-faculty-create'),
+            'edit' => authorizeUserCheck('academic_setup-faculty-edit'),
+            'delete' => authorizeUserCheck('academic_setup-faculty-delete'),
         ];
 
-        authorizeUserModal('academic_setup-room-list');
-
+        authorizeUserModal('academic_setup-faculty-list');
         $this->status = backedEnumAsArray(StatusState::cases());
     }
 
-    public function saveAcademicRoom()
+    public function saveAcademicFaculty()
     {
-        $is_saved = $this->roomForm->performRoomSave();
+        $is_saved = $this->facultyForm->performFacultySave();
 
         if (!$is_saved) {
-            $this->error('Room Could not be Saved', position: 'toast-bottom');
+            $this->error('Academic Faculty Could not be Saved', position: 'toast-bottom');
             return false;
         }
 
-        $this->success("Room " . ($this->roomForm->id ? 'Updated' : 'Saved') . " Successfully", position: 'toast-bottom');
+        $this->success("Academic Faculty " . ($this->facultyForm->id ? 'Updated' : 'Saved') . " Successfully", position: 'toast-bottom');
         $this->drawer = false;
         $this->resetForm();
         $this->resetFormValidation();
@@ -62,8 +61,8 @@ class AcademicRoomSetup extends Component
 
     public function resetForm()
     {
-        $this->title = 'Create Room';
-        $this->roomForm->reset();
+        $this->title = 'Create Faculty';
+        $this->facultyForm->reset();
     }
 
     public function resetFormValidation()
@@ -72,30 +71,28 @@ class AcademicRoomSetup extends Component
         $this->resetValidation();
     }
 
-    public function edit(AcademicRoom $room)
+    public function edit(AcademicFaculty $faculty)
     {
-        $this->title = "Edit Room";
-        $this->roomForm->id = $room->id;
-        $this->roomForm->name = $room->name;
-        $this->roomForm->short_name = $room->short_name;
-        $this->roomForm->floor_no = $room->floor_no;
-        $this->roomForm->block_no = $room->block_no;
-        $this->roomForm->status = $room->status;
+        $this->title = "Edit Faculty";
+        $this->facultyForm->id = $faculty->id;
+        $this->facultyForm->name = $faculty->name;
+        $this->facultyForm->short_name = $faculty->short_name;
+        $this->facultyForm->status = $faculty->status;
         $this->drawer = true;
     }
 
-    public function delete(AcademicRoom $room)
+    public function delete(AcademicFaculty $faculty)
     {
         try {
-            authorizeUserModal('academic_setup-room-delete');
-            AuditTableEntryEvent::dispatch('academic_rooms', $room, 'delete');
-            $is_delete = $room->deleteOrFail();
+            authorizeUserModal('academic_setup-faculty-delete');
+            AuditTableEntryEvent::dispatch('academic_faculties', $faculty, 'delete');
+            $is_delete = $faculty->deleteOrFail();
             if (!$is_delete) {
-                $this->error('Failed to delete the Room', position: "toast-bottom");
+                $this->error('Failed to delete the Academic Faculty', position: "toast-bottom");
                 return false;
             }
             $this->deleteModal = false;
-            $this->error('Room Delete Successfully', position: 'toast-bottom');
+            $this->error('Academic Faculty Delete Successfully', position: 'toast-bottom');
 
         } catch (\Exception $exception) {
             $this->error('Something went wrong ' . $exception->getMessage(), position: 'toast-bottom');
@@ -105,16 +102,16 @@ class AcademicRoomSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-room-setup', [
-            'room_data_list' => $this->roomData(),
+        return view('livewire.scms.academic-module.academic-faculty-setup', [
+            'faculty_data_list' => $this->facultyData(),
             'headers' => $this->headers(),
         ]);
     }
 
-    public function roomData(): LengthAwarePaginator
+    public function facultyData(): LengthAwarePaginator
     {
-        return AcademicRoom::query()
-            ->selectRaw("id, name, short_name, floor_no, block_no, CONCAT(
+        return AcademicFaculty::query()
+            ->selectRaw("id, name, short_name,  CONCAT(
                             UCASE(SUBSTRING(`status`, 1, 1)),
                             LOWER(SUBSTRING(`status`, 2))) as status")
             ->when($this->search, fn($query) => $query->where('name', 'like', "%$this->search%"))
@@ -128,8 +125,6 @@ class AcademicRoomSetup extends Component
             ['key' => 'action', 'label' => __('Action'), 'class' => 'w-16 text-center', 'sortable' => false],
             ['key' => 'name', 'label' => __('Name'), 'class' => 'w-100',],
             ['key' => 'short_name', 'label' => __('Short Name'), 'sortable' => false],
-            ['key' => 'floor_no', 'label' => __('Floor No.'), 'sortable' => false],
-            ['key' => 'block_no', 'label' => __('Block No.'), 'sortable' => false],
             ['key' => 'status', 'label' => __('Status'), 'sortable' => false],
         ];
     }

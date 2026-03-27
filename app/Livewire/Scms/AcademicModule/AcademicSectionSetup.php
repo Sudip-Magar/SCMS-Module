@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup;
+namespace App\Livewire\Scms\AcademicModule;
 
 use App\Enums\AcademicSectionState;
 use App\Enums\StatusState;
@@ -77,7 +77,7 @@ class AcademicSectionSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-section-setup', [
+        return view('livewire.scms.academic-module.academic-section-setup', [
             'section_data_list' => $this->sectionData(),
             'headers' => $this->headers()
         ]);

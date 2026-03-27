@@ -1,0 +1,19 @@
+<ul
+    class="breadcrumbs rounded-md
+           border border-gray-300 shadow-sm bg-white
+           dark:border-gray-600 dark:shadow-md dark:bg-gray-800
+           p-2">
+    @foreach ($generate() as $crumbs)
+        @if ($crumbs->url() && !$loop->last)
+            <li {{ $attributes->merge(['class' => $class . ' text-gray-700 dark:text-gray-200']) }}>
+                <a href="{{ $crumbs->url() }}">
+                    {{ $crumbs->title() }}
+                </a>
+            </li>
+        @else
+            <li {{ $attributes->merge(['class' => $class . ' ' . $active . ' text-gray-900 dark:text-white']) }}>
+                {{ $crumbs->title() }}
+            </li>
+        @endif
+    @endforeach
+</ul>

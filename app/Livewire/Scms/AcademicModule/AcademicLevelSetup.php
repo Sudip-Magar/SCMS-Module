@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup;
+namespace App\Livewire\Scms\AcademicModule;
 
 use App\Enums\AcademicLevelState;
 use App\Enums\StatusState;
@@ -108,7 +108,7 @@ class AcademicLevelSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.academic-level-setup', [
+        return view('livewire.scms.academic-module.academic-level-setup', [
             'level_data_list' => $this->levelData(),
             'headers' => $this->headers(),
         ]);

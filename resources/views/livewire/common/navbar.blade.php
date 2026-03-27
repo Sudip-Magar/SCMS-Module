@@ -19,7 +19,7 @@
     </div>
 
     <!-- Navigation -->
-    <ul class="flex-1 overflow-y-auto py-4 space-y-1 px-3">
+    <ul class="flex-1 overflow-y-auto py-4 space-y-1 px-3" x-cloak>
 
         @php
             $user = Auth::user();

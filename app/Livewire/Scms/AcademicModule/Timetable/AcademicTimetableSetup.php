@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scms\AcademicSetup\Timetable;
+namespace App\Livewire\Scms\AcademicModule\Timetable;
 
 use Livewire\Component;
 
@@ -27,6 +27,6 @@ class AcademicTimetableSetup extends Component
 
     public function render()
     {
-        return view('livewire.scms.academic-setup.timetable.academic-timetable-setup');
+        return view('livewire.scms.academic-module.timetable.academic-timetable-setup');
     }
 }

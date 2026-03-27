@@ -16,8 +16,9 @@ class PermissionSeeder extends Seeder
             'dashboard' => ['view'],
             'setup' => ['user', 'role', 'permission'],
             'academic_setup' => ['year', 'program', 'faculty', 'level', 'section', 'subject', 'room', 'structure'],
-            'timetable_setup' => ['daily_schedule', 'timetable'],
             'student_setup' => ['student', 'admission_numbering'],
+            'staff_setup' => ['department', 'designation', 'staff', 'employee', 'teacher'],
+            'timetable_setup' => ['daily_schedule', 'timetable'],
         ];
 
         $actions = ['list', 'create', 'edit', 'delete'];
