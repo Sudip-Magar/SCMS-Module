@@ -120,56 +120,38 @@ if (!function_exists('getAdmissionNumbering')) {
     }
 }
 
-if (!function_exists('authorizeUserCheck')) {
-    function authorizeUserCheck($permission)
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
     {
-        $user = Auth::user();
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
 
-        if ($user->username == 'admin@gmail.com') {
-            return true;
-        }
-
-        if (is_string($permission)) {
-            return $user->can($permission);
-        }
-
-        if (is_array($permission)) {
-            foreach ($permission as $per) {
-                if ($user->can($per)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
     }
 }
 
-if (!function_exists('authorizeUserModal')) {
-    function authorizeUserModal($permission)
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
     {
-        $response = Gate::allowIf(function ($user) use ($permission) {
-//            dd($user);
-            if ($user->username == 'admin@gmail.com') {
-                return true;
-            }
-            // Single permission
-            if (is_string($permission)) {
-                return $user->can($permission);
-            }
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
 
-            // Multiple permissions
-            if (is_array($permission)) {
-                foreach ($permission as $per) {
-                    if ($user->can($per)) {
-                        return true;
-                    }
-                }
-            }
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
+    }
+}
 
-            return false; // fallback
-        });
+if (!function_exists('auditTableEntry')) {
+    function auditTableEntry(string $auditTableClass, array $data, string $action)
+    {
+        $data['action'] = $action;
+        $data['performed_by'] = Auth::id();
+        $data['ip_address'] = request()->ip();
 
-        return $response->allowed();
+        $table = new $auditTableClass(); // instantiate audit model
+        return $table->create($data);    // save audit record
     }
 }
