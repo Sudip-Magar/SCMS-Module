@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
     {
          User::create([
             'username' => 'admin@gmail.com',
-            'user_type' => 'admin',
+            'profile_type' => '',
+            'short_name' => 'AD',
             'password' => Hash::make('Admin'),
             'status' => 'active'
         ]);

@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('../css/poppins.css');
 @import 'tailwindcss';
+
 @plugin "daisyui";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -9,19 +10,25 @@
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
-    font-family: "Poppins", sans-serif;
-    font-size: 11px !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 12px !important;
 }
 
 x-cloak {
     display: none;
 }
 
-.text-base-content{
+.text-base-content {
     font-size: 12px !important;
 }
 
@@ -32,20 +39,150 @@ x-cloak {
 
 .input {
     display: inline-flex;
-    height: 35px !important;
+    height: 30px !important;
     outline: none;
     border-color: rgb(187, 187, 187);
+    font-size: 12px !important;
 }
 
 .select {
     /* display: block; */
-    height: 35px !important;
+    height: 30px !important;
+    width: clamp(3rem, 20rem, 100%);
     outline: none;
     border-color: rgb(187, 187, 187);
+    font-size: 12px !important;
 }
 
 .fieldset-legend {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 0 3px 0;
+}
+
+.font-extrabold {
+    font-size: 17px;
+}
+
+.mary-table-pagination button {
+    @apply cursor-pointer
+}
+
+/** Active button **/
+.mary-table-pagination span[aria-current="page"] > span {
+    @apply bg-emerald-600 text-base-100
+}
+
+.header {
+    margin-bottom: 1px !important;
+}
+
+.breadcrumbs {
+    /* background-color: purple !important; */
+    margin: 16px 16px 0px 16px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+.breadcrumbs li {
+    padding: 2px 8px;
+    font-weight: 600;
+
+}
+
+.breadcrumbs li:not(:last-child)::after {
+    content: " > ";
+    margin: 0 6px;
+    color: #999;
+}
+
+.breadcrumbs li:last-child {
+    background-color: #D0FAE5;
+    color: #009966;
+    border-radius: 8px;
+    border: solid #00e99c 2px;
+}
+
+/* DARK MODE - Select2 */
+.dark .select2-container--default .select2-selection--single {
+    background-color: #1D232A;
+    /* gray-800 */
+    border-color: rgb(181, 181, 181);
+    /* gray-600 */
+    color: white;
+}
+
+.dark .select2-container--default .select2-selection__rendered {
+    color: white;
+}
+
+.dark .select2-container--default .select2-dropdown {
+    background-color: #1D232A;
+    color: white;
+}
+
+.dark .select2-container--default .select2-results__option {
+    background-color: #1D232A;
+    color: white;
+}
+
+.dark .select2-container--default .select2-results__option--highlighted {
+    background-color: #374151;
+    /* gray-700 */
+}
+
+@layer utilities {
+    /* Light mode scrollbar */
+    .scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 4px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+        background: #f3f4f6; /* very light gray */
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+        background: #009866; /* your emerald color */
+        border-radius: 9999px; /* fully rounded */
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #007a57; /* slightly darker on hover */
+    }
+
+    /* Firefox */
+    .scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #009866 #f3f4f6; /* thumb track */
+    }
+
+    /* Dark mode scrollbar */
+    .dark .scrollbar::-webkit-scrollbar-track {
+        background: #1f2937; /* dark gray track */
+    }
+
+    .dark .scrollbar::-webkit-scrollbar-thumb {
+        background: #00b38c; /* lighter green for dark mode */
+    }
+
+    .dark .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #009866; /* hover in dark mode */
+    }
+
+    .dark .scrollbar {
+        scrollbar-color: #00b38c #1f2937; /* thumb track */
+    }
+}
+
+.errors-403{
+    width: 30%;
+    text-align: center;
+    padding: 10px 6px;
+}
+
+.errors-403 h2{
+    font-size: 20px;
 }

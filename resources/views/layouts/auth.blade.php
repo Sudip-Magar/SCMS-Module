@@ -16,7 +16,7 @@
 </head>
 
 <body x-data class="transition-colors duration-300"
-    :class="$store.darkmode.toggle ? 'bg-gray-900 text-white' : 'bg-white text-black'">
+    >
     {{-- @include('livewire.common.navbar') --}}
     {{ $slot }}
 
